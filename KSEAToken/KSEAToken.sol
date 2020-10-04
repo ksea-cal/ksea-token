@@ -18,7 +18,6 @@ import "./SafeMath.sol";
 contract KSEAToken is EIP20Interface {
     using SafeMath for uint256;
 
-    /// Public variables of the overall balance and allowance 
     mapping (address => uint256) public balances;
     mapping (address => mapping (address => uint256)) public allowed;
     string public name;
@@ -29,21 +28,20 @@ contract KSEAToken is EIP20Interface {
         name = "KSEA Token";                                 // Set the name of token to 'KSEA Token'
     }
 
-
     function transfer(address _to, uint256 _value) public returns (bool success) {
         require(balances[msg.sender] >= _value && _value < 10); // Ensure number of tokens sent is less than 10 
         require(_to != address(0));
-        balances[msg.sender].sub(_value);
-        balances[_to].add(_value);
+        balances[msg.sender] = balances[msg.sender].sub(_value);
+        balances[_to] = balances[_to] += _value;
         emit Transfer(msg.sender, _to, _value); 
         return true;
     }
 
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
         require(balances[_from] >= _value && allowed[_from][msg.sender] >= _value);
-        balances[_to].add(_value);
-        balances[_from].sub(_value);
-        allowed[_from][msg.sender].sub(_value); // Decrement allowance 
+        balances[_to] = balances[_to].add(_value);
+        balances[_from] = balances[_from].sub(_value);
+        allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_value); // Decrement allowance 
         emit Transfer(_from, _to, _value); 
         return true;
     }
