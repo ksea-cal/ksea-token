@@ -32,7 +32,7 @@ contract KSEAToken is EIP20Interface {
         require(balances[msg.sender] >= _value && _value < 10); // Ensure number of tokens sent is less than 10 
         require(_to != address(0));
         balances[msg.sender] = balances[msg.sender].sub(_value);
-        balances[_to] = balances[_to] += _value;
+        balances[_to] = balances[_to].add(_value);
         emit Transfer(msg.sender, _to, _value); 
         return true;
     }
