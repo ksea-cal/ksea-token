@@ -89,8 +89,8 @@ contract KSEAToken is EIP20Interface {
     constructor(uint256 _initialSupply, string _name, string _symbol) public {
         balances[msg.sender] = _initialSupply;               // Give the creator all initial tokens
         totalSupply = _initialSupply;                        // Update total supply
-        symbol = _symbol;                               //Set the symbol of token to _symbol
-        name = _name;                                 // Set the name of token to _name
+        symbol = _symbol;                                    // Set the symbol of token to _symbol
+        name = _name;                                        // Set the name of token to _name
     }
 
     function transfer(address _to, uint256 _value) public returns (bool success) {
