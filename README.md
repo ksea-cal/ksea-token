@@ -28,5 +28,6 @@
 
 * JISU Token Etherscan: https://rinkeby.etherscan.io/address/0xA36874b084cD25f5341d5E632989061Ba372c805
 * KSEA DOBBY Token Etherscan: https://rinkeby.etherscan.io/address/0x623C01A67a62B57C0ADD645a709990f8b0f74204
+* JAM Token Etherscan: https://rinkeby.etherscan.io/address/0x16DD2d0e56c94f46F84E83D65616dF93a34Bf235
 
 
