@@ -24,6 +24,7 @@
 * KSEA DOBBY Token Contract: 0x623C01A67a62B57C0ADD645a709990f8b0f74204
 * JISU Token Contract: 0xA36874b084cD25f5341d5E632989061Ba372c805
 * JAM Token Contract: 0x16DD2d0e56c94f46F84E83D65616dF93a34Bf235
+* JIN Token Contract: 0x737feadd32b224616b64214fE32C303013c13B52
 
 ## Token Etherscan Pages (Can see all transaction records of the tokens)
 
