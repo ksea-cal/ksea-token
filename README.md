@@ -25,6 +25,7 @@
 * JISU Token Contract: 0xA36874b084cD25f5341d5E632989061Ba372c805
 * JAM Token Contract: 0x16DD2d0e56c94f46F84E83D65616dF93a34Bf235
 * JIN Token Contract: 0x737feadd32b224616b64214fE32C303013c13B52
+* HEEHEE Token Contract: 0x2D5d1bE2eeEc5968982a57C81088E9b48cD8bDAb
 
 ## Token Etherscan Pages (Can see all transaction records of the tokens)
 
