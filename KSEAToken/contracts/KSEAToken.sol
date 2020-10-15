@@ -1,72 +1,76 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.4.12;
 
-//SafeMath Library
-library SafeMath {
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        uint256 c = a + b;
-        require(c >= a, "SafeMath: addition overflow");
+pragma solidity >= 0.5.0 < 0.7.0;
 
-        return c;
-    }
+// //SafeMath Library
+// library SafeMath {
+//     function add(uint256 a, uint256 b) internal pure returns (uint256) {
+//         uint256 c = a + b;
+//         require(c >= a, "SafeMath: addition overflow");
 
-    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        return sub(a, b, "SafeMath: subtraction overflow");
-    }
+//         return c;
+//     }
 
-    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        require(b <= a, errorMessage);
-        uint256 c = a - b;
+//     function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+//         return sub(a, b, "SafeMath: subtraction overflow");
+//     }
 
-        return c;
-    }
+//     function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+//         require(b <= a, errorMessage);
+//         uint256 c = a - b;
 
-    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-        if (a == 0) {
-            return 0;
-        }
+//         return c;
+//     }
 
-        uint256 c = a * b;
-        require(c / a == b, "SafeMath: multiplication overflow");
+//     function mul(uint256 a, uint256 b) internal pure returns (uint256) {
+//         if (a == 0) {
+//             return 0;
+//         }
 
-        return c;
-    }
+//         uint256 c = a * b;
+//         require(c / a == b, "SafeMath: multiplication overflow");
 
-    function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        return div(a, b, "SafeMath: division by zero");
-    }
+//         return c;
+//     }
 
-    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        require(b > 0, errorMessage);
-        uint256 c = a / b;
-        // assert(a == b * c + a % b); // There is no case in which this doesn't hold
+//     function div(uint256 a, uint256 b) internal pure returns (uint256) {
+//         return div(a, b, "SafeMath: division by zero");
+//     }
 
-        return c;
-    }
+//     function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+//         require(b > 0, errorMessage);
+//         uint256 c = a / b;
+//         // assert(a == b * c + a % b); // There is no case in which this doesn't hold
 
-    function mod(uint256 a, uint256 b) internal pure returns (uint256) {
-        return mod(a, b, "SafeMath: modulo by zero");
-    }
+//         return c;
+//     }
 
-    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        require(b != 0, errorMessage);
-        return a % b;
-    }
-}
+//     function mod(uint256 a, uint256 b) internal pure returns (uint256) {
+//         return mod(a, b, "SafeMath: modulo by zero");
+//     }
 
-contract EIP20Interface {
+//     function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+//         require(b != 0, errorMessage);
+//         return a % b;
+//     }
+// }
 
-    uint256 public totalSupply;
+// contract EIP20Interface {
 
-    function balanceOf(address _owner) public view returns (uint256 balance);
-    function transfer(address _to, uint256 _value) public returns (bool success);
-    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
-    function approve(address _spender, uint256 _value) public returns (bool success);
-    function allowance(address _owner, address _spender) public view returns (uint256 remaining);
+//     uint256 public totalSupply;
 
-    event Transfer(address indexed _from, address indexed _to, uint256 _value);
-    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
-}
+//     function balanceOf(address _owner) public view returns (uint256 balance);
+//     function transfer(address _to, uint256 _value) public returns (bool success);
+//     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
+//     function approve(address _spender, uint256 _value) public returns (bool success);
+//     function allowance(address _owner, address _spender) public view returns (uint256 remaining);
+
+//     event Transfer(address indexed _from, address indexed _to, uint256 _value);
+//     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+// }
+
+import "./SafeMath.sol";
+import "./EIP20Interface.sol";
 
 /** 
 * @title KSEA Standard EIP 20 Token 
@@ -86,7 +90,7 @@ contract KSEAToken is EIP20Interface {
     mapping (address => uint256) public balances;
     mapping (address => mapping (address => uint256)) public allowed;
     
-    constructor(uint256 _initialSupply, string _name, string _symbol) public {
+    constructor(uint256 _initialSupply, string memory _name, string memory _symbol) public {
         balances[msg.sender] = _initialSupply;               // Give the creator all initial tokens
         totalSupply = _initialSupply;                        // Update total supply
         symbol = _symbol;                                    // Set the symbol of token to _symbol

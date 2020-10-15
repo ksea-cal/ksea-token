@@ -1,3 +1,4 @@
+const { strictEqual } = require('assert');
 const assert = require('assert');
 const KSEAToken = artifacts.require("KSEAToken");
 
@@ -11,7 +12,8 @@ beforeEach(async () => {
 
 contract("KSEAToken", async () => {
     it("should send total supply of tokens to contract deployer's wallet", async () => {
-       
+       let bal = await dobby.balanceOf(accounts[0]);
+       assert.equal(10000, bal);
     });
 
     it ("should show correct balance", async () => {
