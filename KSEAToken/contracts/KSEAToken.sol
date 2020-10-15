@@ -94,7 +94,7 @@ contract KSEAToken is EIP20Interface {
     }
 
     function transfer(address _to, uint256 _value) public returns (bool success) {
-        require(balances[msg.sender] >= _value && _value < 10, "Not enough balance or You are sending more than 10 tokens"); // Ensure number of tokens sent is less than 10 
+        require(balances[msg.sender] >= _value && _value <= 10, "Not enough balance or You are sending more than 10 tokens"); // Ensure number of tokens sent is less than 10 
         require(_to != address(0));
         balances[msg.sender] = balances[msg.sender].sub(_value);
         balances[_to] = balances[_to].add(_value);
@@ -116,7 +116,7 @@ contract KSEAToken is EIP20Interface {
     }
 
     function approve(address _spender, uint256 _value) public returns (bool success) {
-        require(_value < 10, "You can only approve less than 10 tokens"); 
+        require(_value <= 10, "You can only approve less than 10 tokens"); 
         require(_spender != address(0));
         allowed[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value); 
