@@ -16,27 +16,41 @@ contract("KSEAToken", async () => {
        assert.equal(10000, bal);
     });
 
-    it ("should show correct balance", async () => {
-
-    });
-
     it ("should show correct name", async () => {
-
+        let name = await dobby.name();
+        assert.equal("KSEA DOBBY Token", name);
     });
 
     it ("should show correct symbol", async () => {
-
+        let symbol = await dobby.symbol();
+        assert.equal("DOBBY", symbol);
     });
 
     it ("should transfer 10 tokens from accounts[0] to accounts[1]", async () => {
-
+        await dobby.transfer(accounts[1], 10, {from: accounts[0]});
+        let bal = await dobby.balanceOf(accounts[1]);
+        assert.equal(10, bal);
     });
 
     it ("should let accounts[0] approve accounts[1] to send 10 tokens to accounts[2]", async () => {
-
+        await dobby.approve(accounts[1], 10, {from: accounts[0]});
+        let allowance = await dobby.allowance(accounts[0], accounts[1]);
+        assert.equal(10, allowance);
     });
 
     it ("should correctly let accounts[1] to send 10 tokens from accounts[0] to accounts[2]", async () => {
+        await dobby.transferFrom(accounts[0], accounts[2], 10, {from: accounts[1]});
+        let bal = await dobby.balanceOf(accounts[2]);
+        assert.equal(10, bal);
+    });
 
+    it ("should show correct balance", async () => {
+        let bal0 = await dobby.balanceOf(accounts[0]);
+        let bal1 = await dobby.balanceOf(accounts[1]);
+        let bal2 = await dobby.balanceOf(accounts[2]);
+
+        assert.equal(9980, bal0);
+        assert.equal(10, bal1);
+        assert.equal(10, bal2); 
     });
 });
