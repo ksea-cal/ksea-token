@@ -104,5 +104,10 @@ contract KSEADobby is Ownable {
     //     return 
     // }
 
+    //exchange semester token to dobby token. Don't literally exchange semester token. Just give semester token amount of dobby token. They can keep their semester token. 
+    function exchange() public {
+
+    }
+
     
 }
