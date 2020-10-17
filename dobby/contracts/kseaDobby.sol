@@ -100,14 +100,23 @@ contract KSEADobby is Ownable {
         return dobbyToken.balanceOf(this);
     }  
 
+    //exchange semester token to dobby token. Don't literally exchange semester token. Just give semester token amount of dobby token. They can keep their semester token. 
+    function exchangeToDobby(address _curSemester, address[] calldata _memberAccount) public {
+        EIP20Interface private semesterToken;
+        semesterToken = EIP20Interface(_curSemester);
+        uint256 i = 0;
+        while (i < _memberAccount.length) {
+            uint256 semBal = semesterToken.balanceOf(_memberAccount[i]);
+            sendInternally(_memberAccount[i], semBal, semBal);
+            i++;
+        }
+    }
+
     // function getBalance(address _member) public returns(uint256) {
     //     return 
     // }
 
-    //exchange semester token to dobby token. Don't literally exchange semester token. Just give semester token amount of dobby token. They can keep their semester token. 
-    function exchange() public {
-
-    }
+    
 
     
 }
