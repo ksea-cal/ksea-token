@@ -100,9 +100,21 @@ contract KSEADobby is Ownable {
         return dobbyToken.balanceOf(this);
     }  
 
+    function exchangeToDobby(address _curSemester, address[] calldata _memberAccount) public {
+        EIP20Interface private semesterToken;
+        semesterToken = EIP20Interface(_curSemester) ;
+        uint256 i = 0;
+        while (i < _memberAccount.length) {
+            uint256 semBal = semesterToken.balanceOf(_memberAccount[i]);
+            sendInternally(_memberAccount[i], semBal, semBal);
+            i++;
+        }
+    }
+
     // function getBalance(address _member) public returns(uint256) {
     //     return 
     // }
+
 
     
 }
