@@ -1,5 +1,5 @@
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity >= 0.5.0 < 0.7.0;
-
 
 contract EIP20Interface {
     /* This is a slight change to the ERC20 base standard.
