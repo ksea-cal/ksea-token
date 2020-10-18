@@ -1,5 +1,10 @@
 const KSEADobby = artifacts.require("KSEADobby");
+const KSEAToken = artifacts.require("KSEAToken");
 
 module.exports = function(deployer) {
-  deployer.deploy(KSEADobby, "0x623C01A67a62B57C0ADD645a709990f8b0f74204");
+  deployer.then(function() {
+    return deployer.deploy(KSEAToken, 10000, "KSEA DOBBY Token", "DOBBY");
+  }).then(function() {
+    return deployer.deploy(KSEADobby, KSEAToken.address);
+  });
 };

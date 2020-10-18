@@ -1,7 +1,7 @@
 pragma solidity >= 0.5.0 < 0.7.0;
 
-// import "../KSEAToken/contracts/SafeMath.sol";
-// import "../KSEAToken/contracts/EIP20Interface.sol";
+import "../../KSEAToken/contracts/SafeMath.sol";
+import "../../KSEAToken/contracts/EIP20Interface.sol";
 import "../../KSEAToken/contracts/KSEAToken.sol";
 
 // contract DobbyFactory {
@@ -43,6 +43,7 @@ contract KSEADobby is Ownable {
 
     // DobbyFactory private dobbyFactory;
     EIP20Interface private dobbyToken;
+    EIP20Interface private semesterToken;
 
     //mapping, struct, variable Set up
     mapping (address => bool) private boardMembers;
@@ -72,51 +73,50 @@ contract KSEADobby is Ownable {
     function isBoardMember(address _boardMember) public view returns (bool) {
         return boardMembers[_boardMember];
     }
+
+    //Token Distribution functions
+    function distributeEther(address[] calldata _members, uint256 _value) onlyOwner external {
+
+    } 
  
     //send tokens to users 
     function distributeTokens(address[] calldata _members, uint256 _value) onlyOwner external {
         require(isBoardMember(msg.sender) == true, "You are not the board member!");
-        uint256 i = 0;
-        uint256 toSend = _value;
-        while (i < _members.length) {
-            sendInternally(_members[i] , toSend, _value);
-            i++;
+        for (uint i = 0; i < _members.length; i++) {
+            sendInternally(_members[i], _value);
         }
     }
 
-    function sendInternally(address recipient, uint256 tokensToSend, uint256 valueToPresent) internal {
+    function sendInternally(address recipient, uint256 tokensToSend) public {
         if(recipient == address(0)) return;
 
         if(tokensAvailable() >= tokensToSend) {
-        dobbyToken.transfer(recipient, tokensToSend);
-        emit TransferredToken(recipient, valueToPresent);
+        dobbyToken.transferFrom(msg.sender, recipient, tokensToSend);
+        emit TransferredToken(recipient, tokensToSend);
         } else {
-        emit FailedTransfer(recipient, valueToPresent); 
+        emit FailedTransfer(recipient, tokensToSend); 
         }
-    }   
-
+    }  
 
     function tokensAvailable() view internal returns (uint256) {
-        return dobbyToken.balanceOf(this);
+        return dobbyToken.balanceOf(owner);
     }  
 
     //exchange semester token to dobby token. Don't literally exchange semester token. Just give semester token amount of dobby token. They can keep their semester token. 
-    function exchangeToDobby(address _curSemester, address[] calldata _memberAccount) public {
-        EIP20Interface private semesterToken;
+    function exchangeToDobby(address _curSemester, address[] memory _memberAccount) public {
         semesterToken = EIP20Interface(_curSemester);
         uint256 i = 0;
         while (i < _memberAccount.length) {
             uint256 semBal = semesterToken.balanceOf(_memberAccount[i]);
-            sendInternally(_memberAccount[i], semBal, semBal);
+            sendInternally(_memberAccount[i], semBal);
             i++;
         }
     }
 
+    //implement Auction functions
+
+
     // function getBalance(address _member) public returns(uint256) {
     //     return 
-    // }
-
-    
-
-    
+    // }   
 }

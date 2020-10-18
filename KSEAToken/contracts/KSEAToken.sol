@@ -53,7 +53,7 @@ contract KSEAToken is EIP20Interface {
     }
 
     function approve(address _spender, uint256 _value) public returns (bool success) {
-        require(_value <= 10, "You can only approve less than 10 tokens"); 
+        // require(_value <= 10, "You can only approve less than 10 tokens"); 
         require(_spender != address(0));
         allowed[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value); 
