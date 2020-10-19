@@ -80,14 +80,14 @@ contract KSEADobby is Ownable {
     } 
  
     //send tokens to users 
-    function distributeTokens(address[] calldata _members, uint256 _value) onlyOwner external {
+    function distributeTokens(address[] calldata _members, uint256 _value) external {
         require(isBoardMember(msg.sender) == true, "You are not the board member!");
         for (uint i = 0; i < _members.length; i++) {
             sendInternally(_members[i], _value);
         }
     }
 
-    function sendInternally(address recipient, uint256 tokensToSend) public {
+    function sendInternally(address recipient, uint256 tokensToSend) internal {
         if(recipient == address(0)) return;
 
         if(tokensAvailable() >= tokensToSend) {
@@ -102,16 +102,16 @@ contract KSEADobby is Ownable {
         return dobbyToken.balanceOf(owner);
     }  
 
-    //exchange semester token to dobby token. Don't literally exchange semester token. Just give semester token amount of dobby token. They can keep their semester token. 
-    function exchangeToDobby(address _curSemester, address[] memory _memberAccount) public {
-        semesterToken = EIP20Interface(_curSemester);
-        uint256 i = 0;
-        while (i < _memberAccount.length) {
-            uint256 semBal = semesterToken.balanceOf(_memberAccount[i]);
-            sendInternally(_memberAccount[i], semBal);
-            i++;
-        }
-    }
+    //exchange semester token to dobby token. Don't literally exchange semester token. Just give semester token amount of dobby token. They can keep their sem    // function exchangeToDobby(address _curSemester, address[] memory _memberAccount) public {
+    //     semesterToken = EIP20Interface(_curSemester);
+    //     uint256 i = 0;
+    //     while (i < _memberAccount.length) {
+    //         uint256 semBal = semesterToken.balanceOf(_memberAccount[i]);
+    //         sendInternally(_memberAccount[i], semBal);
+    //         i++;
+    //     }
+    // }ester token. 
+
 
     //implement Auction functions
 

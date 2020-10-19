@@ -1,4 +1,3 @@
-const { strictEqual } = require('assert');
 const assert = require('assert');
 const KSEAToken = artifacts.require("KSEAToken");
 
