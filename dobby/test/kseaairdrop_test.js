@@ -33,7 +33,7 @@ contract("KSEAirdrop", async () => {
 
     it("distributeTokens", async () => { //parameter check
        await token.approve(airdrop.address, 100);
-       await airdrop.distributeTokens([accounts[1], accounts[2]], 5, false, {from: accounts[0]});
+       await airdrop.distributeDobbyTokens([accounts[1], accounts[2]], 5, {from: accounts[0]});
 
        let bal1 = await token.balanceOf(accounts[1]);
        let bal1Num = await parseFloat(bal1);
@@ -44,15 +44,18 @@ contract("KSEAirdrop", async () => {
        assert.equal(bal2Num, 5);
     });
 
+
     it("distributeEther", async () => { //parameter check
-       await airdrop.distributeTokens([accounts[1], accounts[2]], 5, true, {from: accounts[0]});
+       await airdrop.distributeEther([accounts[1], accounts[2]], {from: accounts[0], value: 2e18});
 
        let bal1 = await web3.eth.getBalance(accounts[1]);
        let bal1Num = await parseFloat(bal1);
        let bal2 = await web3.eth.getBalance(accounts[2]);
        let bal2Num = await parseFloat(bal2);
 
-       assert.equal(bal1Num, 5);
-       assert.equal(bal2Num, 5);
+       assert.equal(bal1Num/1e18, 101);
+       assert.equal(bal2Num/1e18, 101);
     });
 });
+
+
