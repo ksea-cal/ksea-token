@@ -45,14 +45,26 @@ contract("KSEAirdrop", async () => {
     });
 
     it("distributeEther", async () => { //parameter check
-       await airdrop.distributeTokens([accounts[1], accounts[2]], 5, true, {from: accounts[0]});
+       await airdrop.distributeTokens([accounts[1], accounts[2]], 5, true, {from: accounts[0], value: 1*1e18});
 
        let bal1 = await web3.eth.getBalance(accounts[1]);
        let bal1Num = await parseFloat(bal1);
        let bal2 = await web3.eth.getBalance(accounts[2]);
        let bal2Num = await parseFloat(bal2);
 
-       assert.equal(bal1Num, 5);
-       assert.equal(bal2Num, 5);
+       assert.equal(bal1Num/1e18, 1);
+       assert.equal(bal2Num/1e18, 1);
     });
+
+    it("sendEther", async () => { //parameter check
+        await airdrop.sendInternallyEther([accounts[1], accounts[2]], {from: accounts[0], value: 1*1e18});
+ 
+        let bal1 = await web3.eth.getBalance(accounts[1]);
+        let bal1Num = await parseFloat(bal1);
+        // let bal2 = await web3.eth.getBalance(accounts[2]);
+        // let bal2Num = await parseFloat(bal2);
+ 
+        assert.equal(bal1Num/1e18, 101);
+        // assert.equal(bal2Num, 5);
+     });
 });

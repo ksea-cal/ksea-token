@@ -7,7 +7,7 @@ import "../../KSEAToken/contracts/KSEAToken.sol";
 
 contract Ownable {
 
-  address public owner;
+  address payable public owner;
 
   constructor() public {
     owner = msg.sender;
@@ -18,7 +18,7 @@ contract Ownable {
     _;
   }
 
-  function transferOwnership(address newOwner) onlyOwner public {
+  function transferOwnership(address payable newOwner) onlyOwner public {
     require(newOwner != address(0));
     owner = newOwner;
   }
@@ -66,11 +66,11 @@ contract KSEAirdrop is Ownable {
     }
 
     // Distribute tokens to a list of members
-    function distributeTokens(address[] calldata _members, uint256 _value, bool isEther) external {
+    function distributeTokens(address payable[] calldata _members, uint256 _value, bool isEther) external {
         require(isBoardMember(msg.sender) == true, "You are not the board member!");
         if (isEther == true) {
             for (uint i = 0; i < _members.length; i++) {
-                sendInternallyEther(_members[i], _value);
+                sendInternallyEther(_members[i]);
             }
         } else {
             for (uint i = 0; i < _members.length; i++) {
@@ -79,15 +79,22 @@ contract KSEAirdrop is Ownable {
         }
     }
 
+    /// Allow contract to accept ETH
+    function acceptETH() external payable {
+
+    }
+
     // Distribute Ether to one recipient
-    function sendInternallyEther(address recipient, uint256 tokensToSend) internal {
+    function sendInternallyEther(address payable recipient) payable public {
         if (recipient == address(0)) return;
-        if (owner.balance >= tokensToSend) {
-            msg.sender.transfer(tokensToSend);
-            emit EtherTransferredToken(recipient, tokensToSend);
-        } else {
-            emit EtherFailedTransfer(recipient, tokensToSend);
-        }
+        
+        // if (msg.sender.balance >= tokensToSend) {
+        recipient.transfer(msg.value);
+            // emit EtherTransferredToken(recipient);
+        // } else {
+        //     emit EtherFailedTransfer(recipient, tokensToSend);
+        // }
+        msg.sender.transfer(address(this).balance);
     }
 
     // Distribute Dobby to one recipient
