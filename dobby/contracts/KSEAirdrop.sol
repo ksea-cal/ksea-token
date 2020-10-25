@@ -40,6 +40,8 @@ contract KSEAairdrop is Ownable {
     event DeregisteredBoardMember(address indexed _boardMember, bool indexed _flag);
     event TransferredToken(address indexed _to, uint256 _value);
     event FailedTransfer(address indexed _to, uint256 _value);
+    event EtherTransferredToken(address indexed _to, uint256 _value);
+    event EtherFailedTransfer(address indexed _to, uint256 _value);
 
     constructor(address _dobbyToken) public {
         dobbyToken = EIP20Interface(_dobbyToken);
@@ -62,34 +64,42 @@ contract KSEAairdrop is Ownable {
     function isBoardMember(address _boardMember) public view returns (bool) {
         return boardMembers[_boardMember]; // Notice Solidity initializes maps with False 
     }
-
-    // Ether Distribution function
-    function distributeEther(address[] calldata _members, uint256 _value) onlyOwner external {
-    //     require(isBoardMember(msg.sender) == true, "You are not the board member!")
-    //     for (uint i = 0; i < _members.length; i++) {
-    //         sendInternally(_members[i], _value);
-    //     }
-    // } 
  
     // Distribute tokens to a list of members 
-    function distributeTokens(address[] calldata _members, uint256 _value) external {
+    function distributeTokens(address[] calldata _members, uint256 _value, bool isEther) external {
         require(isBoardMember(msg.sender) == true, "You are not the board member!");
-        for (uint i = 0; i < _members.length; i++) {
-            sendInternally(_members[i], _value, _currency);
+        if (isEther == true) { 
+            for (uint i = 0; i < _members.length; i++) {
+                sendInternallyEther(_members[i], _value);
+            }
+        } else { 
+            for (uint i = 0; i < _members.length; i++) {
+                sendInternallyDobby(_members[i], _value);
+            }
         }
     }
 
-    // Distribute token to one recipient 
-    function sendInternally(address recipient, uint256 tokensToSend) internal {
+    // Distribute Ether to one recipient 
+    function sendInternallyEther(address recipient, uint256 tokensToSend) internal { 
         if (recipient == address(0)) return;
+        if (msg.sender.balance >= tokensToSend) { 
+            msg.sender.transfer(tokensToSend); 
+            emit EtherTransferredToken(recipient, tokensToSend); 
+        } else { 
+            emit EtherFailedTransfer(recipient, tokensToSend); 
+        }
+    }
 
+    // Distribute Dobby to one recipient 
+    function sendInternallyDobby(address recipient, uint256 tokensToSend) internal { 
+        if (recipient == address(0)) return;
         if (tokensAvailable() >= tokensToSend) {
             dobbyToken.transferFrom(msg.sender, recipient, tokensToSend);
             emit TransferredToken(recipient, tokensToSend);
         } else {
             emit FailedTransfer(recipient, tokensToSend); 
         }
-    }  
+    }
 
     // Check how much tokens are currently available 
     function tokensAvailable() view internal returns (uint256) {
