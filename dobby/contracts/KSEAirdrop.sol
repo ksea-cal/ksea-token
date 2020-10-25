@@ -66,28 +66,19 @@ contract KSEAirdrop is Ownable {
     }
 
     // Distribute tokens to a list of members
-    function distributeTokens(address[] calldata _members, uint256 _value, bool isEther) external {
+    function distributeDobbyTokens(address[] calldata _members, uint256 _value) external {
         require(isBoardMember(msg.sender) == true, "You are not the board member!");
-        if (isEther == true) {
-            for (uint i = 0; i < _members.length; i++) {
-                sendInternallyEther(_members[i], _value);
-            }
-        } else {
-            for (uint i = 0; i < _members.length; i++) {
-                sendInternallyDobby(_members[i], _value);
-            }
+        for (uint i = 0; i < _members.length; i++) {
+            sendInternallyDobby(_members[i], _value);
         }
     }
 
-    // Distribute Ether to one recipient
-    function sendInternallyEther(address recipient, uint256 tokensToSend) internal {
-        if (recipient == address(0)) return;
-        if (owner.balance >= tokensToSend) {
-            msg.sender.transfer(tokensToSend);
-            emit EtherTransferredToken(recipient, tokensToSend);
-        } else {
-            emit EtherFailedTransfer(recipient, tokensToSend);
-        }
+
+    function distributeEther(address payable[] calldata _members) external payable { 
+        for (uint i = 0; i < _members.length; i++) {
+            _members[i].transfer(msg.value / _members.length);
+            emit EtherTransferredToken(_members[i], msg.value / _members.length);
+        } 
     }
 
     // Distribute Dobby to one recipient
@@ -104,5 +95,8 @@ contract KSEAirdrop is Ownable {
     // Check how much tokens are currently available
     function tokensAvailable() view internal returns (uint256) {
         return dobbyToken.balanceOf(owner);
+    }
+
+    function payMe() public payable { 
     }
 }
