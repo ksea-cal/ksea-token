@@ -77,16 +77,20 @@ contract KSEAairdrop is Ownable {
 
     //Token Distribution functions
     function distributeEther(address[] calldata _members, uint256 _value) onlyOwner external {
-
-    } 
+    //     require(isBoardMember(msg.sender) == true, "You are not the board member!")
+    //     for (uint i = 0; i < _members.length; i++) {
+    //         sendInternally(_members[i], _value);
+    //     }
+    // } 
  
     //send tokens to users 
-    function distributeTokens(address[] calldata _members, uint256 _value) external {
+    function distributeTokens(address[] calldata _members, uint256 _value, string _currency) external {
         require(isBoardMember(msg.sender) == true, "You are not the board member!");
         for (uint i = 0; i < _members.length; i++) {
-            sendInternally(_members[i], _value);
+            sendInternally(_members[i], _value, _currency);
         }
     }
+
 
     function sendInternally(address recipient, uint256 tokensToSend) internal {
         if(recipient == address(0)) return;
@@ -112,12 +116,4 @@ contract KSEAairdrop is Ownable {
     //         i++;
     //     }
     // }ester token. 
-
-
-    //implement Auction functions
-
-
-    // function getBalance(address _member) public returns(uint256) {
-    //     return 
-    // }   
 }

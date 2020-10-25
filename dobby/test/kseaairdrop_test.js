@@ -1,28 +1,28 @@
 const assert = require('assert');
 const KSEAToken = artifacts.require("KSEAToken");
-const KSEADobby = artifacts.require("KSEADobby");
+const KSEAairdrop = artifacts.require("KSEAairdrop");
 
 let accounts;
-let dobby;
+let airdrop;
 let token;
 
 beforeEach(async () => {
     accounts = await web3.eth.getAccounts();
     token = await KSEAToken.deployed();
-    dobby = await KSEADobby.deployed(token.address);
+    airdrop = await KSEAairdrop.deployed(token.address);
 });
 
-contract("KSEADobby", async () => {
+contract("KSEAairdrop", async () => {
     it("should register board member", async () => {
-        await dobby.registerBoardMember(accounts[0], {from:accounts[0]});
+        await airdrop.registerBoardMember(accounts[0], {from:accounts[0]});
 
-        let board = await dobby.isBoardMember(accounts[0]);
+        let board = await airdrop.isBoardMember(accounts[0]);
 
         assert.equal(board,true);
     })
 
     it("accounts[0] is the owner", async () => {
-        let owner = await dobby.owner();
+        let owner = await airdrop.owner();
         assert.equal(owner, accounts[0]);
     })
 
@@ -32,16 +32,16 @@ contract("KSEADobby", async () => {
     })
 
     it("sendInternally", async () => {
-        await token.approve(dobby.address, 100);
+        await token.approve(airdrop.address, 100);
 
-        await dobby.sendInternally(accounts[1], 5, {from:accounts[0]});
+        await airdrop.sendInternally(accounts[1], 5, {from:accounts[0]});
 
         let bal = await token.balanceOf(accounts[1]);
         assert.equal(bal, 5);
     })
 
     it("distributeTokens", async () => {
-       await dobby.distributeTokens([accounts[1], accounts[2]], 5, {from: accounts[0]});
+       await airdrop.distributeTokens([accounts[1], accounts[2]], 5, {from: accounts[0]});
 
        let bal1 = await token.balanceOf(accounts[1]);
        let bal1Num = await parseFloat(bal1);
