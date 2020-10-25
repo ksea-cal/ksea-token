@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >= 0.5.0 < 0.7.0;
 
-import "../../KSEAToken/contracts/SafeMath.sol";
-import "../../KSEAToken/contracts/EIP20Interface.sol";
+// import "../../KSEAToken/contracts/SafeMath.sol";
+// import "../../KSEAToken/contracts/EIP20Interface.sol";
 import "../../KSEAToken/contracts/KSEAToken.sol";
 
 contract Ownable {
@@ -25,12 +25,12 @@ contract Ownable {
 }
 
 
-contract KSEADobby is Ownable {
+contract KSEAairdrop is Ownable {
     using SafeMath for uint256;
 
     // DobbyFactory private dobbyFactory;
     EIP20Interface private dobbyToken;
-    EIP20Interface private semesterToken;
+    // EIP20Interface private semesterToken;
 
     // Board Member mapping set up
     mapping (address => bool) private boardMembers;
@@ -69,7 +69,7 @@ contract KSEADobby is Ownable {
     } 
  
     // Distribute tokens to a list of members 
-    function distributeTokens(address[] calldata _members, uint256 _value) onlyOwner external {
+    function distributeTokens(address[] calldata _members, uint256 _value) external {
         require(isBoardMember(msg.sender) == true, "You are not the board member!");
         for (uint i = 0; i < _members.length; i++) {
             sendInternally(_members[i], _value);
@@ -77,7 +77,7 @@ contract KSEADobby is Ownable {
     }
 
     // Distribute token to one recipient 
-    function sendInternally(address recipient, uint256 tokensToSend) public {
+    function sendInternally(address recipient, uint256 tokensToSend) internal {
         if (recipient == address(0)) return;
 
         if (tokensAvailable() >= tokensToSend) {
@@ -92,15 +92,4 @@ contract KSEADobby is Ownable {
     function tokensAvailable() view internal returns (uint256) {
         return dobbyToken.balanceOf(owner);
     }  
-
-    // Exchange semester token to Dobby token 
-    // Do not literally exchange semester token - give semester token amount of Dobby token
-    // Members can keep their semester token
-    function exchangeToDobby(address _curSemester, address[] memory _memberAccount) public {
-        semesterToken = EIP20Interface(_curSemester);
-        for (uint i = 0; i < _memberAccount.length; i++) {
-            uint256 semBal = semesterToken.balanceOf(_memberAccount[i]);
-            sendInternally(_memberAccount[i], semBal);
-        }
-    }
 }
