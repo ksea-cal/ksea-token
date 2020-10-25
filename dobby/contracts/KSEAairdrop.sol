@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >= 0.5.0 < 0.7.0;
 
-import "../../KSEAToken/contracts/SafeMath.sol";
-import "../../KSEAToken/contracts/EIP20Interface.sol";
+// import "../../KSEAToken/contracts/SafeMath.sol";
+// import "../../KSEAToken/contracts/EIP20Interface.sol";
 import "../../KSEAToken/contracts/KSEAToken.sol";
 
 // contract DobbyFactory {
@@ -39,12 +39,12 @@ contract Ownable {
 }
 
 
-contract KSEADobby is Ownable {
+contract KSEAairdrop is Ownable {
     using SafeMath for uint256;
 
     // DobbyFactory private dobbyFactory;
     EIP20Interface private dobbyToken;
-    EIP20Interface private semesterToken;
+    // EIP20Interface private semesterToken;
 
     //mapping, struct, variable Set up
     mapping (address => bool) private boardMembers;
