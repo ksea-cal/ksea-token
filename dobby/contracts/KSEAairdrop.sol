@@ -5,20 +5,6 @@ pragma solidity >= 0.5.0 < 0.7.0;
 // import "../../KSEAToken/contracts/EIP20Interface.sol";
 import "../../KSEAToken/contracts/KSEAToken.sol";
 
-// contract DobbyFactory {
-//     function createDobby(
-//         uint256 calldata _initialSupply,
-//         string calldata _name,
-//         string calldata _symbol
-//     ) external returns (address) {
-//         KSEAToken instance = new KSEAToken(_initialSupply, _name, _symbol);
-//         // p.transferOwnership(msg.sender);
-//         address addr = address(instance);
-
-//         return addr;
-//     }
-// }
-
 contract Ownable {
 
   address public owner;
@@ -46,36 +32,38 @@ contract KSEAairdrop is Ownable {
     EIP20Interface private dobbyToken;
     // EIP20Interface private semesterToken;
 
-    //mapping, struct, variable Set up
+    // Board Member mapping set up
     mapping (address => bool) private boardMembers;
 
     //event section
-    event RegisterBoardMember(address indexed _boardMember, bool indexed _flag);
-    event DeregisterBoardMember(address indexed _boardMember, bool indexed _flag);
+    event RegisteredBoardMember(address indexed _boardMember, bool indexed _flag);
+    event DeregisteredBoardMember(address indexed _boardMember, bool indexed _flag);
     event TransferredToken(address indexed _to, uint256 _value);
     event FailedTransfer(address indexed _to, uint256 _value);
 
     constructor(address _dobbyToken) public {
-        //dobbyFactory = DobbyFactory(_dobbyFactory);
         dobbyToken = EIP20Interface(_dobbyToken);
     }
 
-    //board member mamagement
+    // Register board member and emit Registered Board Member event 
     function registerBoardMember(address _boardMember) onlyOwner external {
         boardMembers[_boardMember] = true;
-        emit RegisterBoardMember(_boardMember, true);
+        emit RegisteredBoardMember(_boardMember, true);
     }
 
+    // Deregister board member and emit Registered Board Member event 
     function deregisterBoardMember(address _boardMember) onlyOwner external {
         boardMembers[_boardMember] = false;
-        emit DeregisterBoardMember(_boardMember, false);
+        emit DeregisteredBoardMember(_boardMember, true);
     }
 
+    // Check if address corresponds to a Board Member 
+    // TODO: This is currently a hack using Solidity internals 
     function isBoardMember(address _boardMember) public view returns (bool) {
-        return boardMembers[_boardMember];
+        return boardMembers[_boardMember]; // Notice Solidity initializes maps with False 
     }
 
-    //Token Distribution functions
+    // Ether Distribution function
     function distributeEther(address[] calldata _members, uint256 _value) onlyOwner external {
     //     require(isBoardMember(msg.sender) == true, "You are not the board member!")
     //     for (uint i = 0; i < _members.length; i++) {
@@ -83,37 +71,28 @@ contract KSEAairdrop is Ownable {
     //     }
     // } 
  
-    //send tokens to users 
-    function distributeTokens(address[] calldata _members, uint256 _value, string _currency) external {
+    // Distribute tokens to a list of members 
+    function distributeTokens(address[] calldata _members, uint256 _value) external {
         require(isBoardMember(msg.sender) == true, "You are not the board member!");
         for (uint i = 0; i < _members.length; i++) {
             sendInternally(_members[i], _value, _currency);
         }
     }
 
-
+    // Distribute token to one recipient 
     function sendInternally(address recipient, uint256 tokensToSend) internal {
-        if(recipient == address(0)) return;
+        if (recipient == address(0)) return;
 
-        if(tokensAvailable() >= tokensToSend) {
-        dobbyToken.transferFrom(msg.sender, recipient, tokensToSend);
-        emit TransferredToken(recipient, tokensToSend);
+        if (tokensAvailable() >= tokensToSend) {
+            dobbyToken.transferFrom(msg.sender, recipient, tokensToSend);
+            emit TransferredToken(recipient, tokensToSend);
         } else {
-        emit FailedTransfer(recipient, tokensToSend); 
+            emit FailedTransfer(recipient, tokensToSend); 
         }
     }  
 
+    // Check how much tokens are currently available 
     function tokensAvailable() view internal returns (uint256) {
         return dobbyToken.balanceOf(owner);
     }  
-
-    //exchange semester token to dobby token. Don't literally exchange semester token. Just give semester token amount of dobby token. They can keep their sem    // function exchangeToDobby(address _curSemester, address[] memory _memberAccount) public {
-    //     semesterToken = EIP20Interface(_curSemester);
-    //     uint256 i = 0;
-    //     while (i < _memberAccount.length) {
-    //         uint256 semBal = semesterToken.balanceOf(_memberAccount[i]);
-    //         sendInternally(_memberAccount[i], semBal);
-    //         i++;
-    //     }
-    // }ester token. 
 }
