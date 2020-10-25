@@ -24,7 +24,6 @@ contract Ownable {
   }
 }
 
-
 contract KSEAairdrop is Ownable {
     using SafeMath for uint256;
 
