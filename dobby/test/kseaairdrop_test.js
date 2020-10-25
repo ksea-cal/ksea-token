@@ -31,26 +31,28 @@ contract("KSEAirdrop", async () => {
         assert.equal(bal0, 10000);
     })
 
-    it("sendInternally", async () => {
-        await token.approve(airdrop.address, 100);
-
-        await airdrop.sendInternally(accounts[1], 5, {from:accounts[0]}); // Parameter
-
-        let bal = await token.balanceOf(accounts[1]);
-        assert.equal(bal, 5);
-    })
-
     it("distributeTokens", async () => { //parameter check
-       await airdrop.distributeTokens([accounts[1], accounts[2]], 5, {from: accounts[0]});
+       await token.approve(airdrop.address, 100);
+       await airdrop.distributeTokens([accounts[1], accounts[2]], 5, false, {from: accounts[0]});
 
        let bal1 = await token.balanceOf(accounts[1]);
        let bal1Num = await parseFloat(bal1);
-       let bal2 = await token.balanceOf(accounts[2])
-       ;
+       let bal2 = await token.balanceOf(accounts[2]);
        let bal2Num = await parseFloat(bal2);
 
-       assert.equal(bal1Num, 10);
+       assert.equal(bal1Num, 5);
        assert.equal(bal2Num, 5);
     });
-    
+
+    it("distributeEther", async () => { //parameter check
+       await airdrop.distributeTokens([accounts[1], accounts[2]], 5, true, {from: accounts[0]});
+
+       let bal1 = await web3.eth.getBalance(accounts[1]);
+       let bal1Num = await parseFloat(bal1);
+       let bal2 = await web3.eth.getBalance(accounts[2]);
+       let bal2Num = await parseFloat(bal2);
+
+       assert.equal(bal1Num, 5);
+       assert.equal(bal2Num, 5);
+    });
 });

@@ -25,7 +25,7 @@ contract Ownable {
 }
 
 
-contract KSEAairdrop is Ownable {
+contract KSEAirdrop is Ownable {
     using SafeMath for uint256;
 
     // DobbyFactory private dobbyFactory;
@@ -47,62 +47,62 @@ contract KSEAairdrop is Ownable {
         dobbyToken = EIP20Interface(_dobbyToken);
     }
 
-    // Register board member and emit Registered Board Member event 
+    // Register board member and emit Registered Board Member event
     function registerBoardMember(address _boardMember) onlyOwner external {
         boardMembers[_boardMember] = true;
         emit RegisteredBoardMember(_boardMember, true);
     }
 
-    // Deregister board member and emit Registered Board Member event 
+    // Deregister board member and emit Registered Board Member event
     function deregisterBoardMember(address _boardMember) onlyOwner external {
         boardMembers[_boardMember] = false;
         emit DeregisteredBoardMember(_boardMember, true);
     }
 
-    // Check if address corresponds to a Board Member 
-    // TODO: This is currently a hack using Solidity internals 
+    // Check if address corresponds to a Board Member
+    // TODO: This is currently a hack using Solidity internals
     function isBoardMember(address _boardMember) public view returns (bool) {
-        return boardMembers[_boardMember]; // Notice Solidity initializes maps with False 
+        return boardMembers[_boardMember]; // Notice Solidity initializes maps with False
     }
- 
-    // Distribute tokens to a list of members 
+
+    // Distribute tokens to a list of members
     function distributeTokens(address[] calldata _members, uint256 _value, bool isEther) external {
         require(isBoardMember(msg.sender) == true, "You are not the board member!");
-        if (isEther == true) { 
+        if (isEther == true) {
             for (uint i = 0; i < _members.length; i++) {
                 sendInternallyEther(_members[i], _value);
             }
-        } else { 
+        } else {
             for (uint i = 0; i < _members.length; i++) {
                 sendInternallyDobby(_members[i], _value);
             }
         }
     }
 
-    // Distribute Ether to one recipient 
-    function sendInternallyEther(address recipient, uint256 tokensToSend) internal { 
+    // Distribute Ether to one recipient
+    function sendInternallyEther(address recipient, uint256 tokensToSend) internal {
         if (recipient == address(0)) return;
-        if (msg.sender.balance >= tokensToSend) { 
-            msg.sender.transfer(tokensToSend); 
-            emit EtherTransferredToken(recipient, tokensToSend); 
-        } else { 
-            emit EtherFailedTransfer(recipient, tokensToSend); 
+        if (owner.balance >= tokensToSend) {
+            msg.sender.transfer(tokensToSend);
+            emit EtherTransferredToken(recipient, tokensToSend);
+        } else {
+            emit EtherFailedTransfer(recipient, tokensToSend);
         }
     }
 
-    // Distribute Dobby to one recipient 
-    function sendInternallyDobby(address recipient, uint256 tokensToSend) internal { 
+    // Distribute Dobby to one recipient
+    function sendInternallyDobby(address recipient, uint256 tokensToSend) internal {
         if (recipient == address(0)) return;
         if (tokensAvailable() >= tokensToSend) {
             dobbyToken.transferFrom(msg.sender, recipient, tokensToSend);
             emit TransferredToken(recipient, tokensToSend);
         } else {
-            emit FailedTransfer(recipient, tokensToSend); 
+            emit FailedTransfer(recipient, tokensToSend);
         }
     }
 
-    // Check how much tokens are currently available 
+    // Check how much tokens are currently available
     function tokensAvailable() view internal returns (uint256) {
         return dobbyToken.balanceOf(owner);
-    }  
+    }
 }
