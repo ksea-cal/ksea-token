@@ -1,6 +1,6 @@
 const assert = require('assert');
 const KSEAToken = artifacts.require("KSEAToken");
-const KSEAairdrop = artifacts.require("KSEAairdrop");
+const KSEAirdrop = artifacts.require("KSEAirdrop");
 
 let accounts;
 let airdrop;
@@ -9,10 +9,10 @@ let token;
 beforeEach(async () => {
     accounts = await web3.eth.getAccounts();
     token = await KSEAToken.deployed();
-    airdrop = await KSEAairdrop.deployed(token.address);
+    airdrop = await KSEAirdrop.deployed(token.address);
 });
 
-contract("KSEAairdrop", async () => {
+contract("KSEAirdrop", async () => {
     it("should register board member", async () => {
         await airdrop.registerBoardMember(accounts[0], {from:accounts[0]});
 
@@ -34,13 +34,13 @@ contract("KSEAairdrop", async () => {
     it("sendInternally", async () => {
         await token.approve(airdrop.address, 100);
 
-        await airdrop.sendInternally(accounts[1], 5, {from:accounts[0]});
+        await airdrop.sendInternally(accounts[1], 5, {from:accounts[0]}); // Parameter
 
         let bal = await token.balanceOf(accounts[1]);
         assert.equal(bal, 5);
     })
 
-    it("distributeTokens", async () => {
+    it("distributeTokens", async () => { //parameter check
        await airdrop.distributeTokens([accounts[1], accounts[2]], 5, {from: accounts[0]});
 
        let bal1 = await token.balanceOf(accounts[1]);
