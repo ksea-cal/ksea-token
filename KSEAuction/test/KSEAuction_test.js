@@ -36,14 +36,23 @@ contract("KSEAuction", async () => {
 
   it ("withdraw function test", async () => {
     let status = auction.withdraw({from: accounts[1]});
-    let bal1 = await parseFloat(token.balanceOf(accounts[1]));
-    assert.equal(100, bal1);
+    let bal1 = await token.balanceOf(accounts[1]);
+    let bal1Parsed = await parseFloat(bal1);
+    assert.equal(100, bal1Parsed);
+  });
+
+  it ("internal withdraw test", async() => {
+    await auction.bid(40, {from: accounts[2]});
+    let bal2 = await token.balanceOf(accounts[2]);
+    let bal2Parsed = await parseFloat(bal2);
+    assert.equal(60, bal2Parsed);
   });
 
   it ("getTotalBids function test", async () => {
     await auction.bid(50, {from: accounts[1]});
-    let totBid = await parseFloat(auction.getTotalBids());
-    assert.equal(95, totBid);
+    let totBid = await auction.getTotalBids();
+    let totBidParsed = await parseFloat(totBid);
+    assert.equal(120, totBidParsed);
   });
 
   it ("auctionEnd function test", async () => {
