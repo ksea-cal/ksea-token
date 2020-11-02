@@ -27,18 +27,17 @@ contract KSEAuction is Ownable {
 
     EIP20Interface private dobbyToken;
 
-    uint256 public auctionEndTime; 
-    uint256 public highestBid; 
-    address public highestBidder; 
+    uint256 public auctionEndTime;
+    uint256 public highestBid;
+    address public highestBidder;
     bool ended;
 
     address[] bidders;
 
     // Allowed withdrawals of previous bids
     mapping(address => uint) pendingReturns;
-    mapping(address => uint) public bids; 
-
-      
+    mapping(address => uint) public bids;
+    mapping(address => bool) private bidChecker;
 
     // modifier an_ongoing_auction() { require(now <= auction_end);
     // _;
@@ -51,7 +50,7 @@ contract KSEAuction is Ownable {
         auctionEndTime = block.timestamp + _biddingTime;
         dobbyToken = EIP20Interface(_dobbyToken);
     }
-    
+
     function bid(uint256 _amount) public {
         require(
             now <= auctionEndTime,
@@ -71,10 +70,33 @@ contract KSEAuction is Ownable {
             // withdraw their money themselves.
             pendingReturns[highestBidder] += highestBid;
         }
+
+        if (bidChecker[msg.sender] == true) {
+          internalWithdraw(msg.sender);
+        }
         dobbyToken.transferFrom(msg.sender, address(this), _amount);
         highestBidder = msg.sender;
         highestBid = _amount;
+        bidChecker[msg.sender] = true;
         emit HighestBidIncreased(msg.sender, _amount);
+    }
+
+    function internalWithdraw(address member) onlyOwner internal returns (bool) {
+      uint amount = pendingReturns[member];
+      if (amount > 0) {
+          // It is important to set this to zero because the recipient
+          // can call this function again as part of the receiving call
+          // before `send` returns.
+          pendingReturns[msg.sender] = 0;
+          dobbyToken.transfer(member, amount);
+          /* TODO: Condition check */
+          if (!member.send(amount)) {
+              // No need to call throw here, just reset the amount owing
+              pendingReturns[member] = amount;
+              return false;
+          }
+      }
+      return true;
     }
 
     /// Withdraw a bid that was overbid.
@@ -127,6 +149,6 @@ contract KSEAuction is Ownable {
     function getTotalBids() public view returns (uint256) {
         return dobbyToken.balanceOf(address(this));
     }
-    
-    
+
+
 }
