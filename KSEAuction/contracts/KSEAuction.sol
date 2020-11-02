@@ -54,7 +54,7 @@ contract Auction is ownable {
         dobbyToken = EIP20Interface(_dobbyToken);
     }
     
-    function bid() public payable {
+    function bid(uint256 _amount) public payable {
         require(
             now <= auctionEndTime,
             "Auction already ended."
@@ -73,9 +73,10 @@ contract Auction is ownable {
             // withdraw their money themselves.
             pendingReturns[highestBidder] += highestBid;
         }
+        dobbyToken.transferFrom(msg.sender, address(this), _amount);
         highestBidder = msg.sender;
-        highestBid = msg.value;
-        emit HighestBidIncreased(msg.sender, msg.value);
+        highestBid = _amount;
+        emit HighestBidIncreased(msg.sender, _amount);
     }
 
     /// Withdraw a bid that was overbid.
@@ -86,6 +87,7 @@ contract Auction is ownable {
             // can call this function again as part of the receiving call
             // before `send` returns.
             pendingReturns[msg.sender] = 0;
+            dobbyToken.transferFrom(address(this), msg.sender, amount);
 
             if (!msg.sender.send(amount)) {
                 // No need to call throw here, just reset the amount owing
@@ -121,6 +123,10 @@ contract Auction is ownable {
         emit AuctionEnded(highestBidder, highestBid);
 
         // 3. Interaction
-        beneficiary.transfer(highestBid);
+        dobbyToken.transferFrom(address(this), owner, highestBid);
+    }
+
+    function getTotalBids() public view returns (uint256) {
+        return dobbyToken.balanceOf(address(this));
     }
 }

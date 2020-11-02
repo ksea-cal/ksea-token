@@ -24,7 +24,6 @@ contract Ownable {
   }
 }
 
-
 contract KSEAirdrop is Ownable {
     using SafeMath for uint256;
 
