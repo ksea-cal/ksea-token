@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >= 0.5.0 < 0.7.0;
 
-// import "../../KSEAToken/contracts/SafeMath.sol";
-// import "../../KSEAToken/contracts/EIP20Interface.sol";
 import "../../KSEAToken/contracts/KSEAToken.sol";
 
 contract Ownable {
@@ -50,7 +48,7 @@ contract KSEAuction is Ownable {
     event AuctionEnded(address winner, uint amount);
 
     constructor(uint256 _biddingTime, address _dobbyToken) public {
-        auctionEndTime = now + _biddingTime;
+        auctionEndTime = block.timestamp + _biddingTime;
         dobbyToken = EIP20Interface(_dobbyToken);
     }
     
@@ -87,7 +85,7 @@ contract KSEAuction is Ownable {
             // can call this function again as part of the receiving call
             // before `send` returns.
             pendingReturns[msg.sender] = 0;
-            dobbyToken.transferFrom(address(this), msg.sender, amount);
+            dobbyToken.transfer(msg.sender, amount);
 
             if (!msg.sender.send(amount)) {
                 // No need to call throw here, just reset the amount owing
@@ -129,4 +127,6 @@ contract KSEAuction is Ownable {
     function getTotalBids() public view returns (uint256) {
         return dobbyToken.balanceOf(address(this));
     }
+    
+    
 }
