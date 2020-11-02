@@ -64,7 +64,7 @@ contract KSEAuction is Ownable {
         emit HighestBidIncreased(msg.sender, _amount);
     }
 
-    function internalWithdraw(address member) onlyOwner internal returns (bool) {
+    function internalWithdraw(address member) internal returns (bool) {
       uint amount = pendingReturns[member];
       if (amount > 0) {
           // It is important to set this to zero because the recipient
