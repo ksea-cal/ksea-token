@@ -24,7 +24,7 @@ contract Ownable {
   }
 }
 
-contract Auction is ownable {
+contract Auction is Ownable {
     using SafeMath for uint256;
 
     EIP20Interface private dobbyToken;
