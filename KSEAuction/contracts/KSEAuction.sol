@@ -2,25 +2,8 @@
 pragma solidity >= 0.5.0 < 0.7.0;
 
 import "../../KSEAToken/contracts/KSEAToken.sol";
+import "../../KSEAirdrop/contracts/KSEAirdrop.sol";
 
-contract Ownable {
-
-  address public owner;
-
-  constructor() public {
-    owner = msg.sender;
-  }
-
-  modifier onlyOwner() {
-    require(msg.sender == owner, "Ownable: caller is not owner");
-    _;
-  }
-
-  function transferOwnership(address newOwner) onlyOwner public {
-    require(newOwner != address(0));
-    owner = newOwner;
-  }
-}
 
 contract KSEAuction is Ownable {
     using SafeMath for uint256;
@@ -90,11 +73,11 @@ contract KSEAuction is Ownable {
           pendingReturns[msg.sender] = 0;
           dobbyToken.transfer(member, amount);
           /* TODO: Condition check */
-          if (!member.send(amount)) {
-              // No need to call throw here, just reset the amount owing
-              pendingReturns[member] = amount;
-              return false;
-          }
+        //   if (!member.send(amount)) {
+        //       // No need to call throw here, just reset the amount owing
+        //       pendingReturns[member] = amount;
+        //       return false;
+        //   }
       }
       return true;
     }
@@ -109,11 +92,11 @@ contract KSEAuction is Ownable {
             pendingReturns[msg.sender] = 0;
             dobbyToken.transfer(msg.sender, amount);
 
-            if (!msg.sender.send(amount)) {
-                // No need to call throw here, just reset the amount owing
-                pendingReturns[msg.sender] = amount;
-                return false;
-            }
+            // if (!msg.sender.send(amount)) {
+            //     // No need to call throw here, just reset the amount owing
+            //     pendingReturns[msg.sender] = amount;
+            //     return false;
+            // }
         }
         return true;
     }
