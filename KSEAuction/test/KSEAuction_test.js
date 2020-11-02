@@ -56,6 +56,6 @@ contract("KSEAuction", async () => {
   });
 
   it ("auctionEnd function test", async () => {
-
+    evm_
   });
 });
