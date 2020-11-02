@@ -24,13 +24,13 @@ contract("KSEAuction", async () => {
 
     await token.approve(auction.address, 10000, {from: accounts[1]});
     await auction.bid(10, {from: accounts[1]});
-    let highBid1 = await auction.getHighestBid();
+    let highBid1 = await auction.highestBid();
     assert.equal(10, highBid1);
     await token.approve(auction.address, 10000, {from: accounts[2]});
     await auction.bid(15, {from: accounts[2]});
     await token.approve(auction.address, 10000, {from: accounts[3]});
     await auction.bid(30, {from: accounts[3]});
-    let highBid2 = await auction.getHighestBid();
+    let highBid2 = await auction.highestBid();
     assert.equal(30, highBid2);
   });
 
@@ -56,6 +56,6 @@ contract("KSEAuction", async () => {
   });
 
   it ("auctionEnd function test", async () => {
-    evm_
+
   });
 });
