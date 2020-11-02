@@ -17,25 +17,32 @@ beforeEach(async () => {
 
 contract("KSEAuction", async () => {
   it ("highestBid function test", async () => {
-    await token.approve(airdrop.address, 100);
-    await airdrop.distributeEther([accounts[1], accounts[2]], {from: accounts[0], value: 2e18});
+    await token.approve(airdrop.address, 10000, {from: accounts[0]});
+    await airdrop.registerBoardMember(accounts[0]);
     await airdrop.distributeDobbyTokens([accounts[1], accounts[2], accounts[3]], 100, {from: accounts[0]});
 
+
+    await token.approve(auction.address, 10000, {from: accounts[1]});
     await auction.bid(10, {from: accounts[1]});
-    assert.equal(10, auction.highestBid());
-    await auction.bid(10, {from: accounts[2]});
+    let highBid1 = await auction.getHighestBid();
+    assert.equal(10, highBid1);
+    await token.approve(auction.address, 10000, {from: accounts[2]});
+    await auction.bid(15, {from: accounts[2]});
+    await token.approve(auction.address, 10000, {from: accounts[3]});
     await auction.bid(30, {from: accounts[3]});
-    assert.equal(30, auction.highestBid());
+    let highBid2 = await auction.getHighestBid();
+    assert.equal(30, highBid2);
   });
 
   it ("withdraw function test", async () => {
-    let status = auction.withdraw({from: accounts[2]});
-    assert.true(status);
+    let status = auction.withdraw({from: accounts[1]});
+    assert.equal(100, token.balanceOf(accounts[1]));
   });
 
   it ("getTotalBids function test", async () => {
     await auction.bid(50, {from: accounts[1]});
-    assert.equal(90, auction.getTotalBids());
+    let totBid = await parseFloat(auction.getTotalBids());
+    assert.equal(95, totBid);
   });
 
   it ("auctionEnd function test", async () => {

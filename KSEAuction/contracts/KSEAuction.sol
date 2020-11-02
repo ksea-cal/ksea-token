@@ -64,6 +64,10 @@ contract KSEAuction is Ownable {
         emit HighestBidIncreased(msg.sender, _amount);
     }
 
+    function getHighestBid() public view returns (uint256) {
+      return highestBid;
+    }
+
     function internalWithdraw(address member) onlyOwner internal returns (bool) {
       uint amount = pendingReturns[member];
       if (amount > 0) {
