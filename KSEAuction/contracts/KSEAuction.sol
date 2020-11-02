@@ -24,7 +24,7 @@ contract Ownable {
   }
 }
 
-contract Auction is Ownable {
+contract KSEAuction is Ownable {
     using SafeMath for uint256;
 
     EIP20Interface private dobbyToken;
@@ -54,14 +54,14 @@ contract Auction is Ownable {
         dobbyToken = EIP20Interface(_dobbyToken);
     }
     
-    function bid(uint256 _amount) public payable {
+    function bid(uint256 _amount) public {
         require(
             now <= auctionEndTime,
             "Auction already ended."
         );
 
         require(
-            msg.value > highestBid,
+            _amount > highestBid,
             "There already is a higher bid."
         );
 

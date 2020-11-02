@@ -96,6 +96,6 @@ contract KSEAirdrop is Ownable {
         return dobbyToken.balanceOf(owner);
     }
 
-    function payMe() public payable { 
-    }
+    // function payMe() public payable { 
+    // }
 }
