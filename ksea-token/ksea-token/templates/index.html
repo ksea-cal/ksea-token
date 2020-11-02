@@ -5,13 +5,8 @@
 </head>
 <body>
     <p> Current Winners </p>
-    <tbody>
-        {% for c in curr_sem_users %}
-        <tr>
-            <td>{{ c.nickname }}</td>
-            <td>{{ c.num_points }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+    {% for c in curr_sem_users %}
+        <p> {{ c.name }}: {{ c.num_points }} </p>
+    {% endfor %}
 </body>
 </html>

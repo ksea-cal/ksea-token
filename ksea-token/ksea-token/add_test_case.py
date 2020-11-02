@@ -1,4 +1,4 @@
-from db import *
+from db import db, User
 
 db.create_all()
 

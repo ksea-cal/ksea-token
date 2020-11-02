@@ -1,6 +1,5 @@
 import flask
 from flask_sqlalchemy import SQLAlchemy
-
 from app import app
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/ksea-token.db'
