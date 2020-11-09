@@ -10,29 +10,39 @@ import '../App.css';
 
 function Officer(props) {
 
+
   function handleBoardChange(event) {
-    setBoardValue(event.target.boardValue);
+    setBoardValue(event.target.value);
+    console.log(boardValue);
   }
 
   function handleMemberChange(event) {
-    setMemberValue(event.target.memberValue);
+    setMemberValue(event.target.value);
+    console.log("memberValue: ", memberValue)
   }
+
+  function handleEventChange(event) {
+    setEventValue(event.target.value);
+    console.log("eventValue:", eventValue);
+  }
+
+  useEffect(() => {
+    
+  })
 
   function handleRegister(event) {
     event.preventDefault();
     props.registerBoardMem(boardValue)
   }
 
-  async function handleSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault();
-
-    props.distributeTokens(memberValue, amount)
+    props.distributeTokens(memberValue, eventValue);
   }
-
-
 
   const [boardValue, setBoardValue] = useState('');
   const [memberValue, setMemberValue] = useState('');
+  const [eventValue, setEventValue] = useState(0);
 
   //have input section for what event it is
   //import list of array 
@@ -41,7 +51,7 @@ function Officer(props) {
     <Form>
       <Form.Group controlId="formBasicEmail">
         <Form.Label>Register Board Member</Form.Label>
-        <Form.Control type="string" placeholder="Board Member Address" />
+        <Form.Control type="text" onChange={handleBoardChange} placeholder="Board Member Address" />
       </Form.Group>
       <Button onClick={handleRegister} variant="primary" type="submit">
         Register
@@ -56,12 +66,12 @@ function Officer(props) {
 
       <Form.Group controlId="formBasicPassword">
       <Form.Label>Type of Event</Form.Label>
-        <Form.Control as="select" size="sm" custom>
-          <option>GM: 2 Dobbies</option>
-          <option>Focus Group: 3 Dobbies</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
+        <Form.Control onChange={handleEventChange} as="select" size="sm" custom>
+          <option value="2">GM: 2 Dobbies</option>
+          <option value="3">Focus Group: 3 Dobbies</option>
+          <option value="4">a</option>
+          <option value="5">b</option>
+          <option value="6">c</option>
         </Form.Control>
       </Form.Group>
       <Button onClick={handleSubmit} variant="primary" type="submit">

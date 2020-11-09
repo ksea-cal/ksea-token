@@ -86,15 +86,15 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
   //Airdrop Section
 
   async function registerBoardMem(_address) {
-    await airdrop.methods.registerBoardMember(_address).send()
+    await airdrop.methods.registerBoardMember(_address).send({from:account})
     let board = await airdrop.methods.isBoardMember(_address).call();
 
     console.log("IsBoardMember: ", board);
   }
 
   async function distributeTokens(_addresses, _value) {
-    await token.methods.approve(airdrop.address, _value);
-    await airdrop.methods.distributeDobbyTokens(_addresses, _value).send()
+    await token.methods.approve(airdrop.address, _value).send({from:account});
+    await airdrop.methods.distributeDobbyTokens(_addresses, _value).send({from:account})
     let bal1 = await token.balanceOf(_addresses[0]);
     let bal1Num = await parseFloat(bal1);
 
