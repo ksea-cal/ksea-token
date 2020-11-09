@@ -10,7 +10,7 @@ import '../App.css';
 function Officer(props) {
 
   function distributeTokens() {
-    
+
   }
 
   //have input section for what event it is
@@ -21,7 +21,7 @@ function Officer(props) {
             style={{ display: "flex", justifyContent: "center", paddingTop: 150 }}
           >
           <ButtonGroup>
-              <Button onClick=>Send Dobby!</Button>
+              <Button>Send Dobby!</Button>
 
               <DropdownButton as={ButtonGroup}    title="Dropdown" 
               variant="secondary"

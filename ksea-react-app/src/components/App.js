@@ -53,6 +53,36 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
       // console.log('Smart contracts not deployed to detected network.')
       setLoading(false)
     }
+    const networkData = KSEA_Auction.networks[networkId]
+    console.log(account)
+    if(networkData) {
+      const auction = new web3.eth.Contract(KSEA_Auction.abi, networkData.address)
+      setAuction(auction)
+
+      setLoading(false)
+    } else {
+      // ***Devs*** uncomment this after deploying smart contracts
+      window.alert('Smart contracts not deployed to detected network.')
+      // console.log('Smart contracts not deployed to detected network.')
+      setLoading(false)
+    }
+        const networkData = KSEA_Auction.networks[networkId]
+    console.log(account)
+    if(networkData) {
+      const auction = new web3.eth.Contract(KSEA_Auction.abi, networkData.address)
+      setAuction(auction)
+
+      setLoading(false)
+    } else {
+      // ***Devs*** uncomment this after deploying smart contracts
+      window.alert('Smart contracts not deployed to detected network.')
+      // console.log('Smart contracts not deployed to detected network.')
+      setLoading(false)
+    }
+  }
+
+  function distributeTokens() {
+    auction.options.
   }
 
   const [account, setAccount] = useState('')
