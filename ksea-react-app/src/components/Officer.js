@@ -21,6 +21,7 @@ function Officer(props) {
             style={{ display: "flex", justifyContent: "center", paddingTop: 150 }}
           >
           <ButtonGroup>
+              <Button>Send Dobby!</Button>
 
               <DropdownButton as={ButtonGroup}    title="Dropdown" 
               variant="secondary"

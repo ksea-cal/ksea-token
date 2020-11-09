@@ -7,8 +7,7 @@ import '../App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 
-
- function App() {
+function App() {
 
   useEffect(() => {
     async function fetchData() {
@@ -49,15 +48,35 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
       setLoading(false)
     } else {
       // ***Devs*** uncomment this after deploying smart contracts
-      window.alert('Smart contracts not deployed to detected network.')
+      // window.alert('Smart contracts not deployed to detected network.')
       // console.log('Smart contracts not deployed to detected network.')
       setLoading(false)
     }
   }
 
+  function Ranking() { 
+    fetch('http://127.0.0.1:5000').then(res => res.json()).then(
+      data => setWinner(data.curr_sem_users)
+    );
+  }
+
+  function Member(address) { 
+    fetch("http://127.0.0.1:5000/viewmember?address=".concat(address)).then(res => res.json()).then(
+      data => { 
+        setMember(data.name)
+        setPoints(data.points)
+      }
+    );
+  }
+
   const [account, setAccount] = useState('')
   const [auction, setAuction] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [currentWinner, setWinner] = useState([])
+  const [currentMember, setMember] = useState("Name")
+  const [currentPoints, setPoints] = useState(0)
+  Ranking()
+  Member(account)
 
   return (
     <Router>
@@ -73,7 +92,20 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
             <Officer />
           </Route>
           <Route path="/">
-            <h1> Home Page!!!</h1>
+            <div>
+              <h1> Hi { currentMember }! </h1>
+              <h3> You currently have { currentPoints } points </h3>
+            </div>
+            <div className="App">
+              <header className="App-header">
+                <h1> Leaderboard </h1> 
+                <p>The current winner is { currentWinner[0] } </p>
+                <p> Second place is { currentWinner[1] } </p>
+                <p> Third place is { currentWinner[2] } </p>
+                <p> Fourth place is { currentWinner[3] } </p>
+                <p> Fifth place is { currentWinner[4] } </p>
+              </header>
+            </div>
           </Route>
         </Switch>
       </div>
