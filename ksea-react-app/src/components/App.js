@@ -3,6 +3,8 @@ import Navbar from "./Navbar"
 import Officer from "./Officer"
 import Web3 from 'web3';
 import KSEA_Auction from "../abis/KSEAuction.json";
+import KSEA_Airdrop from "../abis/KSEAirdrop.json";
+import KSEA_Token from "../abis/KSEAToken.json";
 import '../App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
@@ -40,53 +42,69 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
     setAccount(accounts[0])
     // Network ID
     const networkId = await web3.eth.net.getId()
-    const networkData = KSEA_Auction.networks[networkId]
+    const networkData1 = KSEA_Token.networks[networkId]
     console.log(account)
-    if(networkData) {
-      const auction = new web3.eth.Contract(KSEA_Auction.abi, networkData.address)
-      setAuction(auction)
+    if(networkData1) {
+      const token = new web3.eth.Contract(KSEA_Token.abi, networkData1.address)
+      setToken(token)
 
       setLoading(false)
     } else {
       // ***Devs*** uncomment this after deploying smart contracts
-      window.alert('Smart contracts not deployed to detected network.')
+      window.alert('Token contract not deployed to detected network.')
       // console.log('Smart contracts not deployed to detected network.')
       setLoading(false)
     }
-    const networkData = KSEA_Auction.networks[networkId]
-    console.log(account)
-    if(networkData) {
-      const auction = new web3.eth.Contract(KSEA_Auction.abi, networkData.address)
-      setAuction(auction)
+
+    const networkData2 = KSEA_Airdrop.networks[networkId]
+    if(networkData2) {
+      const airdrop = new web3.eth.Contract(KSEA_Airdrop.abi, networkData2.address)
+      setAirdrop(airdrop)
 
       setLoading(false)
     } else {
       // ***Devs*** uncomment this after deploying smart contracts
-      window.alert('Smart contracts not deployed to detected network.')
+      window.alert('Airdrop contract not deployed to detected network.')
       // console.log('Smart contracts not deployed to detected network.')
       setLoading(false)
     }
-        const networkData = KSEA_Auction.networks[networkId]
-    console.log(account)
-    if(networkData) {
-      const auction = new web3.eth.Contract(KSEA_Auction.abi, networkData.address)
+
+    const networkData3 = KSEA_Auction.networks[networkId]
+    if(networkData3) {
+      const auction = new web3.eth.Contract(KSEA_Auction.abi, networkData3.address)
       setAuction(auction)
 
       setLoading(false)
     } else {
       // ***Devs*** uncomment this after deploying smart contracts
-      window.alert('Smart contracts not deployed to detected network.')
+      window.alert('Auction contract not deployed to detected network.')
       // console.log('Smart contracts not deployed to detected network.')
       setLoading(false)
     }
   }
 
-  function distributeTokens() {
-    auction.options.
+  //Airdrop Section
+
+  async function registerBoardMem(_address) {
+    await airdrop.methods.registerBoardMember(_address).send()
+    let board = await airdrop.methods.isBoardMember(_address).call();
+
+    console.log("IsBoardMember: ", board);
+  }
+
+  async function distributeTokens(_addresses, _value) {
+    await token.methods.approve(airdrop.address, _value);
+    await airdrop.methods.distributeDobbyTokens(_addresses, _value).send()
+    let bal1 = await token.balanceOf(_addresses[0]);
+    let bal1Num = await parseFloat(bal1);
+
+    console.log(bal1Num);
   }
 
   const [account, setAccount] = useState('')
   const [auction, setAuction] = useState(null)
+  const [token, setToken] = useState(null)
+  const [airdrop, setAirdrop] = useState(null)
   const [loading, setLoading] = useState(true)
 
   return (
@@ -100,7 +118,10 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
           }  
           </Route>
           <Route path="/officer">
-            <Officer />
+            <Officer
+              registerBoardMem = {registerBoardMem}
+              distributeTokens = {distributeTokens}
+            />
           </Route>
           <Route path="/">
             <h1> Home Page!!!</h1>
