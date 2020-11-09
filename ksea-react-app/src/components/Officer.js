@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 // import Web3 from 'web3';
 import Button from 'react-bootstrap/Button'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
@@ -22,13 +22,10 @@ function Officer(props) {
   }
 
   function handleEventChange(event) {
-    setEventValue(event.target.value);
+    eventValue = event.target.value
+
     console.log("eventValue:", eventValue);
   }
-
-  useEffect(() => {
-    
-  })
 
   function handleRegister(event) {
     event.preventDefault();
@@ -42,7 +39,7 @@ function Officer(props) {
 
   const [boardValue, setBoardValue] = useState('');
   const [memberValue, setMemberValue] = useState('');
-  const [eventValue, setEventValue] = useState(0);
+  let eventValue = useRef(0);
 
   //have input section for what event it is
   //import list of array 
@@ -67,11 +64,15 @@ function Officer(props) {
       <Form.Group controlId="formBasicPassword">
       <Form.Label>Type of Event</Form.Label>
         <Form.Control onChange={handleEventChange} as="select" size="sm" custom>
+          <option value="0">Choose Event</option>
           <option value="2">GM: 2 Dobbies</option>
           <option value="3">Focus Group: 3 Dobbies</option>
-          <option value="4">a</option>
-          <option value="5">b</option>
-          <option value="6">c</option>
+          <option value="1">KSEA Chat: 1 Dobby</option>
+          <option value="4">Lead Focus Group: 4 Dobbies</option>
+          <option value="1">Small Group: 1 Dobby</option>
+          <option value="1">Social: 1 Dobby</option>
+          <option value="1">Workshop: 1 Dobby</option>
+          <option value="1">Review: 1 Dobby</option>
         </Form.Control>
       </Form.Group>
       <Button onClick={handleSubmit} variant="primary" type="submit">
