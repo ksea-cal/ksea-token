@@ -1,9 +1,8 @@
 import React from 'react';
 // import ksea_logo from '../ksea_logo.png';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
+import {Navbar, Nav} from 'react-bootstrap';
 
-function NavBar() {
+function NavBar(props) {
 
   return (
     <Navbar bg="dark" variant="dark">
@@ -20,6 +19,11 @@ function NavBar() {
         <Nav.Link href="/auction">Auction</Nav.Link>
         <Nav.Link href="/officer">Officer</Nav.Link>
       </Nav>
+      <Navbar.Collapse className="justify-content-end">
+        <Navbar.Text>
+          Signed in as: <a href="/">{props.account}</a>
+        </Navbar.Text>
+      </Navbar.Collapse>
     </Navbar>
   );
 }

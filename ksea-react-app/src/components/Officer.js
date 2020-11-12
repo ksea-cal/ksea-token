@@ -1,30 +1,27 @@
 import React, {useState, useRef} from 'react';
-// import Web3 from 'web3';
-import Button from 'react-bootstrap/Button'
-import ButtonGroup from 'react-bootstrap/ButtonGroup'
-import DropdownButton from 'react-bootstrap/DropdownButton'
-import Dropdown from 'react-bootstrap/Dropdown'
-import Form from 'react-bootstrap/Form'
-import '../App.css';
-// import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {Container, Row, Button, Col, Form} from 'react-bootstrap'
 
 function Officer(props) {
 
 
   function handleBoardChange(event) {
     setBoardValue(event.target.value);
-    console.log(boardValue);
+    // console.log(boardValue);
   }
 
   function handleMemberChange(event) {
     setMemberValue(event.target.value);
-    console.log("memberValue: ", memberValue)
+  }
+
+  function handleListChange(event) {
+    event.preventDefault();
+    setListOfMembers([...listOfMembers, memberValue])
+    // console.log("memberValue: ", listOfMembers)
   }
 
   function handleEventChange(event) {
     eventValue = event.target.value
-
-    console.log("eventValue:", eventValue);
+    // console.log("eventValue:", eventValue);
   }
 
   function handleRegister(event) {
@@ -32,68 +29,84 @@ function Officer(props) {
     props.registerBoardMem(boardValue)
   }
 
-  function handleSubmit(event) {
+  function handleDeregister(event) {
     event.preventDefault();
-    props.distributeTokens(memberValue, eventValue);
+    props.deregisterBoardMem(boardValue)
+  }
+
+  function handleDistribute(event) {
+    event.preventDefault();
+    props.distributeTokens(listOfMembers, eventValue);
   }
 
   const [boardValue, setBoardValue] = useState('');
   const [memberValue, setMemberValue] = useState('');
+  const [listOfMembers, setListOfMembers] = useState([]);
   let eventValue = useRef(0);
 
-  //have input section for what event it is
-  //import list of array 
   return (
-    
-    <Form>
-      <Form.Group controlId="formBasicEmail">
-        <Form.Label>Register Board Member</Form.Label>
-        <Form.Control type="text" onChange={handleBoardChange} placeholder="Board Member Address" />
-      </Form.Group>
-      <Button onClick={handleRegister} variant="primary" type="submit">
-        Register
-      </Button>
-
+    <div className="officer">
       <br/><br/>
+      <Container>
+        <Form>
+          <Row>
+            <Col>
+              <Form.Group>
+                <Form.Label>Register Board Member</Form.Label>
+                <Form.Control type="text" onChange={handleBoardChange} placeholder="Board Member Address" />
+              </Form.Group>
+              <Button onClick={handleRegister} variant="primary" type="submit">
+                Register
+              </Button>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>Deregister Board Member</Form.Label>
+                <Form.Control type="text" onChange={handleBoardChange} placeholder="Board Member Address" /> 
+              </Form.Group>
+              <Button onClick={handleDeregister}  variant="primary" type="submit">
+                Deregister
+              </Button>
+            </Col>          
+          </Row>
+          <br/><br/>
 
-      <Form.Group controlId="formBasicEmail">
-        <Form.Label>Loyal Dobbies!</Form.Label>
-        <Form.Control type="list" placeholder="list of Dobbies" />
-      </Form.Group>
+          <Form.Group>
+            <Form.Label>Loyal Dobbies!</Form.Label>
+            <Form.Control onChange={handleMemberChange} type="list" placeholder="list of Dobbies" />
+            <Button onClick={handleListChange}  variant="primary" type="submit">
+              Add Member
+            </Button>
+          </Form.Group>
 
-      <Form.Group controlId="formBasicPassword">
-      <Form.Label>Type of Event</Form.Label>
-        <Form.Control onChange={handleEventChange} as="select" size="sm" custom>
-          <option value="0">Choose Event</option>
-          <option value="2">GM: 2 Dobbies</option>
-          <option value="3">Focus Group: 3 Dobbies</option>
-          <option value="1">KSEA Chat: 1 Dobby</option>
-          <option value="4">Lead Focus Group: 4 Dobbies</option>
-          <option value="1">Small Group: 1 Dobby</option>
-          <option value="1">Social: 1 Dobby</option>
-          <option value="1">Workshop: 1 Dobby</option>
-          <option value="1">Review: 1 Dobby</option>
-        </Form.Control>
-      </Form.Group>
-      <Button onClick={handleSubmit} variant="primary" type="submit">
-        Send Dobbies!
-      </Button>
-    </Form>
-      // <div
-      //       className="Form"
-      //       style={{ display: "flex", justifyContent: "center", paddingTop: 150 }}
-      //     >
-      //     <ButtonGroup>
-      //         <Button>Send Dobby!</Button>
+          <ul>
+            {listOfMembers.map((member, key) => {
+              return(
+                <li key={key}>{member}</li>
+              )
+            })}
+          </ul>
 
-      //         <DropdownButton as={ButtonGroup}    title="Dropdown" 
-      //         variant="secondary"
-      //         id="bg-nested-dropdown">
-      //             <Dropdown.Item eventKey="Send Dobby!">GM: 2 Dobbies</Dropdown.Item>
-      //             <Dropdown.Item eventKey="2">Focus Group: 3 Dobbies</Dropdown.Item>
-      //         </DropdownButton>
-      //     </ButtonGroup>
-      // </div>
+          <Form.Group>
+          <Form.Label>Type of Event</Form.Label>
+            <Form.Control onChange={handleEventChange} as="select" size="sm" custom>
+              <option value="0">Choose Event</option>
+              <option value="2">GM: 2 Dobbies</option>
+              <option value="3">Focus Group: 3 Dobbies</option>
+              <option value="1">KSEA Chat: 1 Dobby</option>
+              <option value="4">Lead Focus Group: 4 Dobbies</option>
+              <option value="1">Small Group: 1 Dobby</option>
+              <option value="1">Social: 1 Dobby</option>
+              <option value="1">Workshop: 1 Dobby</option>
+              <option value="1">Review: 1 Dobby</option>
+            </Form.Control>
+          </Form.Group>
+          <Button onClick={handleDistribute} variant="primary" type="submit">
+            Send Dobbies!
+          </Button>
+        </Form>
+      </Container>
+    </div>
   );
 }
 
