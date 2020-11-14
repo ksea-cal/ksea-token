@@ -18,6 +18,7 @@ function NavBar(props) {
         <Nav.Link href="/">Home</Nav.Link>
         <Nav.Link href="/auction">Auction</Nav.Link>
         <Nav.Link href="/officer">Officer</Nav.Link>
+        <Nav.Link href="/checkin">Check In</Nav.Link>
       </Nav>
       <Navbar.Collapse className="justify-content-end">
         <Navbar.Text>

@@ -137,6 +137,9 @@ function App() {
           <Route path="/">
             <h1> Home Page!!!</h1>
           </Route>
+          <Route path="/checkin">
+            <h1> Check In Page!!!</h1>
+          </Route>
         </Switch>
       </div>
     </Router>
