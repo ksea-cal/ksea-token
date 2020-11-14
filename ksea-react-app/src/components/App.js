@@ -7,10 +7,9 @@ import KSEA_Airdrop from "../abis/KSEAirdrop.json";
 import KSEA_Token from "../abis/KSEAToken.json";
 import '../App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+ 
 
-
-
- function App() {
+function App() {
 
   useEffect(() => {
     async function fetchData() {
@@ -37,13 +36,16 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
   async function loadBlockchainData() {
     const web3 = window.web3
+
     // Load account
     const accounts = await web3.eth.getAccounts()
     setAccount(accounts[0])
+
     // Network ID
     const networkId = await web3.eth.net.getId()
+
+    // KSEA Token
     const networkData1 = KSEA_Token.networks[networkId]
-    console.log(account)
     if(networkData1) {
       const token = new web3.eth.Contract(KSEA_Token.abi, networkData1.address)
       setToken(token)
@@ -56,6 +58,7 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
       setLoading(false)
     }
 
+    // KSEA Airdrop
     const networkData2 = KSEA_Airdrop.networks[networkId]
     if(networkData2) {
       const airdrop = new web3.eth.Contract(KSEA_Airdrop.abi, networkData2.address)
@@ -69,6 +72,7 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
       setLoading(false)
     }
 
+    // KSEA Auction
     const networkData3 = KSEA_Auction.networks[networkId]
     if(networkData3) {
       const auction = new web3.eth.Contract(KSEA_Auction.abi, networkData3.address)
@@ -81,10 +85,30 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
       // console.log('Smart contracts not deployed to detected network.')
       setLoading(false)
     }
-    
-
   }
 
+  // Airdrop Section
+
+  async function registerBoardMem(_address) {
+    await airdrop.methods.registerBoardMember(_address).send({from:account})
+    let board = await airdrop.methods.isBoardMember(_address).call();
+    console.log("IsBoardMember: ", board);
+  }
+
+  async function deregisterBoardMem(_address) {
+    await airdrop.methods.deregisterBoardMember(_address).send({from:account})
+    let board = await airdrop.methods.isBoardMember(_address).call();
+    console.log("IsBoardMember: ", board);
+  }
+
+  async function distributeTokens(_addresses, _value) {
+    let total_val = _value * _addresses.length
+    await token.methods.approve(airdrop._address, total_val).send({from:account});
+    await airdrop.methods.distributeDobbyTokens(_addresses, _value).send({from:account})
+    console.log(total_val)
+  }
+
+  // States
   const [account, setAccount] = useState('')
   const [auction, setAuction] = useState(null)
   const [token, setToken] = useState(null)
@@ -94,7 +118,9 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
   return (
     <Router>
       <div className="app">
-        <Navbar />
+        <Navbar 
+          account = {account}
+        />
         <Switch>
           <Route path="/auction">
           {loading
@@ -102,7 +128,11 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
           }  
           </Route>
           <Route path="/officer">
-            <Officer />
+            <Officer
+              registerBoardMem = {registerBoardMem}
+              deregisterBoardMem = {deregisterBoardMem}
+              distributeTokens = {distributeTokens}
+            />
           </Route>
           <Route path="/">
             <h1> Home Page!!!</h1>
@@ -114,5 +144,3 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 }
 
 export default App;
-
-{/*https://www.youtube.com/watch?v=1_IYL9ZMR_Y&t=18s*/}
