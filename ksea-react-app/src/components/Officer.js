@@ -39,9 +39,31 @@ function Officer(props) {
     props.distributeTokens(listOfMembers, eventValue);
   }
 
+  //Auction Handlers
+  function handleStartPrice(event) {
+    setStartPrice(event.target.value);
+  }
+
+  function handleItemChange(event) {
+    setItemValue(event.target.value);
+  }
+  function handleTimeChange(event) {
+    setTimeValue(event.target.value); 
+  }
+
+  function handleCreate(event) {
+    event.preventDefault();
+    console.log("dobby address: ", props.dobby._address);
+    props.createAuction(itemValue, startPrice, timeValue, props.dobby._address);
+  }
+
   const [boardValue, setBoardValue] = useState('');
   const [memberValue, setMemberValue] = useState('');
+  const [timeValue, setTimeValue] = useState(0);
+  const [itemValue, setItemValue] = useState('');
+  const [startPrice, setStartPrice] = useState(0);
   const [listOfMembers, setListOfMembers] = useState([]);
+
   let eventValue = useRef(0);
 
   return (
@@ -104,6 +126,27 @@ function Officer(props) {
           <Button onClick={handleDistribute} variant="primary" type="submit">
             Send Dobbies!
           </Button>
+          <br /> <br />
+          <Form.Group>
+            <Row>
+              <Col>
+                <Form.Label>Auction Item</Form.Label>
+                <Form.Control onChange={handleItemChange} type="string" placeholder="Item Name" />
+              </Col>
+              <Col>
+                <Form.Label>Entering Fee</Form.Label>
+                <Form.Control onChange={handleStartPrice} type="string" placeholder="Entering Fee in Dobby" />
+              </Col>
+              <Col>
+                <Form.Label>Auction Time Limit</Form.Label>
+                <Form.Control onChange={handleTimeChange} type="number" placeholder="Time in seconds" />
+              </Col>
+                <Button onClick={handleCreate}  variant="primary" type="submit">
+                  Create Auction
+                </Button>
+            </Row>
+          </Form.Group>
+          
         </Form>
       </Container>
     </div>

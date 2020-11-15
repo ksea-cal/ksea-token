@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from "./Navbar"
 import Officer from "./Officer"
+import Auction from "./Auction"
 import Web3 from 'web3';
 import KSEA_Auction from "../abis/KSEAuction.json";
 import KSEA_Airdrop from "../abis/KSEAirdrop.json";
 import KSEA_Token from "../abis/KSEAToken.json";
+import AuctionFactory from "../abis/AuctionFactory.json";
 import '../App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
  
@@ -63,6 +65,7 @@ function App() {
     if(networkData2) {
       const airdrop = new web3.eth.Contract(KSEA_Airdrop.abi, networkData2.address)
       setAirdrop(airdrop)
+      console.log("airdrop address:", airdrop.options.address)
 
       setLoading(false)
     } else {
@@ -72,11 +75,12 @@ function App() {
       setLoading(false)
     }
 
-    // KSEA Auction
-    const networkData3 = KSEA_Auction.networks[networkId]
+    // AuctionFactory
+    const networkData3 = AuctionFactory.networks[networkId]
     if(networkData3) {
-      const auction = new web3.eth.Contract(KSEA_Auction.abi, networkData3.address)
-      setAuction(auction)
+      const auctionFactory = new web3.eth.Contract(AuctionFactory.abi, networkData3.address)
+      setAuctionFactory(auctionFactory)
+      console.log("auctionFactory", auctionFactory.options.address);
 
       setLoading(false)
     } else {
@@ -108,12 +112,53 @@ function App() {
     console.log(total_val)
   }
 
+  //Auction Section
+  async function createAuction(_name, _startPrice, _biddingTime, _dobbyToken) {
+    let web3 = window.web3
+    await auctionFactory.methods.createAuction(_name, _startPrice, _biddingTime, _dobbyToken).send({from:account});
+
+    let auctionAddr = await auctionFactory.methods.getAuctionAddr(_name).call();
+    console.log("auction address:", auctionAddr)
+
+    const auction = new web3.eth.Contract(KSEA_Auction.abi, auctionAddr);
+    setAuction(auction);
+
+    const itemName = await auctionFactory.methods.getItemName(_name).call();
+    setItemName(itemName);
+    console.log("name:", itemName);
+    const startPrice = await auctionFactory.methods.getStartPrice(_name).call();
+    setStartPrice(startPrice);
+    console.log("start price:", startPrice);
+  }
+
+  // async function getItemName(_name) {
+  //   await auctionFactory.methods.getItemName(_name).call();
+  // }
+
+  // async function getStartPrice(_name) {
+  //   await auctionFactory.methods.getStartPrice(_name).call();
+  // }
+
+  async function bid(_amount) {
+    await auction.methods.bid(_amount).send({from:account});
+  }
+
+  async function withdraw() {
+    await auction.methods.withdraw().send({from:account});
+  }
+  async function endAuction() {
+    await auction.methods.auctionEnd().send({from:account});
+  }
+
   // States
   const [account, setAccount] = useState('')
   const [auction, setAuction] = useState(null)
   const [token, setToken] = useState(null)
+  const [auctionFactory, setAuctionFactory] = useState(null)
   const [airdrop, setAirdrop] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [itemName, setItemName] = useState('');
+  const [startPrice, setStartPrice] = useState(0);
 
   return (
     <Router>
@@ -124,11 +169,24 @@ function App() {
         <Switch>
           <Route path="/auction">
           {loading
-            ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>:<h1> Auction Page</h1>
-          }  
+            ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
+            :<Auction 
+                bid = {bid}
+                withdraw = {withdraw}
+                endAuction = {endAuction}
+                // getItemName = {getItemName}
+                // getStartPrice = {getStartPrice}
+                itemName = {itemName}
+                startPrice = {startPrice}
+                auction = {auction}
+                
+              />
+          }
           </Route>
           <Route path="/officer">
             <Officer
+              dobby = {token}
+              createAuction = {createAuction}
               registerBoardMem = {registerBoardMem}
               deregisterBoardMem = {deregisterBoardMem}
               distributeTokens = {distributeTokens}

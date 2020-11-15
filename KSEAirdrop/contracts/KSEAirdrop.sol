@@ -7,7 +7,7 @@ import "../../KSEAToken/contracts/KSEAToken.sol";
 
 contract Ownable {
 
-  address payable public owner;
+  address public owner;
 
   constructor() public {
     owner = msg.sender;
@@ -18,7 +18,7 @@ contract Ownable {
     _;
   }
 
-  function transferOwnership(address payable newOwner) onlyOwner public {
+  function transferOwnership(address newOwner) onlyOwner public {
     require(newOwner != address(0));
     owner = newOwner;
   }
