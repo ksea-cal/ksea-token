@@ -1,12 +1,13 @@
 import React, {useState, useRef} from 'react';
 import {Container, Row, Button, Col, Form} from 'react-bootstrap'
 
-function Officer(props) {
+const axios = require('axios').default;
 
+
+function Officer(props) {
 
   function handleBoardChange(event) {
     setBoardValue(event.target.value);
-    // console.log(boardValue);
   }
 
   function handleMemberChange(event) {
@@ -16,12 +17,10 @@ function Officer(props) {
   function handleListChange(event) {
     event.preventDefault();
     setListOfMembers([...listOfMembers, memberValue])
-    // console.log("memberValue: ", listOfMembers)
   }
 
   function handleEventChange(event) {
     eventValue = event.target.value
-    // console.log("eventValue:", eventValue);
   }
 
   function handleRegister(event) {
@@ -37,11 +36,54 @@ function Officer(props) {
   function handleDistribute(event) {
     event.preventDefault();
     props.distributeTokens(listOfMembers, eventValue);
+
+    let formData = new FormData();
+    formData.append('members', listOfMembers); 
+    formData.append('points', eventValue); 
+    axios.post("http://127.0.0.1:5000/award", formData)
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+  }
+
+  function handlePassword(event) { 
+    setPassword(event.target.value);
+  }
+
+  function handleTimeLimit(event) { 
+    setTimeLimit(event.target.value);
+  }
+
+  function handleEventName(event) { 
+    setEventName(event.target.value);
+  }
+
+  // Push Check-in information to the database 
+  function handleCheckIn(event) { 
+    let formData = new FormData();
+    formData.append('password', password); 
+    formData.append('timeLimit', timeLimit); 
+    formData.append('eventName', eventName); 
+    axios.post("http://127.0.0.1:5000/createcheckin", formData)
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
   }
 
   const [boardValue, setBoardValue] = useState('');
   const [memberValue, setMemberValue] = useState('');
   const [listOfMembers, setListOfMembers] = useState([]);
+  const [password, setPassword] = useState('');
+  const [eventName, setEventName] = useState('');
+  const [timeLimit, setTimeLimit] = useState(0);
+
   let eventValue = useRef(0);
 
   return (
@@ -103,6 +145,17 @@ function Officer(props) {
           </Form.Group>
           <Button onClick={handleDistribute} variant="primary" type="submit">
             Send Dobbies!
+          </Button>
+          
+          <br></br>
+          <Form.Group>
+            <Form.Label>Create Check-In</Form.Label>
+            <Form.Control type="text" onChange={handleEventName} placeholder="Event Name" /> 
+            <Form.Control type="text" onChange={handlePassword} placeholder="Password" /> 
+            <Form.Control type="int" onChange={handleTimeLimit} placeholder="0"/> 
+          </Form.Group>
+          <Button onClick={handleCheckIn}  variant="primary" type="submit">
+            Create Check-In
           </Button>
         </Form>
       </Container>

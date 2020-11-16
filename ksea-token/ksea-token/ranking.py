@@ -1,9 +1,14 @@
-import datetime
 from flask import *
 from web3 import Web3
+import ast
+import time
 
 from app import app
-from db import db, User
+from db import db, User, Checkin
+
+
+CURR_CID = 0 
+
 
 @app.route("/")
 def index():
@@ -21,24 +26,40 @@ def viewmember():
     return {"name": curr_member.name, "points": curr_member.num_points}
 
 
-@app.route("/award", methods=["GET", "POST"])
+@app.route("/award", methods=["POST"])
 def award():
     """ Award points to members """ 
     if request.method == "POST":
-        name = request.form['name']
-        points = int(request.form['points'])
-        awardee = User.query.filter(User.name == name).first() 
-        awardee.num_points += points
+        members = request.values['members']
+        members = ast.literal_eval("[" + members + "]")
+        points = int(request.values['points'])
+        for address in members: 
+            awardee = User.query.filter(User.address == hex(address)).first() 
+            if not awardee: 
+                raise Exception("[ERROR] No Awardee {}".format(address))
+            else: 
+                print(awardee)
+            awardee.num_points += points
         db.session.commit()
-        return index()
-    else: 
-        return render_template("award.html")
+
+
+@app.route("/createcheckin", methods=["POST"])
+def create_check_in():
+    """ Award points to members """ 
+    if request.method == "POST":
+        password = request.values['password']
+        time_limit = int(request.values['timeLimit'])
+        event_name = request.values['eventName']
+        curr_checkin = Checkin(event_name=event_name,  password=password, time_limit=time_limit)
+        db.session.add(curr_checkin)
+        db.session.commit()
 
 
 @app.route("/auction", methods=["POST", "GET"])
 def auction(): 
     if request.method == "POST":
-        name = request.form['name']
+        event_name = request.form['eventName']
+        name = request.form['members']
         points = int(request.form['points'])
         awardee = User.query.filter(User.name == name).first() 
         awardee.num_points += points
