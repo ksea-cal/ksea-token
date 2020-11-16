@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >= 0.5.0 < 0.7.0;
+pragma solidity >=0.5.0 <0.7.0;
 
 import "../../KSEAToken/contracts/KSEAToken.sol";
 import "../../KSEAirdrop/contracts/KSEAirdrop.sol";
@@ -18,30 +18,29 @@ contract KSEAuction is Ownable {
     address[] bidders;
 
     // Allowed withdrawals of previous bids
-    mapping(address => uint) pendingReturns;
-    mapping(address => uint) public bids;
+    mapping(address => uint256) pendingReturns;
+    mapping(address => uint256) public bids;
     mapping(address => bool) private bidChecker;
 
-    event HighestBidIncreased(address bidder, uint amount);
-    event AuctionEnded(address winner, uint amount);
+    event HighestBidIncreased(address bidder, uint256 amount);
+    event AuctionEnded(address winner, uint256 amount);
 
-    constructor(uint256 _biddingTime, uint256 _entryFee, address _dobbyToken, address _owner) public {
+    constructor(
+        uint256 _biddingTime,
+        uint256 _entryFee,
+        address _dobbyToken
+        address _owner
+    ) public {
         auctionEndTime = block.timestamp + _biddingTime;
         dobbyToken = EIP20Interface(_dobbyToken);
-        owner = _owner;
         entryFee = _entryFee;
+        owner = _owner;
     }
 
     function bid(uint256 _amount) public {
-        require(
-            now <= auctionEndTime,
-            "Auction already ended."
-        );
+        require(block.timestamp <= auctionEndTime, "Auction already ended.");
 
-        require(
-            _amount > highestBid,
-            "There already is a higher bid."
-        );
+        require(_amount > highestBid, "There already is a higher bid.");
 
         if (highestBid != 0) {
             pendingReturns[highestBidder] += highestBid;
@@ -55,7 +54,7 @@ contract KSEAuction is Ownable {
             dobbyToken.transferFrom(msg.sender, address(this), premiumBid);
             bidChecker[msg.sender] = true;
         }
-        
+
         highestBidder = msg.sender;
         highestBid = _amount;
 
@@ -63,21 +62,21 @@ contract KSEAuction is Ownable {
     }
 
     function internalWithdraw(address member) internal returns (bool) {
-      uint amount = pendingReturns[member];
-      if (amount > 0) {
-          pendingReturns[msg.sender] = 0;
-        if (dobbyToken.transfer(member, amount)) {
-            return true;
-        } else {
-            pendingReturns[member] = amount;
-            return false;
+        uint256 amount = pendingReturns[member];
+        if (amount > 0) {
+            pendingReturns[msg.sender] = 0;
+            if (dobbyToken.transfer(member, amount)) {
+                return true;
+            } else {
+                pendingReturns[member] = amount;
+                return false;
+            }
         }
-      }
     }
 
     /// Withdraw a bid that was overbid.
     function withdraw() public returns (bool) {
-        uint amount = pendingReturns[msg.sender];
+        uint256 amount = pendingReturns[msg.sender];
         if (amount > 0) {
             pendingReturns[msg.sender] = 0;
             if (dobbyToken.transfer(msg.sender, amount)) {
@@ -93,7 +92,7 @@ contract KSEAuction is Ownable {
     /// to the beneficiary.
     function auctionEnd() public {
         // 1. Conditions
-        require(now >= auctionEndTime, "Auction not yet ended.");
+        require(block.timestamp >= auctionEndTime, "Auction not yet ended.");
         require(!ended, "auctionEnd has already been called.");
 
         // 2. Effects
