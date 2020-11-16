@@ -11,7 +11,7 @@ contract KSEAuction is Ownable {
 
     uint256 public auctionEndTime;
     uint256 public highestBid;
-    uint256 public startPrice;
+    uint256 public entryFee;
     address public highestBidder;
     bool ended;
 
@@ -25,11 +25,11 @@ contract KSEAuction is Ownable {
     event HighestBidIncreased(address bidder, uint amount);
     event AuctionEnded(address winner, uint amount);
 
-    constructor(uint256 _biddingTime, uint256 _startPrice, address _dobbyToken, address _owner) public {
+    constructor(uint256 _biddingTime, uint256 _entryFee, address _dobbyToken, address _owner) public {
         auctionEndTime = block.timestamp + _biddingTime;
         dobbyToken = EIP20Interface(_dobbyToken);
         owner = _owner;
-        startPrice = _startPrice;
+        entryFee = _entryFee;
     }
 
     function bid(uint256 _amount) public {
@@ -51,7 +51,7 @@ contract KSEAuction is Ownable {
             internalWithdraw(msg.sender);
             dobbyToken.transferFrom(msg.sender, address(this), _amount);
         } else {
-            uint256 premiumBid = _amount + startPrice;
+            uint256 premiumBid = _amount + entryFee;
             dobbyToken.transferFrom(msg.sender, address(this), premiumBid);
             bidChecker[msg.sender] = true;
         }

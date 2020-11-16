@@ -7078,12 +7078,12 @@
         }
       },
       "links": {},
-      "address": "0xc179076525EA7fF99a4Fc1d5D0524b9ecAe93A4C",
-      "transactionHash": "0xcdcf268ecde79851b7a901a6c63581a72213ab5529c995f13a4bcd68b8f823d8"
+      "address": "0xB247De23A0833B1f485686d1d30B0f2966f7adDA",
+      "transactionHash": "0x37b1c5142792e557863f0ef1d6d968e4e6310ec4063f6064579c103f2161fbb3"
     }
   },
   "schemaVersion": "3.2.2",
-  "updatedAt": "2020-11-15T15:47:46.250Z",
+  "updatedAt": "2020-11-16T05:10:53.548Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}

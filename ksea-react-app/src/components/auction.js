@@ -28,7 +28,7 @@ function Auction(props) {
             </Card.Text>
           </Card.Body>
           <ListGroup className="list-group-flush">
-            <ListGroupItem>Entering Fee: {props.startPrice}</ListGroupItem>
+            <ListGroupItem>Entering Fee: {props.entryFee}</ListGroupItem>
           </ListGroup>
           <Card.Body>
             <Card.Link href="#">Card Link</Card.Link>

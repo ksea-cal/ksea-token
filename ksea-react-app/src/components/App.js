@@ -113,9 +113,9 @@ function App() {
   }
 
   //Auction Section
-  async function createAuction(_name, _startPrice, _biddingTime, _dobbyToken) {
+  async function createAuction(_name, _entryFee, _biddingTime, _dobbyToken) {
     let web3 = window.web3
-    await auctionFactory.methods.createAuction(_name, _startPrice, _biddingTime, _dobbyToken).send({from:account});
+    await auctionFactory.methods.createAuction(_name, _entryFee, _biddingTime, _dobbyToken).send({from:account});
 
     let auctionAddr = await auctionFactory.methods.getAuctionAddr(_name).call();
     console.log("auction address:", auctionAddr)
@@ -123,12 +123,12 @@ function App() {
     const auction = new web3.eth.Contract(KSEA_Auction.abi, auctionAddr);
     setAuction(auction);
 
-    const itemName = await auctionFactory.methods.getItemName(_name).call();
+    let itemName = await auctionFactory.methods.getItemName(_name).call();
     setItemName(itemName);
     console.log("name:", itemName);
-    const startPrice = await auctionFactory.methods.getStartPrice(_name).call();
-    setStartPrice(startPrice);
-    console.log("start price:", startPrice);
+    let entryFee = await auctionFactory.methods.getEntryFee(_name).call();
+    setEntryFee(entryFee);
+    console.log("Entry fee:", entryFee);
   }
 
   // async function getItemName(_name) {
@@ -158,7 +158,7 @@ function App() {
   const [airdrop, setAirdrop] = useState(null)
   const [loading, setLoading] = useState(true)
   const [itemName, setItemName] = useState('');
-  const [startPrice, setStartPrice] = useState(0);
+  const [entryFee, setEntryFee] = useState(0);
 
   return (
     <Router>
@@ -177,7 +177,7 @@ function App() {
                 // getItemName = {getItemName}
                 // getStartPrice = {getStartPrice}
                 itemName = {itemName}
-                startPrice = {startPrice}
+                entryFee = {entryFee}
                 auction = {auction}
                 
               />

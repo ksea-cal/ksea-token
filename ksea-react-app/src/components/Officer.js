@@ -40,8 +40,8 @@ function Officer(props) {
   }
 
   //Auction Handlers
-  function handleStartPrice(event) {
-    setStartPrice(event.target.value);
+  function handleEntryFee(event) {
+    setEntryFee(event.target.value);
   }
 
   function handleItemChange(event) {
@@ -54,14 +54,14 @@ function Officer(props) {
   function handleCreate(event) {
     event.preventDefault();
     console.log("dobby address: ", props.dobby._address);
-    props.createAuction(itemValue, startPrice, timeValue, props.dobby._address);
+    props.createAuction(itemValue, entryFee, timeValue, props.dobby._address);
   }
 
   const [boardValue, setBoardValue] = useState('');
   const [memberValue, setMemberValue] = useState('');
   const [timeValue, setTimeValue] = useState(0);
   const [itemValue, setItemValue] = useState('');
-  const [startPrice, setStartPrice] = useState(0);
+  const [entryFee, setEntryFee] = useState(0);
   const [listOfMembers, setListOfMembers] = useState([]);
 
   let eventValue = useRef(0);
@@ -135,7 +135,7 @@ function Officer(props) {
               </Col>
               <Col>
                 <Form.Label>Entering Fee</Form.Label>
-                <Form.Control onChange={handleStartPrice} type="string" placeholder="Entering Fee in Dobby" />
+                <Form.Control onChange={handleEntryFee} type="string" placeholder="Entering Fee in Dobby" />
               </Col>
               <Col>
                 <Form.Label>Auction Time Limit</Form.Label>

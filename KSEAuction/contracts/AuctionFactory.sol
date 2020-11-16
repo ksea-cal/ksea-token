@@ -8,21 +8,21 @@ contract AuctionFactory {
 
     struct AuctionItem {
         string name;
-        uint256 startPrice;
+        uint256 entryFee;
         address auctionAddr;
     }
     mapping (string => AuctionItem) private auctions;
     
     function createAuction(
         string calldata _name,
-        uint256 _startPrice,
+        uint256 _entryFee,
         uint256 _biddingTime,
         address _dobbyToken
     ) external returns (bool) {
-        KSEAuction k = new KSEAuction(_biddingTime, _startPrice, _dobbyToken, msg.sender);
+        KSEAuction k = new KSEAuction(_biddingTime, _entryFee, _dobbyToken, msg.sender);
         addr = address(k);
         auctions[_name].name = _name;
-        auctions[_name].startPrice = _startPrice;
+        auctions[_name].entryFee = _entryFee;
         auctions[_name].auctionAddr = addr;
         return true;
     }
@@ -35,7 +35,7 @@ contract AuctionFactory {
         return auctions[_name].name;
     }
     
-    function getStartPrice(string calldata _name) external view returns(uint256) {
-        return auctions[_name].startPrice;
+    function getEntryFee(string calldata _name) external view returns(uint256) {
+        return auctions[_name].entryFee;
     }
 }

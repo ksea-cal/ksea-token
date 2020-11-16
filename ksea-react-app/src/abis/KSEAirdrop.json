@@ -8208,12 +8208,12 @@
         }
       },
       "links": {},
-      "address": "0xCfaF4fCd9CED4DC3b6290022E96Ea0Bfe6F366eA",
-      "transactionHash": "0xe48bf62192ef5e4a3d0e8fcf6225bf5e07310a75c32820ea273a67f5768db3fa"
+      "address": "0x6fAe6ee638370E2695F16997897857e6b3189FaE",
+      "transactionHash": "0x99549bf6a8725ffeb7e013bd91fdbf4fdc3413e57a7564833a1a5c5ff7c2518f"
     }
   },
   "schemaVersion": "3.2.2",
-  "updatedAt": "2020-11-15T15:47:46.262Z",
+  "updatedAt": "2020-11-16T05:10:53.570Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}
