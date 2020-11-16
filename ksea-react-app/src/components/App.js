@@ -3,9 +3,11 @@ import Navbar from "./Navbar"
 import Officer from "./Officer"
 import Web3 from 'web3';
 import KSEA_Auction from "../abis/KSEAuction.json";
+import KSEA_Airdrop from "../abis/KSEAirdrop.json";
+import KSEA_Token from "../abis/KSEAToken.json";
 import '../App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-
+ 
 
 function App() {
 
@@ -34,21 +36,52 @@ function App() {
 
   async function loadBlockchainData() {
     const web3 = window.web3
+
     // Load account
     const accounts = await web3.eth.getAccounts()
     setAccount(accounts[0])
+
     // Network ID
     const networkId = await web3.eth.net.getId()
-    const networkData = KSEA_Auction.networks[networkId]
-    console.log(account)
-    if(networkData) {
-      const auction = new web3.eth.Contract(KSEA_Auction.abi, networkData.address)
+
+    // KSEA Token
+    const networkData1 = KSEA_Token.networks[networkId]
+    if(networkData1) {
+      const token = new web3.eth.Contract(KSEA_Token.abi, networkData1.address)
+      setToken(token)
+
+      setLoading(false)
+    } else {
+      // ***Devs*** uncomment this after deploying smart contracts
+      window.alert('Token contract not deployed to detected network.')
+      // console.log('Smart contracts not deployed to detected network.')
+      setLoading(false)
+    }
+
+    // KSEA Airdrop
+    const networkData2 = KSEA_Airdrop.networks[networkId]
+    if(networkData2) {
+      const airdrop = new web3.eth.Contract(KSEA_Airdrop.abi, networkData2.address)
+      setAirdrop(airdrop)
+
+      setLoading(false)
+    } else {
+      // ***Devs*** uncomment this after deploying smart contracts
+      window.alert('Airdrop contract not deployed to detected network.')
+      // console.log('Smart contracts not deployed to detected network.')
+      setLoading(false)
+    }
+
+    // KSEA Auction
+    const networkData3 = KSEA_Auction.networks[networkId]
+    if(networkData3) {
+      const auction = new web3.eth.Contract(KSEA_Auction.abi, networkData3.address)
       setAuction(auction)
 
       setLoading(false)
     } else {
       // ***Devs*** uncomment this after deploying smart contracts
-      // window.alert('Smart contracts not deployed to detected network.')
+      window.alert('Auction contract not deployed to detected network.')
       // console.log('Smart contracts not deployed to detected network.')
       setLoading(false)
     }
@@ -69,8 +102,32 @@ function App() {
     );
   }
 
+  // Airdrop Section
+
+  async function registerBoardMem(_address) {
+    await airdrop.methods.registerBoardMember(_address).send({from:account})
+    let board = await airdrop.methods.isBoardMember(_address).call();
+    console.log("IsBoardMember: ", board);
+  }
+
+  async function deregisterBoardMem(_address) {
+    await airdrop.methods.deregisterBoardMember(_address).send({from:account})
+    let board = await airdrop.methods.isBoardMember(_address).call();
+    console.log("IsBoardMember: ", board);
+  }
+
+  async function distributeTokens(_addresses, _value) {
+    let total_val = _value * _addresses.length
+    await token.methods.approve(airdrop._address, total_val).send({from:account});
+    await airdrop.methods.distributeDobbyTokens(_addresses, _value).send({from:account})
+    console.log(total_val)
+  }
+
+  // States
   const [account, setAccount] = useState('')
   const [auction, setAuction] = useState(null)
+  const [token, setToken] = useState(null)
+  const [airdrop, setAirdrop] = useState(null)
   const [loading, setLoading] = useState(true)
   const [currentWinner, setWinner] = useState([])
   const [currentMember, setMember] = useState("Name")
@@ -81,7 +138,9 @@ function App() {
   return (
     <Router>
       <div className="app">
-        <Navbar />
+        <Navbar 
+          account = {account}
+        />
         <Switch>
           <Route path="/auction">
           {loading
@@ -89,7 +148,11 @@ function App() {
           }  
           </Route>
           <Route path="/officer">
-            <Officer />
+            <Officer
+              registerBoardMem = {registerBoardMem}
+              deregisterBoardMem = {deregisterBoardMem}
+              distributeTokens = {distributeTokens}
+            />
           </Route>
           <Route path="/">
             <div>
@@ -107,6 +170,9 @@ function App() {
               </header>
             </div>
           </Route>
+          <Route path="/checkin">
+            <h1> Check In Page!!!</h1>
+          </Route>
         </Switch>
       </div>
     </Router>
@@ -114,5 +180,3 @@ function App() {
 }
 
 export default App;
-
-{/*https://www.youtube.com/watch?v=1_IYL9ZMR_Y&t=18s*/}
