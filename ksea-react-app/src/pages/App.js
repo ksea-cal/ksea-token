@@ -17,6 +17,8 @@ function App() {
     async function fetchData() {
       await loadWeb3()
       await loadBlockchainData()
+      await Ranking()
+      await Member(account)
     }
     fetchData();
   }, [])
@@ -55,7 +57,7 @@ function App() {
       setLoading(false)
     } else {
       // ***Devs*** uncomment this after deploying smart contracts
-      window.alert('Token contract not deployed to detected network.')
+      // window.alert('Token contract not deployed to detected network.')
       // console.log('Smart contracts not deployed to detected network.')
       setLoading(false)
     }
@@ -70,7 +72,7 @@ function App() {
       setLoading(false)
     } else {
       // ***Devs*** uncomment this after deploying smart contracts
-      window.alert('Airdrop contract not deployed to detected network.')
+      // window.alert('Airdrop contract not deployed to detected network.')
       // console.log('Smart contracts not deployed to detected network.')
       setLoading(false)
     }
@@ -84,11 +86,29 @@ function App() {
 
       setLoading(false)
     } else {
-      // ***Devs*** uncomment this    after deploying smart contracts
-      window.alert('Auction contract not deployed to detected network.')
+      // ***Devs*** uncomment this after deploying smart contracts
+      // window.alert('Auction contract not deployed to detected network.')
       // console.log('Smart contracts not deployed to detected network.')
       setLoading(false)
     }
+  }
+
+  async function Ranking() { 
+    fetch('http://127.0.0.1:5000').then(res => res.json()).then(
+      data => { 
+        setWinner(data.curr_sem_users)
+        console.log(data.curr_sem_users)
+      }
+    );
+  }
+
+  async function Member(address) { 
+    fetch("http://127.0.0.1:5000/viewmember?address=".concat(address)).then(res => res.json()).then(
+      data => { 
+        setMember(data.name)
+        setPoints(data.points)
+      }
+    );
   }
 
   // Airdrop Section
@@ -166,6 +186,13 @@ function App() {
   const [item, dispatch] = useReducer(reducer, '');
   const [entryFees, setEntryFee] = useState(0);
 
+  const [currentWinner, setWinner] = useState([])
+  const [currentMember, setMember] = useState("Name")
+  const [currentPoints, setPoints] = useState(0)
+
+  console.log(currentMember)
+  console.log(currentPoints)
+
   return (
     <Router>
       <div className="app">
@@ -200,10 +227,22 @@ function App() {
             />
           </Route>
           <Route path="/">
-            <h1> Home Page!!!</h1>
+            <div>
+              <h1> Hi { currentMember }! </h1>
+              <h3> You currently have { currentPoints } points </h3>
+            </div>
+            <div className="App">
+              <header className="App-header">
+                <h1> Leaderboard </h1> 
+                <p>The current winner is { currentWinner[0] } </p>
+                <p> Second place is { currentWinner[1] } </p>
+                <p> Third place is { currentWinner[2] } </p>
+                <p> Fourth place is { currentWinner[3] } </p>
+                <p> Fifth place is { currentWinner[4] } </p>
+              </header>
+            </div>
           </Route>
           <Route path="/checkin">
-            <h1> Check In Page!!!</h1>
           </Route>
         </Switch>
       </div>
