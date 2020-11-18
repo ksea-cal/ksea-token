@@ -28,7 +28,7 @@ contract KSEAuction is Ownable {
     constructor(
         uint256 _biddingTime,
         uint256 _entryFee,
-        address _dobbyToken
+        address _dobbyToken,
         address _owner
     ) public {
         auctionEndTime = block.timestamp + _biddingTime;
