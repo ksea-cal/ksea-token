@@ -8,9 +8,11 @@ let token;
 let auction;
 let airdrop;
 
+
 beforeEach(async () => {
   accounts = await web3.eth.getAccounts();
   token = await KSEAToken.deployed();
+
   auction = await KSEAuction.deployed();
   airdrop = await KSEAirdrop.deployed();
 });
@@ -18,7 +20,7 @@ beforeEach(async () => {
 contract("KSEAuction", async () => {
   it ("highestBid function test", async () => {
     await token.approve(airdrop.address, 10000, {from: accounts[0]});
-    await airdrop.registerBoardMember(accounts[0]);
+    await airdrop.registerBoardMember(accounts[0], {from:accounts[0]});
     await airdrop.distributeDobbyTokens([accounts[1], accounts[2], accounts[3]], 100, {from: accounts[0]});
 
 
@@ -38,24 +40,24 @@ contract("KSEAuction", async () => {
     let status = auction.withdraw({from: accounts[1]});
     let bal1 = await token.balanceOf(accounts[1]);
     let bal1Parsed = await parseFloat(bal1);
-    assert.equal(100, bal1Parsed);
+    assert.equal(99, bal1Parsed);
   });
 
   it ("internal withdraw test", async() => {
     await auction.bid(40, {from: accounts[2]});
     let bal2 = await token.balanceOf(accounts[2]);
     let bal2Parsed = await parseFloat(bal2);
-    assert.equal(60, bal2Parsed);
+    assert.equal(59, bal2Parsed);
   });
 
   it ("getTotalBids function test", async () => {
     await auction.bid(50, {from: accounts[1]});
     let totBid = await auction.getTotalBids();
     let totBidParsed = await parseFloat(totBid);
-    assert.equal(120, totBidParsed);
+    assert.equal(123, totBidParsed);
   });
 
   it ("auctionEnd function test", async () => {
-
+    setTimeout(auction.auctionEnd, 10000);
   });
 });
