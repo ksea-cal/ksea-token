@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from "./Navbar"
+import React, { useState, useEffect, useReducer } from 'react';
+import Navbar from "../components/Navbar"
 import Officer from "./Officer"
 import Auction from "./Auction"
 import Web3 from 'web3';
@@ -84,7 +84,7 @@ function App() {
 
       setLoading(false)
     } else {
-      // ***Devs*** uncomment this after deploying smart contracts
+      // ***Devs*** uncomment this    after deploying smart contracts
       window.alert('Auction contract not deployed to detected network.')
       // console.log('Smart contracts not deployed to detected network.')
       setLoading(false)
@@ -114,6 +114,7 @@ function App() {
 
   //Auction Section
   async function createAuction(_name, _entryFee, _biddingTime, _dobbyToken) {
+    setLoading(true);
     let web3 = window.web3
     await auctionFactory.methods.createAuction(_name, _entryFee, _biddingTime, _dobbyToken).send({from:account});
 
@@ -125,10 +126,11 @@ function App() {
 
     let itemName = await auctionFactory.methods.getItemName(_name).call();
     setItemName(itemName);
-    console.log("name:", itemName);
+    console.log("name:", itemNames);
     let entryFee = await auctionFactory.methods.getEntryFee(_name).call();
     setEntryFee(entryFee);
-    console.log("Entry fee:", entryFee);
+    console.log("Entry fee:", entryFees);
+    setLoading(false);
   }
 
   // async function getItemName(_name) {
@@ -150,15 +152,19 @@ function App() {
     await auction.methods.auctionEnd().send({from:account});
   }
 
+  function reducer(item, action) {
+    re
+  }
+
   // States
+  const [loading, setLoading] = useState(true)
   const [account, setAccount] = useState('')
-  const [auction, setAuction] = useState(null)
   const [token, setToken] = useState(null)
   const [auctionFactory, setAuctionFactory] = useState(null)
   const [airdrop, setAirdrop] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [itemName, setItemName] = useState('');
-  const [entryFee, setEntryFee] = useState(0);
+  const [auction, setAuction] = useState(null)
+  const [item, dispatch] = useReducer(reducer, '');
+  const [entryFees, setEntryFee] = useState(0);
 
   return (
     <Router>
@@ -168,19 +174,20 @@ function App() {
         />
         <Switch>
           <Route path="/auction">
-          {loading
-            ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
-            :<Auction 
+          {entryFees
+            ?<Auction 
                 bid = {bid}
                 withdraw = {withdraw}
                 endAuction = {endAuction}
                 // getItemName = {getItemName}
                 // getStartPrice = {getStartPrice}
-                itemName = {itemName}
-                entryFee = {entryFee}
+                itemName = {itemNames}
+                entryFee = {entryFees}
                 auction = {auction}
-                
               />
+            : <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
+                
+              
           }
           </Route>
           <Route path="/officer">
