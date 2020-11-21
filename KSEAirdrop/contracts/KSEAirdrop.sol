@@ -48,14 +48,16 @@ contract KSEAirdrop is Ownable {
 
     // Register board member and emit Registered Board Member event
     function registerBoardMember(address _boardMember) onlyOwner external {
+        require(boardMembers[_boardMember] = false, "This member is already a board member!");
         boardMembers[_boardMember] = true;
         emit RegisteredBoardMember(_boardMember, true);
     }
 
     // Deregister board member and emit Registered Board Member event
     function deregisterBoardMember(address _boardMember) onlyOwner external {
+        require(boardMembers[_boardMember] = true, "This member is not a board member!");
         boardMembers[_boardMember] = false;
-        emit DeregisteredBoardMember(_boardMember, true);
+        emit DeregisteredBoardMember(_boardMember, false);
     }
 
     // Check if address corresponds to a Board Member
