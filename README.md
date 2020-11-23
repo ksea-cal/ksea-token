@@ -26,3 +26,9 @@ Navigate to `ksea-react-app` and start:
 npm start
 ```
 Then navigate to your web browser and connect to the corresponding address (typically `localhost:4000`)
+
+## Wallets & Addresses
+Check out member wallets and addresses [here](ADDRESS.md)
+
+## Contributors
+KSEA Fall 2020 Token Team. 
