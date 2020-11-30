@@ -1,6 +1,8 @@
 import React, {useState, useRef} from 'react';
 import {Container, Row, Button, Col, Form, Card, ListGroup, ListGroupItem} from 'react-bootstrap'
 
+//TODO: DB에서 상품 사진, entryfee, status 가져오기 + 상품 클릭시 상세페이지 넘어가기
+
 function Auction(props) {
 
   function handleBidAmount(event) {
@@ -16,6 +18,7 @@ function Auction(props) {
   const [bidAmount, setBidAmount] = useState(0);
 
   return (
+    /*
     <div className="auction">
       <Container>
         <Card className="text-center">
@@ -44,6 +47,43 @@ function Auction(props) {
       </Container>
       
     </div>
+    */
+   <div className="Auction">
+    <div class="auctionboxFrame">
+      <article class="productFrame">
+          <section class="productimage"></section>
+          <section class="productinfo">
+              <h1>ProductName</h1>
+              <p>Status</p>
+              <p>Entry fee</p>
+          </section>
+      </article>
+      <article class="productFrame">
+          <section class="productimage"></section>
+          <section class="productinfo">
+              <h1>ProductName</h1>
+              <p>Status</p>
+              <p>Entry fee</p>
+          </section>
+      </article>
+      <article class="productFrame">
+          <section class="productimage"></section>
+          <section class="productinfo">
+              <h1>ProductName</h1>
+              <p>Status</p>
+              <p>Entry fee</p>
+          </section>
+      </article>
+      <article class="productFrame">
+          <section class="productimage"></section>
+          <section class="productinfo">
+              <h1>ProductName</h1>
+              <p>Status</p>
+              <p>Entry fee</p>
+          </section>
+      </article>
+    </div>
+  </div>
   );
 }
 

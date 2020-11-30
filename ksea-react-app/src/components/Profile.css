@@ -1,0 +1,44 @@
+.profileBox {
+  top: 6.5%;
+  position: absolute;
+  border-radius: 8px;
+  width: 20rem;
+  height: 50vh;
+  display: flex;
+  background-color: #f2ca7e;
+  border: 1px solid #f2ca7e;
+  box-sizing: border-box;
+}
+
+.profileBox .about {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+}
+
+.about-backimage {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  width: 254%;
+  height: 25vh;
+  background-color: white;
+}
+
+.about-profileimage {
+  position: relative;
+  top: -25%;
+  left: 77%;
+  width: 7rem;
+  height: 7rem;
+  border-radius: 100px;
+  background-color: white;
+}
+
+.profileBox .about-text {
+  position: relative;
+  left: -39%;
+  top: 55%;
+  width: 250%;
+  height: 25vh;
+  font-size: 1.2rem;
+}
