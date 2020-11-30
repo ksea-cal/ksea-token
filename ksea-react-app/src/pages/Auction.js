@@ -5,6 +5,14 @@ import {Container, Row, Button, Col, Form, Card, ListGroup, ListGroupItem} from 
 
 function Auction(props) {
 
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     await loadWeb3()
+  //     await loadBlockchainData()
+  //   }
+  //   fetchData();
+  // }, [])
+  
   function handleBidAmount(event) {
     setBidAmount(event.target.value);
   }
@@ -16,6 +24,8 @@ function Auction(props) {
   }
 
   const [bidAmount, setBidAmount] = useState(0);
+  const [itemName, setItemName] = useState('');
+  const [entryFee, setEntryFee] = useState(0);
 
   return (
     /*
@@ -24,14 +34,14 @@ function Auction(props) {
         <Card className="text-center">
           <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
           <Card.Body>
-            <Card.Title>{props.itemName}</Card.Title>
+            <Card.Title>{itemName}</Card.Title>
             <Card.Text>
               Some quick example text to build on the card title and make up the bulk of
               the card's content.
             </Card.Text>
           </Card.Body>
           <ListGroup className="list-group-flush">
-            <ListGroupItem>Entering Fee: {props.entryFee}</ListGroupItem>
+            <ListGroupItem>Entering Fee: {entryFee}</ListGroupItem>
           </ListGroup>
           <Card.Body>
             <Card.Link href="#">Card Link</Card.Link>
