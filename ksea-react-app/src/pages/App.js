@@ -14,6 +14,8 @@ import Profile from "../components/Profile"
 import Officer from "./Officer"
 import Auction from "./Auction"
 
+import Profile from "../components/Profile"
+
 import './App.css';
 
 
@@ -53,11 +55,13 @@ function App() {
   console.log(account);
 
   return (
+    <body style={{backgroundColor:"#011826"}}>
     <Router>
-      <div className="app">
+      <div className="app" style={{backgroundColor:"#011826"}}>
         <Navbar
           account = {account}
         />
+        <Profile></Profile>
         <Switch>
           <Route path="/auction">
           {entryFees
@@ -90,6 +94,7 @@ function App() {
         </Switch>
       </div>
     </Router>
+    </body>
   );
 }
 

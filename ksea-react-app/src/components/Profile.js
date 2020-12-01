@@ -35,9 +35,10 @@ class Profile extends React.Component {
                       <div class="about-profileimage"></div>
                   </article>
                   <article class="about-text">
-                      <h1> { this.state.member }</h1>
-                      <p> { this.state.points }</p>
-                      <p>Dobby</p>
+                    <h2 style={{fontWeight:"bolder", fontSize:"40px"}}>{ this.state.member }</h2>
+                    <p style={{lineHeight:"10px"}}></p>
+                    <p>Current points - { this.state.points }</p>
+                    <p>Dobby</p>
                   </article>
               </li>
           </div>
