@@ -13,6 +13,8 @@ import Checkin from "../components/Checkin"
 import Officer from "./Officer"
 import Auction from "./Auction"
 
+import Profile from "../components/Profile"
+
 import './App.css';
 
 
@@ -57,11 +59,13 @@ function App() {
   console.log(currentPoints)
 
   return (
+    <body style={{backgroundColor:"#011826"}}>
     <Router>
       <div className="app">
         <Navbar
           account = {account}
         />
+        <Profile></Profile>
         <Switch>
           <Route path="/auction">
           {entryFees
@@ -91,6 +95,7 @@ function App() {
         </Switch>
       </div>
     </Router>
+    </body>
   );
 }
 

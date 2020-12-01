@@ -13,7 +13,7 @@ function Profile(){
                         <div class="about-profileimage"></div>
                     </article>
                     <article class="about-text">
-                        <h1>Name</h1>
+                        <h1>Name</h1><br></br>
                         <p>Current point</p>
                         <p>Dobby</p>
                     </article>
