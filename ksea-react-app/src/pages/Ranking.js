@@ -1,9 +1,24 @@
 import React from 'react';
-import './Ranking.css'
 
-//TODO: DB 에서 포인트랭킹 매기기 데려오기
 
-function Ranking() {
+class Ranking extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      winner: [],
+    }
+  }
+
+  componentDidMount() {
+    fetch('http://127.0.0.1:5000').then(res => res.json()).then(
+      data => {
+        this.setState( { "winner": data.curr_sem_users })
+      }
+    );
+  };
+
+  render() {
     return (
         <div className="ranking">
             <div class="rankingbox">
@@ -12,21 +27,21 @@ function Ranking() {
                     <article class="firstplace">
                         <div class="firstperson"></div>
                         <div class="firstcontent">
-                            <p style={{lineHeight: "0.1"}}>Name</p>
+                            <p style={{lineHeight: "0.1"}}> { this.state.winner[0] } </p>
                             <p>Point</p>
                         </div>
                     </article>
                     <article class="secondplace">
                         <div class="secondperson"></div>
                         <div class="secondcontent">
-                            <p style={{lineHeight: "0.1"}}>Name</p>
+                            <p style={{lineHeight: "0.1"}}> { this.state.winner[1] } </p>
                             <p>Point</p>
                         </div>
                     </article>
                     <article class="thirdplace">
                         <div class="thirdperson"></div>
                         <div class="thirdcontent">
-                            <p style={{lineHeight: "0.1"}}>Name</p>
+                            <p style={{lineHeight: "0.1"}}> { this.state.winner[2] } </p>
                             <p>Point</p>
                         </div>
                     </article>
@@ -55,7 +70,8 @@ function Ranking() {
                 </div>
             </div>
         </div>
-    );
+      )
+  }
 }
 
 export default Ranking;
