@@ -14,8 +14,6 @@ import Profile from "../components/Profile"
 import Officer from "./Officer"
 import Auction from "./Auction"
 
-import Profile from "../components/Profile"
-
 import './App.css';
 
 
