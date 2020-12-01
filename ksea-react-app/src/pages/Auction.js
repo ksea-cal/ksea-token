@@ -1,5 +1,6 @@
 import React, {useState, useRef} from 'react';
-import {Container, Row, Button, Col, Form, Card, ListGroup, ListGroupItem} from 'react-bootstrap'
+import {Container, Row, Button, Col, Form, Card, ListGroup, ListGroupItem} from 'react-bootstrap';
+import "./Auction.css";
 
 //TODO: DB에서 상품 사진, entryfee, status 가져오기 + 상품 클릭시 상세페이지 넘어가기
 

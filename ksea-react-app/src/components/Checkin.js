@@ -18,3 +18,5 @@ function Checkin(props) {
         </div>
     );
 }
+
+export default Checkin;

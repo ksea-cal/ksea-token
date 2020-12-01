@@ -35,7 +35,7 @@ function NavBar(props) {
         <li><a href="/auction">Auction</a></li>
         <li><a href="/officer">Officer</a></li>
         <li><a href="/checkin">Check In</a></li>
-        <li style="float:right"><a href="/">{props.account}</a></li>
+        <li style={{float:"right"}}><a href="/">{props.account}</a></li>
     </ul>
     </div>
   );

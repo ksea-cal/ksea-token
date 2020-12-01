@@ -12,21 +12,21 @@ function Ranking() {
                     <article class="firstplace">
                         <div class="firstperson"></div>
                         <div class="firstcontent">
-                            <p style="line-height:0.1">Name</p>
+                            <p style={{lineHeight: "0.1"}}>Name</p>
                             <p>Point</p>
                         </div>
                     </article>
                     <article class="secondplace">
                         <div class="secondperson"></div>
                         <div class="secondcontent">
-                            <p style="line-height:0.1">Name</p>
+                            <p style={{lineHeight: "0.1"}}>Name</p>
                             <p>Point</p>
                         </div>
                     </article>
                     <article class="thirdplace">
                         <div class="thirdperson"></div>
                         <div class="thirdcontent">
-                            <p style="line-height:0.1">Name</p>
+                            <p style={{lineHeight: "0.1"}}>Name</p>
                             <p>Point</p>
                         </div>
                     </article>
@@ -57,3 +57,5 @@ function Ranking() {
         </div>
     );
 }
+
+export default Ranking;

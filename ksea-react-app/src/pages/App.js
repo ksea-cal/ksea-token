@@ -3,10 +3,11 @@ import loadAccount from "../components/ethereum/LoadAccount";
 import kseaToken from "../components/ethereum/KSEA_Token";
 import kseairdrop from "../components/ethereum/KSEAirdrop";
 import factory from "../components/ethereum/AuctionFactory";
-import Navbar from "../components/Navbar"
-import Officer from "./Officer"
-import Auction from "./Auction"
-import '../App.css';
+import Navbar from "../components/Navbar";
+import Officer from "./Officer";
+import Auction from "./Auction";
+import Ranking from "./Ranking";
+import './App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
  
 
@@ -126,7 +127,8 @@ function App() {
             />
           </Route>
           <Route path="/">
-            <div>
+            <Ranking />
+            {/* <div>
               <h1> Hi { currentMember }! </h1>
               <h3> You currently have { currentPoints } points </h3>
             </div>
@@ -139,7 +141,7 @@ function App() {
                 <p> Fourth place is { currentWinner[3] } </p>
                 <p> Fifth place is { currentWinner[4] } </p>
               </header>
-            </div>
+            </div> */}
           </Route>
           <Route path="/checkin">
           </Route>
