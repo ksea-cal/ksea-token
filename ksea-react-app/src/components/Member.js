@@ -12,13 +12,13 @@ class Member extends React.Component {
 
   componentDidMount() {
     if (this.props.address != "") {
-      fetch("http://127.0.0.1:5000/viewmember?address=".concat(this.props.address)).then(res => res.json()).then(
+      fetch("http://127.0.0.1:5000/viewmember?address=".concat(this.props.account)).then(res => res.json()).then(
         data => { 
           this.setState( { "member": data.name, "points": data.points })
         }
       );
     } else { 
-      console.log(this.props.address);
+      console.log(this.props.account);
     }
   };
 
