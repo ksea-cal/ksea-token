@@ -61,7 +61,7 @@ function App() {
   return (
     <body style={{backgroundColor:"#011826"}}>
     <Router>
-      <div className="app">
+      <div className="app" style={{backgroundColor:"#011826"}}>
         <Navbar
           account = {account}
         />

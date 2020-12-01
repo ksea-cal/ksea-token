@@ -13,7 +13,8 @@ function Profile(){
                         <div class="about-profileimage"></div>
                     </article>
                     <article class="about-text">
-                        <h1>Name</h1><br></br>
+                        <h2 style={{fontWeight:"bolder", fontSize:"40px"}}>Name</h2>
+                        <p style={{lineHeight:"10px"}}></p>
                         <p>Current point</p>
                         <p>Dobby</p>
                     </article>

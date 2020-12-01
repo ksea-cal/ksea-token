@@ -142,6 +142,9 @@
   background-color: white;
 }
 .wholerankbox .ranktable {
+  border-collapse: separate;
+  border-spacing: 3px;
+
   position: relative;
   top: 5px;
   margin-left: 5px;
