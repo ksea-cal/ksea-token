@@ -9,6 +9,7 @@ import factory from "../components/ethereum/AuctionFactory";
 import Navbar from "../components/Navbar"
 import Ranking from "../pages/Ranking"
 import Checkin from "../components/Checkin"
+import Profile from "../components/Profile"
 
 import Officer from "./Officer"
 import Auction from "./Auction"
@@ -49,12 +50,7 @@ function App() {
   const [itemNames, setItemName] = useState('');
   const [entryFees, setEntryFee] = useState(0);
 
-  const [currentWinner, setWinner] = useState([])
-  const [currentMember, setMember] = useState("Name")
-  const [currentPoints, setPoints] = useState(0)
-
-  console.log(currentMember)
-  console.log(currentPoints)
+  console.log(account);
 
   return (
     <Router>
@@ -81,6 +77,9 @@ function App() {
             />
           </Route>
           <Route path="/">
+            <Profile
+              account = { account }
+            />
             <Ranking
             />
           </Route>
