@@ -4,8 +4,6 @@ import loadAccount from "../components/ethereum/LoadAccount";
 import kseaToken from "../components/ethereum/KSEA_Token";
 import kseairdrop from "../components/ethereum/KSEAirdrop";
 import kseafactory from "../components/ethereum/AuctionFactory";
-import web3 from "../components/ethereum/Web3";
-import KSEA_Auction from "../abis/KSEAuction.json";
 
 const axios = require('axios').default;
 
@@ -106,83 +104,7 @@ function Officer(props) {
     console.log(total_val)
   }
 
-  //Auction Section
-<<<<<<< HEAD
-  // async function createAuction(_name, _entryFee, _biddingTime, _dobbyToken) {
-  //   // let web3 = window.web3
-  //   await factory.methods.createAuction(_name, _entryFee, _biddingTime, _dobbyToken).send({from:account});
-
-  //   let auctionAddr = await factory.methods.getAuctionAddr(_name).call();
-  //   console.log("auction address:", auctionAddr)
-  //   setAuctionAddr(auctionAddr);
-  //   setAuctionName(_name);
-  //   setUpdate(!update);
-  // }
-
-  // function auctionInstanceCreate(addr) {
-  //   const auctionInst = new web3.eth.Contract(KSEA_Auction.abi, addr);
-  //   setAuction(auctionInst);
-    
-    
-  // }
-
-  //   // let itemName = await auctionFactory.methods.getItemName(_name).call();
-  //   // setItemName(itemName);
-  //   // console.log("name:", itemNames);
-  //   // let entryFee = await auctionFactory.methods.getEntryFee(_name).call();
-  //   // setEntryFee(entryFee);
-  //   // console.log("Entry fee:", entryFees);
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     auctionInstanceCreate(auctionAddr);
-  //     let itemName = await auction.methods.getItemName(auctionName).call();
-  //     setAuctionItem(itemName);
-
-  //     let entryFee = await auction.methods.getEntryFee(auctionName).call();
-  //     setAuctionFee(entryFee);
-  //   }
-  //   fetchData();
-  // }, [update])
-=======
-  async function createAuction(_name, _entryFee, _biddingTime, _dobbyToken) {
-    // let web3 = window.web3
-    await factory.methods.createAuction(_name, _entryFee, _biddingTime, _dobbyToken).send({from:account});
-
-    let auctionAddr = await factory.methods.getAuctionAddr(_name).call();
-    console.log("auction address:", auctionAddr)
-    setAuctionAddr(auctionAddr);
-    setAuctionName(_name);
-    setUpdate(!update);
-  }
-
-  function auctionInstanceCreate(addr) {
-    const auctionInst = new web3.eth.Contract(KSEA_Auction.abi, addr);
-    setAuction(auctionInst);
-    
-    
-  }
-
-    // let itemName = await auctionFactory.methods.getItemName(_name).call();
-    // setItemName(itemName);
-    // console.log("name:", itemNames);
-    // let entryFee = await auctionFactory.methods.getEntryFee(_name).call();
-    // setEntryFee(entryFee);
-    // console.log("Entry fee:", entryFees);
-
-  useEffect(() => {
-    async function fetchData() {
-      auctionInstanceCreate(auctionAddr);
-      let itemName = await auction.methods.getItemName(auctionName).call();
-      setAuctionItem(itemName);
-
-      let entryFee = await auction.methods.getEntryFee(auctionName).call();
-      setAuctionFee(entryFee);
-    }
-    fetchData();
-  }, [update])
->>>>>>> 73d907a7bbd79f3d77603bec12735b15c8d6cf3f
-
+  
   // Push Check-in information to the database 
   function handleCheckIn(event) { 
     let formData = new FormData();
@@ -199,57 +121,6 @@ function Officer(props) {
 
   }
 
-  //Auction Handlers
-<<<<<<< HEAD
-  // function handleEntryFee(event) {
-  //   setEntryFee(event.target.value);
-  // }
-
-  // function handleItemChange(event) {
-  //   setItemValue(event.target.value);
-  // }
-  // function handleTimeChange(event) {
-  //   setTimeValue(event.target.value); 
-  // }
-
-  // function showState(event) {
-  //   event.preventDefault();
-  //   console.log("Auction Instance!!: ", auction);
-  //   console.loge("Auction Item: ", auctionItem);
-  //   console.log("Auction Fee: ", auctionFee);
-  // }
-
-  // function handleCreate(event) {
-  //   event.preventDefault();
-  //   console.log("dobby address: ", token.options.address);
-  //   createAuction(itemValue, entryFee, timeValue, token.options.address);
-  // }
-=======
-  function handleEntryFee(event) {
-    setEntryFee(event.target.value);
-  }
-
-  function handleItemChange(event) {
-    setItemValue(event.target.value);
-  }
-  function handleTimeChange(event) {
-    setTimeValue(event.target.value); 
-  }
-
-  function showState(event) {
-    event.preventDefault();
-    console.log("Auction Instance!!: ", auction);
-    console.loge("Auction Item: ", auctionItem);
-    console.log("Auction Fee: ", auctionFee);
-  }
-
-  function handleCreate(event) {
-    event.preventDefault();
-    console.log("dobby address: ", token.options.address);
-    createAuction(itemValue, entryFee, timeValue, token.options.address);
-  }
->>>>>>> 73d907a7bbd79f3d77603bec12735b15c8d6cf3f
-
   //Blockchain States
   const [account, setAccount] = useState('');
   const [airdrop, setAirdrop] = useState(null);
@@ -257,12 +128,6 @@ function Officer(props) {
   const [factory, setFactory] = useState(null);
   const [auction, setAuction] = useState(null);
   const [update, setUpdate] = useState(false);
-
-  //Auction
-  const [auctionItem, setAuctionItem] = useState('');
-  const [auctionFee, setAuctionFee] = useState(0);
-  const [auctionName, setAuctionName] = useState('');
-  const [auctionAddr, setAuctionAddr] = useState('');
 
   const [boardValue, setBoardValue] = useState('');
   const [memberValue, setMemberValue] = useState('');
@@ -273,8 +138,6 @@ function Officer(props) {
   const [password, setPassword] = useState('');
   const [eventName, setEventName] = useState('');
   const [timeLimit, setTimeLimit] = useState(0);
-
-  let eventValue = useRef(0);
 
   return (
     <div className="officer">
@@ -337,35 +200,6 @@ function Officer(props) {
             Send Dobbies!
           </Button>
           <br /> <br />
-<<<<<<< HEAD
-          {/* <Form.Group>
-=======
-          <Form.Group>
->>>>>>> 73d907a7bbd79f3d77603bec12735b15c8d6cf3f
-            <Row>
-              <Col>
-                <Form.Label>Auction Item</Form.Label>
-                <Form.Control onChange={handleItemChange} type="string" placeholder="Item Name" />
-              </Col>
-              <Col>
-                <Form.Label>Entering Fee</Form.Label>
-                <Form.Control onChange={handleEntryFee} type="string" placeholder="Entering Fee in Dobby" />
-              </Col>
-              <Col>
-                <Form.Label>Auction Time Limit</Form.Label>
-                <Form.Control onChange={handleTimeChange} type="number" placeholder="Time in seconds" />
-              </Col>
-                <Button onClick={handleCreate}  variant="primary" type="submit">
-                  Create Auction
-                </Button>
-            </Row>
-<<<<<<< HEAD
-          </Form.Group> */}
-=======
-          </Form.Group>
->>>>>>> 73d907a7bbd79f3d77603bec12735b15c8d6cf3f
-          
-          
           <br></br>
           <Form.Group>
             <Form.Label>Create Check-In</Form.Label>
@@ -377,10 +211,6 @@ function Officer(props) {
             Create Check-In
           </Button>
         </Form>
-<<<<<<< HEAD
-=======
-        <Button onClick={showState}>show State!</Button>
->>>>>>> 73d907a7bbd79f3d77603bec12735b15c8d6cf3f
       </Container>
     </div>
   );

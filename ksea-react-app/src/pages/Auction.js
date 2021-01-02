@@ -1,12 +1,8 @@
 import React, {useState, useRef} from 'react';
-<<<<<<< HEAD
 import {Container, Row, Button, Col, Form, Card, ListGroup, ListGroupItem} from 'react-bootstrap';
 import "./Auction.css";
 
 //TODO: DB에서 상품 사진, entryfee, status 가져오기 + 상품 클릭시 상세페이지 넘어가기
-=======
-import {Container, Row, Button, Col, Form, Card, ListGroup, ListGroupItem} from 'react-bootstrap'
->>>>>>> 73d907a7bbd79f3d77603bec12735b15c8d6cf3f
 
 function Auction(props) {
 
@@ -33,10 +29,7 @@ function Auction(props) {
   const [entryFee, setEntryFee] = useState(0);
 
   return (
-<<<<<<< HEAD
     /*
-=======
->>>>>>> 73d907a7bbd79f3d77603bec12735b15c8d6cf3f
     <div className="auction">
       <Container>
         <Card className="text-center">
@@ -65,7 +58,6 @@ function Auction(props) {
       </Container>
       
     </div>
-<<<<<<< HEAD
     */
    <div className="Auction">
     <div class="auctionboxFrame">
@@ -103,8 +95,6 @@ function Auction(props) {
       </article>
     </div>
   </div>
-=======
->>>>>>> 73d907a7bbd79f3d77603bec12735b15c8d6cf3f
   );
 }
 
