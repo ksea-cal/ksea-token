@@ -1,0 +1,75 @@
+/*
+1. 배경색
+2. 가운데 박스
+    - 박스 안에:
+        - "Enter meeting password"
+        - input box
+        - submit
+*/
+
+/* Background Color */
+/* "Secret word"*/
+.secretword {
+  /*Sentence position*/
+  width: 600px;
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+}
+
+/* Center Box Model */
+.centerbox {
+  /*Box position*/
+  width: 600px;
+  height: 600px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  /*Box boarder style*/
+  /*Box background color*/
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1rem #71d9c6;
+}
+
+form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Input Text Box Style */
+input {
+  /*Textbox Alignment*/
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /*Textbox style*/
+  width: 500px;
+  height: 70px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 35px !important;
+  color: LightGray !important;
+}
+
+/* Submit Button Style */
+button {
+  position: absolute;
+  top: 600%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid #f28963;
+  background-color: #f28963;
+  color: white;
+  padding: 5px;
+  border-radius: 8px;
+  height: 60px;
+  width: 100px;
+  font-size: 20px;
+}

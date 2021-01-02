@@ -21,12 +21,31 @@ class User(db.Model):
         return '<User {}>'.format(self.name)
 
 
+<<<<<<< HEAD
+class Event(db.Model):
+    eid = db.Column(db.Integer, primary_key=True)
+=======
 class Checkin(db.Model):
     cid = db.Column(db.Integer, primary_key=True)
+>>>>>>> master
     event_name = db.Column(db.Text)
     current_time = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     password = db.Column(db.Text)
     time_limit = db.Column(db.Integer)
 
     def __repr__(self):
+<<<<<<< HEAD
+        return '<Event {}>'.format(self.event_name)
+
+
+class Checkin(db.Model):
+    cid = db.Column(db.Integer, primary_key=True)
+    event = db.Column(db.Integer) # Link to Event Table
+    user = db.Column(db.Integer) # Link to User Table
+    current_time = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+    def __repr__(self):
+        return '<Checkin {} for {}>'.format(self.cid, self.user)
+=======
         return '<Checkin {}>'.format(self.event_name)
+>>>>>>> master

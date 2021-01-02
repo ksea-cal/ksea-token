@@ -1,0 +1,47 @@
+/* Background */
+.Navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  list-style-type: none;
+  background-color: black;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+li {
+  float: left;
+}
+
+/* General State */
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Active State*/
+li:active {
+  color: #f28963;
+}
+
+/* Hovering (Intended) State */
+li:hover {
+  background-color: #f28963;
+  transition-duration: 0.5s;
+}
+
+/*
+1. 폰트
+2. Active 일 때 상태
+3. Inactive 상태
+4. Intended 상태
+
+*/
