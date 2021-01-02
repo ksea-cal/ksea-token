@@ -1,9 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Container, Row, Button, Col, Form} from 'react-bootstrap'
-import loadAccount from "../components/ethereum/LoadAccount";
-import kseaToken from "../components/ethereum/KSEA_Token";
-import kseairdrop from "../components/ethereum/KSEAirdrop";
-import kseafactory from "../components/ethereum/AuctionFactory";
 
 const axios = require('axios').default;
 
@@ -12,17 +8,8 @@ function Officer(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let accounts = await loadAccount()
-      setAccount(accounts);
-
-      let t = await kseaToken()
-      setToken(t);
-
-      let a = await kseairdrop()
-      setAirdrop(a);
-
-      let f = await kseafactory()
-      setFactory(f);
+      await props.loadWeb3()
+      await props.loadBlockchainData()
     }
     fetchData();
   }, [])
@@ -93,13 +80,13 @@ function Officer(props) {
 
   async function deregisterBoardMem(_address) {
     await airdrop.methods.deregisterBoardMember(_address).send({from:account})
-    let board = await airdrop.methods.isBoardMember(_address).call();
+    let board = await props.airdrop.methods.isBoardMember(_address).call();
     console.log("IsBoardMember: ", board);
   }
 
   async function distributeTokens(_addresses, _value) {
     let total_val = _value * _addresses.length
-    await token.methods.approve(airdrop._address, total_val).send({from:account});
+    await token.methods.approve(props.airdrop._address, total_val).send({from:account});
     await airdrop.methods.distributeDobbyTokens(_addresses, _value).send({from:account})
     console.log(total_val)
   }
@@ -121,23 +108,17 @@ function Officer(props) {
 
   }
 
-  //Blockchain States
   const [account, setAccount] = useState('');
   const [airdrop, setAirdrop] = useState(null);
   const [token, setToken] = useState(null);
-  const [factory, setFactory] = useState(null);
-  const [auction, setAuction] = useState(null);
-  const [update, setUpdate] = useState(false);
-
   const [boardValue, setBoardValue] = useState('');
   const [memberValue, setMemberValue] = useState('');
-  const [timeValue, setTimeValue] = useState(0);
-  const [itemValue, setItemValue] = useState('');
-  const [entryFee, setEntryFee] = useState(0);
   const [listOfMembers, setListOfMembers] = useState([]);
   const [password, setPassword] = useState('');
   const [eventName, setEventName] = useState('');
   const [timeLimit, setTimeLimit] = useState(0);
+
+  let eventValue = useRef(0);
 
   return (
     <div className="officer">

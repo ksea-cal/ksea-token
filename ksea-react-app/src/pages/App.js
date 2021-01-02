@@ -58,6 +58,7 @@ function App() {
     // KSEA Token
     const networkData1 = KSEA_Token.networks[networkId]
     if(networkData1) {
+      setLoading(True)
       const token = new web3.eth.Contract(KSEA_Token.abi, networkData1.address)
       setToken(token)
 
@@ -200,10 +201,15 @@ function App() {
           } */}
           </Route>
           <Route path="/officer">
-            <Officer
-              airdrop = {airdrop}
-              token = {token}
-            />
+            {token != null && 
+              <Officer
+                account = {account}
+                airdrop = {airdrop}
+                token = {token}
+                loadBlockchainData = {loadBlockchainData}
+                loadWeb3 = {loadWeb3}
+              />
+            }
           </Route>
           <Route path="/">
             <Profile />
