@@ -3,7 +3,7 @@ import loadAccount from "../components/ethereum/LoadAccount";
 import kseaToken from "../components/ethereum/KSEA_Token";
 import kseairdrop from "../components/ethereum/KSEAirdrop";
 import factory from "../components/ethereum/AuctionFactory";
-import Navbar from "../components/Navbar"
+import Header from "../components/Header";
 import Officer from "./Officer"
 import Auction from "./Auction"
 import '../App.css';
@@ -102,7 +102,7 @@ function App() {
   return (
     <Router>
       <div className="app">
-        <Navbar 
+        <Header 
           account = {account}
         />
         <Switch>
