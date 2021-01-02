@@ -79,13 +79,9 @@ function App() {
             />
           </Route>
           <Route path="/">
-<<<<<<< HEAD
-            <Profile />
-=======
             <Profile
               account = { account }
             />
->>>>>>> 0a68caff6b18dd7593c3763f8432d3eaf108f2b3
             <Ranking
             />
           </Route>
