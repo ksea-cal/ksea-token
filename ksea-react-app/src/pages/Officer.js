@@ -107,42 +107,42 @@ function Officer(props) {
   }
 
   //Auction Section
-  async function createAuction(_name, _entryFee, _biddingTime, _dobbyToken) {
-    // let web3 = window.web3
-    await factory.methods.createAuction(_name, _entryFee, _biddingTime, _dobbyToken).send({from:account});
+  // async function createAuction(_name, _entryFee, _biddingTime, _dobbyToken) {
+  //   // let web3 = window.web3
+  //   await factory.methods.createAuction(_name, _entryFee, _biddingTime, _dobbyToken).send({from:account});
 
-    let auctionAddr = await factory.methods.getAuctionAddr(_name).call();
-    console.log("auction address:", auctionAddr)
-    setAuctionAddr(auctionAddr);
-    setAuctionName(_name);
-    setUpdate(!update);
-  }
+  //   let auctionAddr = await factory.methods.getAuctionAddr(_name).call();
+  //   console.log("auction address:", auctionAddr)
+  //   setAuctionAddr(auctionAddr);
+  //   setAuctionName(_name);
+  //   setUpdate(!update);
+  // }
 
-  function auctionInstanceCreate(addr) {
-    const auctionInst = new web3.eth.Contract(KSEA_Auction.abi, addr);
-    setAuction(auctionInst);
+  // function auctionInstanceCreate(addr) {
+  //   const auctionInst = new web3.eth.Contract(KSEA_Auction.abi, addr);
+  //   setAuction(auctionInst);
     
     
-  }
+  // }
 
-    // let itemName = await auctionFactory.methods.getItemName(_name).call();
-    // setItemName(itemName);
-    // console.log("name:", itemNames);
-    // let entryFee = await auctionFactory.methods.getEntryFee(_name).call();
-    // setEntryFee(entryFee);
-    // console.log("Entry fee:", entryFees);
+  //   // let itemName = await auctionFactory.methods.getItemName(_name).call();
+  //   // setItemName(itemName);
+  //   // console.log("name:", itemNames);
+  //   // let entryFee = await auctionFactory.methods.getEntryFee(_name).call();
+  //   // setEntryFee(entryFee);
+  //   // console.log("Entry fee:", entryFees);
 
-  useEffect(() => {
-    async function fetchData() {
-      auctionInstanceCreate(auctionAddr);
-      let itemName = await auction.methods.getItemName(auctionName).call();
-      setAuctionItem(itemName);
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     auctionInstanceCreate(auctionAddr);
+  //     let itemName = await auction.methods.getItemName(auctionName).call();
+  //     setAuctionItem(itemName);
 
-      let entryFee = await auction.methods.getEntryFee(auctionName).call();
-      setAuctionFee(entryFee);
-    }
-    fetchData();
-  }, [update])
+  //     let entryFee = await auction.methods.getEntryFee(auctionName).call();
+  //     setAuctionFee(entryFee);
+  //   }
+  //   fetchData();
+  // }, [update])
 
   // Push Check-in information to the database 
   function handleCheckIn(event) { 
@@ -161,29 +161,29 @@ function Officer(props) {
   }
 
   //Auction Handlers
-  function handleEntryFee(event) {
-    setEntryFee(event.target.value);
-  }
+  // function handleEntryFee(event) {
+  //   setEntryFee(event.target.value);
+  // }
 
-  function handleItemChange(event) {
-    setItemValue(event.target.value);
-  }
-  function handleTimeChange(event) {
-    setTimeValue(event.target.value); 
-  }
+  // function handleItemChange(event) {
+  //   setItemValue(event.target.value);
+  // }
+  // function handleTimeChange(event) {
+  //   setTimeValue(event.target.value); 
+  // }
 
-  function showState(event) {
-    event.preventDefault();
-    console.log("Auction Instance!!: ", auction);
-    console.loge("Auction Item: ", auctionItem);
-    console.log("Auction Fee: ", auctionFee);
-  }
+  // function showState(event) {
+  //   event.preventDefault();
+  //   console.log("Auction Instance!!: ", auction);
+  //   console.loge("Auction Item: ", auctionItem);
+  //   console.log("Auction Fee: ", auctionFee);
+  // }
 
-  function handleCreate(event) {
-    event.preventDefault();
-    console.log("dobby address: ", token.options.address);
-    createAuction(itemValue, entryFee, timeValue, token.options.address);
-  }
+  // function handleCreate(event) {
+  //   event.preventDefault();
+  //   console.log("dobby address: ", token.options.address);
+  //   createAuction(itemValue, entryFee, timeValue, token.options.address);
+  // }
 
   //Blockchain States
   const [account, setAccount] = useState('');
@@ -272,7 +272,7 @@ function Officer(props) {
             Send Dobbies!
           </Button>
           <br /> <br />
-          <Form.Group>
+          {/* <Form.Group>
             <Row>
               <Col>
                 <Form.Label>Auction Item</Form.Label>
@@ -290,7 +290,7 @@ function Officer(props) {
                   Create Auction
                 </Button>
             </Row>
-          </Form.Group>
+          </Form.Group> */}
           
           
           <br></br>
@@ -304,7 +304,6 @@ function Officer(props) {
             Create Check-In
           </Button>
         </Form>
-        <Button onClick={showState}>show State!</Button>
       </Container>
     </div>
   );

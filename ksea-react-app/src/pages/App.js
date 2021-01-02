@@ -9,6 +9,7 @@ import factory from "../components/ethereum/AuctionFactory";
 import Navbar from "../components/Navbar"
 import Ranking from "../pages/Ranking"
 import Checkin from "../components/Checkin"
+import Profile from "../components/Profile"
 
 import Officer from "./Officer"
 import Auction from "./Auction"
@@ -81,6 +82,7 @@ function App() {
             />
           </Route>
           <Route path="/">
+            <Profile />
             <Ranking
             />
           </Route>
