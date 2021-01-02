@@ -50,19 +50,16 @@ function App() {
   const [itemNames, setItemName] = useState('');
   const [entryFees, setEntryFee] = useState(0);
 
-  const [currentWinner, setWinner] = useState([])
-  const [currentMember, setMember] = useState("Name")
-  const [currentPoints, setPoints] = useState(0)
-
-  console.log(currentMember)
-  console.log(currentPoints)
+  console.log(account);
 
   return (
+    <body style={{backgroundColor:"#011826"}}>
     <Router>
-      <div className="app">
+      <div className="app" style={{backgroundColor:"#011826"}}>
         <Navbar
           account = {account}
         />
+        <Profile></Profile>
         <Switch>
           <Route path="/auction">
           {entryFees
@@ -82,7 +79,13 @@ function App() {
             />
           </Route>
           <Route path="/">
+<<<<<<< HEAD
             <Profile />
+=======
+            <Profile
+              account = { account }
+            />
+>>>>>>> 0a68caff6b18dd7593c3763f8432d3eaf108f2b3
             <Ranking
             />
           </Route>
@@ -93,6 +96,7 @@ function App() {
         </Switch>
       </div>
     </Router>
+    </body>
   );
 }
 

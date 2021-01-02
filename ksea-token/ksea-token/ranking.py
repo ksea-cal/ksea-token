@@ -12,14 +12,14 @@ def index():
     """ View the top winners of that semester """
     curr_sem_users = User.query.filter(User.curr_sem == True).all()
     curr_sem_users.sort(key=lambda x: x.num_points, reverse=True)
-    return {"curr_sem_users": [c.name for c in curr_sem_users]}
+    return {"curr_sem_users": [c.name for c in curr_sem_users], "curr_sem_points": [c.num_points for c in curr_sem_users]}
 
 
 @app.route("/viewmember", methods=["GET"])
 def viewmember():
     """ View the number of points a member has """
     address = request.args.get("address")
-    curr_member = User.query.filter(User.address == address).first()
+    curr_member = User.query.filter(User.address == hex(ast.literal_eval(address))).first()
     return {"name": curr_member.name, "points": curr_member.num_points}
 
 

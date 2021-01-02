@@ -8,16 +8,22 @@ class Ranking extends React.Component {
 
     this.state = {
       winner: [],
+      points: [],
     }
-  }
+  };
 
   componentDidMount() {
     fetch('http://127.0.0.1:5000').then(res => res.json()).then(
       data => {
-        this.setState( { "winner": data.curr_sem_users })
+        this.setState( {
+          "winner": data.curr_sem_users,
+          "points": data.curr_sem_points,
+          }
+        )
       }
     );
-  };
+  }
+
 
   render() {
     return (
@@ -29,21 +35,21 @@ class Ranking extends React.Component {
                         <div class="firstperson"></div>
                         <div class="firstcontent">
                             <p style={{lineHeight: "0.1"}}> { this.state.winner[0] } </p>
-                            <p>Point</p>
+                            <p> { this.state.points[0] } </p>
                         </div>
                     </article>
                     <article class="secondplace">
                         <div class="secondperson"></div>
                         <div class="secondcontent">
                             <p style={{lineHeight: "0.1"}}> { this.state.winner[1] } </p>
-                            <p>Point</p>
+                            <p> { this.state.points[1] } </p>
                         </div>
                     </article>
                     <article class="thirdplace">
                         <div class="thirdperson"></div>
                         <div class="thirdcontent">
                             <p style={{lineHeight: "0.1"}}> { this.state.winner[2] } </p>
-                            <p>Point</p>
+                            <p> { this.state.points[2] } </p>
                         </div>
                     </article>
                     </article>
@@ -57,16 +63,15 @@ class Ranking extends React.Component {
                                 <th class="title" scope="cols">Points</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <td class="content">1</td>
-                            <td class="content">Chris</td>
-                            <td class="content">45</td>
-                        </tbody>
-                        <tbody>
-                            <td class="content">2</td>
-                            <td class="content">Brian</td>
-                            <td class="content">43</td>
-                        </tbody>
+                        { this.state.winner.map(( winner, i ) => {
+                          return (
+                            <tbody>
+                              <td class="content"> { i + 1 } </td>
+                              <td class="content"> { this.state.winner[i] }</td>
+                              <td class="content"> { this.state.points[i] }</td>
+                            </tbody>
+                          );
+                        }) }
                     </table>
                 </div>
             </div>
