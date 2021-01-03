@@ -6,6 +6,11 @@ import Auction_Factory from "../abis/AuctionFactory.json";
 import KSEA_Airdrop from "../abis/KSEAirdrop.json";
 import KSEA_Token from "../abis/KSEAToken.json";
 
+import loadAccount from "../components/ethereum/LoadAccount";
+import kseaToken from "../components/ethereum/KSEA_Token";
+import kseAirdrop from "../components/ethereum/KSEAirdrop";
+import factory from "../components/ethereum/AuctionFactory";
+
 import Navbar from "../components/Navbar";
 import Ranking_page from "../pages/Ranking";
 import Checkin from "../components/Checkin";
@@ -22,8 +27,12 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
-      await loadWeb3()
-      await loadBlockchainData()
+      // await loadWeb3()
+      let addr = await loadAccount()
+      setAccount(addr)
+      await kseaToken()
+      await kseAirdrop()
+      await factory()
       await Ranking()
       await Member(account)
     }
@@ -45,59 +54,64 @@ function App() {
     }
   }
 
-  async function loadBlockchainData() {
-    const web3 = window.web3
+  // async function loadBlockchainData() {
+  //   const web3 = window.web3
 
-    // Load account
-    const accounts = await web3.eth.getAccounts()
-    setAccount(accounts[0])
+  //   // Load account
+  //   const accounts = await web3.eth.getAccounts()
+  //   setAccount(accounts[0])
 
-    // Network ID
-    const networkId = await web3.eth.net.getId()
+  //   // Network ID
+  //   const networkId = await web3.eth.net.getId()
 
-    // KSEA Token
-    const networkData1 = KSEA_Token.networks[networkId]
-    if(networkData1) {
-      setLoading(True)
-      const token = new web3.eth.Contract(KSEA_Token.abi, networkData1.address)
-      setToken(token)
+  //   // KSEA Token
+  //   const networkData1 = KSEA_Token.networks[networkId]
+  //   if(networkData1) {
+  //     setLoading(true)
+  //     const token_inst = new web3.eth.Contract(KSEA_Token.abi, networkData1.address)
+  //     setToken(token_inst)
+  //     if (token != null){
+  //       setLoading(false)
+  //     }
+  //   } else {
+  //     // ***Devs*** uncomment this after deploying smart contracts
+  //     // window.alert('Token contract not deployed to detected network.')
+  //     // console.log('Smart contracts not deployed to detected network.')
+  //     setLoading(false)
+  //   }
 
-      setLoading(false)
-    } else {
-      // ***Devs*** uncomment this after deploying smart contracts
-      // window.alert('Token contract not deployed to detected network.')
-      // console.log('Smart contracts not deployed to detected network.')
-      setLoading(false)
-    }
+  //   // KSEA Airdrop
+  //   const networkData2 = KSEA_Airdrop.networks[networkId]
+  //   if(networkData2) {
+  //     setLoading(true)
+  //     const airdrop_inst = new web3.eth.Contract(KSEA_Airdrop.abi, networkData2.address)
+  //     setAirdrop(airdrop_inst)
+  //     if (airdrop != null){
+  //       setLoading(false)
+  //     }
+  //   } else {
+  //     // ***Devs*** uncomment this after deploying smart contracts
+  //     // window.alert('Airdrop contract not deployed to detected network.')
+  //     // console.log('Smart contracts not deployed to detected network.')
+  //     setLoading(false)
+  //   }
 
-    // KSEA Airdrop
-    const networkData2 = KSEA_Airdrop.networks[networkId]
-    if(networkData2) {
-      const airdrop = new web3.eth.Contract(KSEA_Airdrop.abi, networkData2.address)
-      setAirdrop(airdrop)
-
-      setLoading(false)
-    } else {
-      // ***Devs*** uncomment this after deploying smart contracts
-      // window.alert('Airdrop contract not deployed to detected network.')
-      // console.log('Smart contracts not deployed to detected network.')
-      setLoading(false)
-    }
-
-    //KSEA Auction Factory
-    const networkData3 = Auction_Factory.networks[networkId]
-    if(networkData3) {
-      const auctionFactory = new web3.eth.Contract(Auction_Factory.abi, networkData3.address)
-      setAuctionFactory(auctionFactory)
-
-      setLoading(false)
-    } else {
-      // ***Devs*** uncomment this after deploying smart contracts
-      // window.alert('Token contract not deployed to detected network.')
-      // console.log('Smart contracts not deployed to detected network.')
-      setLoading(false)
-    }
-  }
+  //   //KSEA Auction Factory
+  //   const networkData3 = Auction_Factory.networks[networkId]
+  //   if(networkData3) {
+  //     setLoading(true)
+  //     const auctionFactory_inst = new web3.eth.Contract(Auction_Factory.abi, networkData3.address)
+  //     setAuctionFactory(auctionFactory_inst)
+  //     if (auctionFactory != null){
+  //       setLoading(false)
+  //     }
+  //   } else {
+  //     // ***Devs*** uncomment this after deploying smart contracts
+  //     // window.alert('Token contract not deployed to detected network.')
+  //     // console.log('Smart contracts not deployed to detected network.')
+  //     setLoading(false)
+  //   }
+  // }
 
   async function Ranking() { 
     fetch('http://127.0.0.1:5000').then(res => res.json()).then(
@@ -201,15 +215,9 @@ function App() {
           } */}
           </Route>
           <Route path="/officer">
-            {token != null && 
-              <Officer
+              <Officer 
                 account = {account}
-                airdrop = {airdrop}
-                token = {token}
-                loadBlockchainData = {loadBlockchainData}
-                loadWeb3 = {loadWeb3}
               />
-            }
           </Route>
           <Route path="/">
             <Profile />

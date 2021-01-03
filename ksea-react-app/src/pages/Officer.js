@@ -1,6 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Container, Row, Button, Col, Form} from 'react-bootstrap'
 
+import loadAccount from "../components/ethereum/LoadAccount";
+import kseaToken from "../components/ethereum/KSEA_Token";
+import kseAirdrop from "../components/ethereum/KSEAirdrop";
+
 const axios = require('axios').default;
 
 
@@ -8,8 +12,14 @@ function Officer(props) {
 
   useEffect(() => {
     async function fetchData() {
-      await props.loadWeb3()
-      await props.loadBlockchainData()
+      let accounts = await loadAccount()
+      setAccount(accounts);
+
+      let t = await kseaToken()
+      setToken(t);
+
+      let a = await kseAirdrop()
+      setAirdrop(a);
     }
     fetchData();
   }, [])
@@ -80,13 +90,13 @@ function Officer(props) {
 
   async function deregisterBoardMem(_address) {
     await airdrop.methods.deregisterBoardMember(_address).send({from:account})
-    let board = await props.airdrop.methods.isBoardMember(_address).call();
+    let board = await airdrop.methods.isBoardMember(_address).call();
     console.log("IsBoardMember: ", board);
   }
 
   async function distributeTokens(_addresses, _value) {
     let total_val = _value * _addresses.length
-    await token.methods.approve(props.airdrop._address, total_val).send({from:account});
+    await token.methods.approve(airdrop._address, total_val).send({from:account});
     await airdrop.methods.distributeDobbyTokens(_addresses, _value).send({from:account})
     console.log(total_val)
   }

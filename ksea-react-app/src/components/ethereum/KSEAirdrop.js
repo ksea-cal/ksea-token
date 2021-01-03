@@ -1,7 +1,7 @@
 import web3 from "./Web3";
 import KSEA_Airdrop from "../../abis/KSEAirdrop.json";
 
-const kseairdop = async () => {
+const kseAirdrop = async () => {
 
     const networkId = await web3.eth.net.getId()
 
@@ -20,4 +20,4 @@ const kseairdop = async () => {
     }
 }
 
-export default kseairdop;
+export default kseAirdrop;
