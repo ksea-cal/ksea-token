@@ -7,8 +7,9 @@ import kseAirdrop from "../components/ethereum/KSEAirdrop";
 
 const axios = require('axios').default;
 
-
 function Officer(props) {
+
+  //load account address, smart contract instances when the page first renders
 
   useEffect(() => {
     async function fetchData() {
@@ -23,6 +24,8 @@ function Officer(props) {
     }
     fetchData();
   }, [])
+
+  //Airdrop Handler
 
   function handleBoardChange(event) {
     setBoardValue(event.target.value);
@@ -68,6 +71,9 @@ function Officer(props) {
         });
   }
 
+
+  //checkin Handlers
+
   function handlePassword(event) { 
     setPassword(event.target.value);
   }
@@ -80,7 +86,22 @@ function Officer(props) {
     setEventName(event.target.value);
   }
 
-  // Airdrop Section
+  // Push Check-in information to the database 
+  function handleCheckIn(event) { 
+    let formData = new FormData();
+    formData.append('password', password); 
+    formData.append('timeLimit', timeLimit); 
+    formData.append('eventName', eventName); 
+    axios.post("http://127.0.0.1:5000/createcheckin", formData)
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+  }
+
+  // Airdrop Contract Interacting Functions
 
   async function registerBoardMem(_address) {
     await airdrop.methods.registerBoardMember(_address).send({from:account})
@@ -99,23 +120,6 @@ function Officer(props) {
     await token.methods.approve(airdrop._address, total_val).send({from:account});
     await airdrop.methods.distributeDobbyTokens(_addresses, _value).send({from:account})
     console.log(total_val)
-  }
-
-  
-  // Push Check-in information to the database 
-  function handleCheckIn(event) { 
-    let formData = new FormData();
-    formData.append('password', password); 
-    formData.append('timeLimit', timeLimit); 
-    formData.append('eventName', eventName); 
-    axios.post("http://127.0.0.1:5000/createcheckin", formData)
-        .then(response => {
-            console.log(response);
-        })
-        .catch(error => {
-            console.log(error);
-        });
-
   }
 
   const [account, setAccount] = useState('');

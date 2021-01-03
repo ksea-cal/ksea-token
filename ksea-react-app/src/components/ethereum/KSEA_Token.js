@@ -16,7 +16,7 @@ const kseaToken = async () => {
         return token;
     } else {
         // ***Devs*** uncomment this after deploying smart contracts
-        // window.alert('Token contract not deployed to detected network.')
+        window.alert('Token contract not deployed to detected network.')
         // console.log('Smart contracts not deployed to detected network.')
     }
 }

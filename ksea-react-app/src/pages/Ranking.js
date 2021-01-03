@@ -1,7 +1,6 @@
 import React from 'react';
 import './Ranking.css'
 
-
 class Ranking extends React.Component {
   constructor(props) {
     super(props)
@@ -23,7 +22,6 @@ class Ranking extends React.Component {
       }
     );
   }
-
 
   render() {
     return (

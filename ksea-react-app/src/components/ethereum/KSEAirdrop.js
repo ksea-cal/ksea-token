@@ -14,7 +14,7 @@ const kseAirdrop = async () => {
       return airdrop
     } else {
       // ***Devs*** uncomment this after deploying smart contracts
-      // window.alert('Airdrop contract not deployed to detected network.')
+      window.alert('Airdrop contract not deployed to detected network.')
       // console.log('Smart contracts not deployed to detected network.')
  
     }

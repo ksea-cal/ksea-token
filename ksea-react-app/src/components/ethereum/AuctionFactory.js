@@ -14,7 +14,7 @@ const factory = async () => {
       return auctionFactory
     } else {
       // ***Devs*** uncomment this after deploying smart contracts
-      // window.alert('Auction contract not deployed to detected network.')
+      window.alert('Auction contract not deployed to detected network.')
       // console.log('Smart contracts not deployed to detected network.')
     }
   }
