@@ -2,45 +2,41 @@ import React, { useState, useEffect } from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 import loadAccount from "../components/ethereum/LoadAccount";
+import kseaToken from "../components/ethereum/KSEA_Token";
+import kseairdrop from "../components/ethereum/KSEAirdrop";
+import factory from "../components/ethereum/AuctionFactory";
+import Navbar from "../components/Navbar"
+import Member from "../components/Member"
+import Winner from "../components/Winner"
+import Checkin from "../components/Checkin"
 
-import Ranking_page from "../pages/Ranking";
-import Checkin from "../components/Checkin";
-import Profile from "../components/Profile";
+import Officer from "./Officer"
+import Auction from "./Auction"
 
-import Header from "../components/Header";
-import Officer from "./Officer";
-import './App.css';
-
+import '../App.css';
  
 
 function App() {
 
   useEffect(() => {
     async function fetchData() {
-      let addr = await loadAccount()
-      setAccount(addr)
-      await Ranking()
-      await Member(account)
+      await loadAccount()
+      await kseaToken()
+      await kseairdrop()
+      await factory()
     }
     fetchData();
   }, [])
 
-  async function Ranking() { 
-    fetch('http://127.0.0.1:5000').then(res => res.json()).then(
-      data => { 
-        setWinner(data.curr_sem_users)
-        console.log(data.curr_sem_users)
-      }
-    );
+  async function bid(_amount) {
+    await auction.methods.bid(_amount).send({from:account});
   }
 
-  async function Member(address) { 
-    fetch("http://127.0.0.1:5000/viewmember?address=".concat(address)).then(res => res.json()).then(
-      data => { 
-        setMember(data.name)
-        setPoints(data.points)
-      }
-    );
+  async function withdraw() {
+    await auction.methods.withdraw().send({from:account});
+  }
+  async function endAuction() {
+    await auction.methods.auctionEnd().send({from:account});
   }
 
   // States
@@ -58,17 +54,31 @@ function App() {
         />
         <Switch>
           <Route path="/auction">
-            <h1>Work in Progress</h1>
+          {entryFees
+            ?<Auction 
+                bid = {bid}
+                withdraw = {withdraw}
+                endAuction = {endAuction}
+                itemName = {itemNames}
+                entryFee = {entryFees}
+                auction = {auction}
+              />
+            : <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
+          }
           </Route>
           <Route path="/officer">
               <Officer />
           </Route>
           <Route path="/">
-            <Profile />
-            <Ranking_page />
+            <Member 
+              account = { account }
+            />
+            <Winner 
+            />
           </Route>
           <Route path="/checkin">
-            <Checkin />
+            <Checkin 
+            />
           </Route>
         </Switch>
       </div>
