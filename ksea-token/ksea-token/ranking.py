@@ -38,21 +38,6 @@ def award():
 
 @app.route("/awardevent", methods=["POST"])
 def award_event():
-    """ Award points to members """
-    if request.method == "POST":
-        event = request.values['event']
-        event_to_award = Event.query.filter(Event.event_name == event)
-        members = Checkin.query.filter(Checkin.event == event_to_award.eid).all()
-        awardees = [m.user for m in members]
-        awardee_names = [User.query.filter(User.uid == an).first().name for an in awardees]
-        for u in awardees:
-            awardee = User.query.filter(User.uid == u).first()
-            if not awardee:
-                raise Exception("[ERROR] No Awardee {}".format(address))
-
-
-@app.route("/awardevent", methods=["POST"])
-def award_event():
     """ Award points to members """ 
     if request.method == "POST":
         event = request.values['event']
