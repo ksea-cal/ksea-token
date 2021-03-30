@@ -56,24 +56,34 @@ contract("KSEAToken", async () => {
     });
 
     it("testing when not enough balance. should not change balances.", async () => {
-        await dobby.transfer(accounts[2], 50, {from: accounts[1]});
-        let bal1 = await dobby.balanceOf(accounts[1]);
-        let bal2 = await dobby.balanceOf(accounts[2]);
+        try {
+            await dobby.transfer(accounts[2], 50, {from: accounts[1]});
+        } catch(e) {
 
-        assert.equal(10, bal1);
-        assert.equal(10, bal2);
+        } finally {
+            let bal1 = await dobby.balanceOf(accounts[1]);
+            let bal2 = await dobby.balanceOf(accounts[2]);
+
+            assert.equal(10, bal1);
+            assert.equal(10, bal2);
+        }
     });
 
     it ("testing when not enough allowance. should not change balances", async () => {
         await dobby.approve(accounts[1], 10, {from: accounts[0]});
-        await transferFrom(accounts[0], accounts[2], 50, {from: accounts[1]});
-        let bal0 = await dobby.balanceOf(accounts[0]);
-        let bal1 = await dobby.balanceOf(accounts[1]);
-        let bal2 = await dobby.balanceOf(accounts[2]);
+        try {
+            await dobby.transferFrom(accounts[0], accounts[2], 50, {from: accounts[1]});
+        } catch(e) {
 
-        assert.equal(9980, bal0);
-        assert.equal(10, bal1);
-        assert.equal(10, bal2);
+        } finally {
+            let bal0 = await dobby.balanceOf(accounts[0]);
+            let bal1 = await dobby.balanceOf(accounts[1]);
+            let bal2 = await dobby.balanceOf(accounts[2]);
+    
+            assert.equal(9980, bal0);
+            assert.equal(10, bal1);
+            assert.equal(10, bal2);
+        }
     });
 
     it ("should correctly let accounts[1] to send 10 tokens from accounts[0] to accounts[1] itself", async () => {
