@@ -1,0 +1,41 @@
+#ranking {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+#ranking img {
+  padding: 5px;
+}
+#my-ranking {
+  width: 25%;
+  background-color: rgb(207, 233, 193);
+  padding: 0 1vw;
+}
+#total-ranking {
+  width: 65%;
+  background-color: rgb(245, 232, 209);
+  padding: 2vw;
+}
+.top3-ranking {
+  background-color: rgb(212, 231, 229);
+}
+.rest-ranking {
+  margin-top: 2vw;
+  background-color: rgb(240, 223, 240);
+}
+#top3-img {
+  width: 15vw;
+  height: 15vw;
+  object-fit: cover;
+}
+#rest-img {
+  width: 5vw;
+  height: 5vw;
+  object-fit: cover;
+}
+#my-img {
+  width: 10vw;
+  height: 10vw;
+  object-fit: cover;
+}

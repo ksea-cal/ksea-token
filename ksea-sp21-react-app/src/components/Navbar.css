@@ -1,0 +1,46 @@
+@import "./../App.css";
+
+.navbar-background {
+    background-color: rgb(188, 223, 143);
+    margin-bottom: 30px;
+}
+.row-space-out {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.navbar {
+    padding: 7px 0;
+    font-size: 17px;
+}
+.nav-left {
+    width: 40%;
+}
+.nav-right {
+    width: 15%;
+    justify-content: flex-end;
+}
+.navbar-item {
+    padding: 15px 15px 15px 0;
+    text-decoration: none;
+}
+.profile-item {
+    padding: 5px 8px;
+    border-radius: 10px;
+    background:red;
+    text-decoration: none;
+}
+.navbar-item:hover {
+    cursor: pointer;
+    color: blueviolet;
+}
+.profile-item:hover{
+    cursor: pointer;
+    color: blueviolet;
+}
+.display-center {
+    width: 70%;
+    margin: auto;
+    
+}
