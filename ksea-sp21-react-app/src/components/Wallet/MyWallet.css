@@ -1,0 +1,25 @@
+.my-wallet {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.my-wallet .photo{
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+.photo input {
+  margin-top: 20px;
+}
+.my-wallet .info{
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+.info input {
+  width: 100px;
+}
+.info .btns {
+  display: flex;
+  flex-direction: row;
+}
