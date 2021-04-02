@@ -33,15 +33,18 @@ contract("KSEAirdrop", async () => {
 
     it("distributeTokens", async () => { //parameter check
        await token.approve(airdrop.address, 100);
-       await airdrop.distributeDobbyTokens([accounts[1], accounts[2]], 5, {from: accounts[0]});
+       await airdrop.distributeDobbyTokens([accounts[1], accounts[2], accounts[3]], 5, {from: accounts[0]});
 
        let bal1 = await token.balanceOf(accounts[1]);
        let bal1Num = await parseFloat(bal1);
        let bal2 = await token.balanceOf(accounts[2]);
        let bal2Num = await parseFloat(bal2);
+       let bal3 = await token.balanceOf(accounts[3]);
+       let bal3Num = await parseFloat(bal3);
 
        assert.equal(bal1Num, 5);
        assert.equal(bal2Num, 5);
+       assert.equal(bal3Num, 5);
     });
 
 
@@ -56,6 +59,61 @@ contract("KSEAirdrop", async () => {
        assert.equal(bal1Num/1e18, 101);
        assert.equal(bal2Num/1e18, 101);
     });
+
+    it("should register another board member", async () => {
+        await airdrop.registerBoardMember(accounts[3]);
+    
+        let board = await airdrop.isBoardMember(accounts[3]);
+    
+        assert.equal(board,true);
+    });
+
+    it("distributeTokens to another board member", async () => { //parameter check
+        await airdrop.distributeDobbyTokens([accounts[3]], 5, {from: accounts[0]});
+ 
+        let bal3 = await token.balanceOf(accounts[3]);
+        let bal3Num = await parseFloat(bal3);
+ 
+        assert.equal(bal3Num, 10);
+     });
+    
+    it("should deregister a board member", async () => {
+        await airdrop.deregisterBoardMember(accounts[3]);
+    
+        let board = await airdrop.isBoardMember(accounts[3]);
+    
+        assert.equal(board,false);
+    });
+
+    it("try to distribute tokens by a non-board member.", async () => {
+        try {
+            await airdrop.distributeDobbyTokens([accounts[1], accounts[2]], 5, {from: accounts[3]});
+        } catch {
+
+        } finally {
+            let bal1 = await token.balanceOf(accounts[1]);
+            let bal1Num = await parseFloat(bal1);
+            let bal2 = await token.balanceOf(accounts[2]);
+            let bal2Num = await parseFloat(bal2);
+
+            assert.equal(bal1Num, 5);
+            assert.equal(bal2Num, 5);
+        }
+    });
+
+    it("try to distribute more tokens than the approved", async () => {
+        try {
+            await airdrop.distributeDobbyTokens([accounts[1], accounts[2]], 45, {from: accounts[0]});
+        } catch {
+
+        } finally {
+            let bal1 = await token.balanceOf(accounts[1]);
+            let bal1Num = await parseFloat(bal1);
+            let bal2 = await token.balanceOf(accounts[2]);
+            let bal2Num = await parseFloat(bal2);
+
+            assert.equal(bal1Num, 5);
+            assert.equal(bal2Num, 5);
+        }
+    });
 });
-
-
