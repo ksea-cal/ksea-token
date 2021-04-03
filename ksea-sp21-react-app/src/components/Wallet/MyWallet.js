@@ -1,32 +1,20 @@
 import React, {useState} from 'react';
-import axios from 'axios';
+//import axios from 'axios';
 import './MyWallet.css';
 
-export default function MyWallet({user, setWalletConnect}) {
-  const [userEdit, setUserEdit] = useState(user);
+export default function MyWallet() {
+  const [user, setUser] = useState({
+        "id": 1,
+        "img": "https://source.unsplash.com/collection/1051/3",
+        "name": "이신희",
+        "point": 92,
+        "rank": 2
+    });
   const [edit, setEdit] = useState(false);
-  
-  function handleDisconnect() {
-    setWalletConnect(false)
-  }
 
   function handleChange(e) {
     const {name, value} = e.target
-    setUserEdit({...userEdit, [name]: value})
-  }
-
-  function handleEditProfile() {
-    setEdit(false)
-    userEdit.name && userEdit.img ?
-      axios.put(`http://localhost:5000/api/user/${user.id}`, 
-        {
-          "name": userEdit.name,
-          "point": user.point,
-          "rank": user.rank,
-          "img": userEdit.img
-        })
-      : null
-      .catch(err => console.error(`Error: ${err}`));
+    setUser({...user, [name]: value})
   }
 
   return (  
@@ -37,7 +25,7 @@ export default function MyWallet({user, setWalletConnect}) {
           <input 
             type="text"
             name="img"
-            value={userEdit.img}
+            value={user.img}
             placeholder="New Img Url"
             onChange={handleChange}
           />
@@ -49,7 +37,7 @@ export default function MyWallet({user, setWalletConnect}) {
           <input 
             type="text"
             name="name"
-            value={userEdit.name}
+            value={user.name}
             placeholder="New Name"
             onChange={handleChange}
           />
@@ -59,7 +47,6 @@ export default function MyWallet({user, setWalletConnect}) {
         <p>Rank #{user.rank}</p>
         <p>Copy Address</p>
         <div className="btns">
-          <button onClick={handleDisconnect}>Disconnect Wallet</button>
           {edit?
             <button onClick={() => setEdit(false)}>
                 Finish Edit

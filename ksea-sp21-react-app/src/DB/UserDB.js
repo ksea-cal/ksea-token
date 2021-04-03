@@ -1,4 +1,4 @@
-
+const UserDB =
 [
         {
             "name": "이신희",
@@ -291,3 +291,4 @@
     ]
 
 //https://beautifytools.com/excel-to-json-converter.php
+export default UserDB

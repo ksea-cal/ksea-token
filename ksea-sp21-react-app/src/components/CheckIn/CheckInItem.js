@@ -14,9 +14,10 @@ export default function CheckInItem({event, handleSubmit}) {
     setInputKey("");
   };
   function handleChange(e) {
+    console.log(e.target.value)
     setInputKey(e.target.value);
   }
-
+ 
   return (
     <div className="item">
       <div className="check-in-item">

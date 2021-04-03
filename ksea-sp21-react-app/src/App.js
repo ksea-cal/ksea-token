@@ -8,45 +8,14 @@ import {
   Switch
 } from "react-router-dom";
 import CheckIn from './components/CheckIn/CheckIn';
-import Ranking from './components/Ranking';
+import Ranking from './components/Rank/Ranking';
 import MyWallet from './components/Wallet/MyWallet';
-import ConnectWallet from './components/Wallet/ConnectWallet';
 import Auction from './components/Auction/Auction';
+import Officer from './components/Officer';
 
 export default function App() {
-  const [user, setUser] = useState({
-    id: '',
-    name: "",
-    img: "",
-    point: 0,
-    rank: 0
-  });
-  const [ walletConnect, setWalletConnect ] = useState(false)
-  const [ connectWalShown, setConnectWalShown ] = useState(false);
-
-  function showConnectWal() {
-    setConnectWalShown(true);
-  };
-  function closeConnectWal() {
-    setConnectWalShown(false);
-  };
-  function handleWalletConnect() {
-    axios.get(`http://localhost:5000/api/user/${user.id}`)
-      .then(res => {
-        setUser(res.data)
-      })
-      .catch(err => console.error(`Error: ${err}`));
-    setWalletConnect(true);
-    closeConnectWal();
-  }
-    
-  function handleChange(e) {
-    setUser({...user, id:e.target.value});
-  }
-
   return (
     <div>
-      {walletConnect ?
       <Router>
         <div id="page-container">
           <div id="content-wrap">
@@ -55,9 +24,10 @@ export default function App() {
               <Switch>
                 <Route path="/" exact component={CheckIn}/>
                 <Route path="/checkin" component={CheckIn}/>
-                <Route path="/ranking"><Ranking user={user}/></Route>
+                <Route path="/ranking" component={Ranking}/>
                 <Route path="/auction" component={Auction}/>
-                <Route path="/my-wallet"><MyWallet user={user} setWalletConnect={setWalletConnect}/></Route>
+                <Route path="/officer" component={Officer}/>
+                <Route path="/my-wallet" component={MyWallet}/>
               </Switch>
             </div>
           </div>
@@ -66,23 +36,6 @@ export default function App() {
           </footer>
         </div>
       </Router>
-      :
-      <div>
-        <button onClick={showConnectWal}>Connect Wallet</button>
-        <ConnectWallet 
-          connectWalShown={connectWalShown}
-        >
-          <input
-            type="text"
-            value={user.id}
-            placeholder="User Id"
-            onChange={handleChange}
-          />
-          <button onClick={handleWalletConnect}>Connect</button>
-          <button onClick={closeConnectWal}>Close</button>
-        </ConnectWallet>
-      </div>
-      }
     </div>
   )
 }

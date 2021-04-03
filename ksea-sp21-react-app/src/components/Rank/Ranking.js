@@ -1,10 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import './Ranking.css';
 import axios from "axios";
+import MyRank from './MyRank';
 
-export default function Ranking({ user }) {
+export default function Ranking() {
   const [ranking, setRanking] = useState([]);
-  const [userUpdate, setUserUpdate] = useState(user);
+  const [user, setUser] = useState({
+        "id": 1,
+        "img": "https://source.unsplash.com/collection/1051/3",
+        "name": "이신희",
+        "point": 92,
+        "rank": 2
+    });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -32,12 +39,6 @@ export default function Ranking({ user }) {
         )
       })
       .catch(err => console.error(`Error: ${err}`));
-
-  axios.get(`http://localhost:5000/api/user/${user.id}`)
-    .then(res => {
-      setUserUpdate(res.data)
-    })
-    .catch(err => console.error(`Error: ${err}`));
   
   setLoading(true);
   }, []);
@@ -84,13 +85,10 @@ export default function Ranking({ user }) {
   return (
     <div>
       <div id="ranking">
-        <div id="my-ranking">
-          <h4>My rank</h4>
-          <img src={userUpdate.img} id="my-img" alt="headshot"/>
-          <h5>Rank #{userUpdate.rank}</h5>
-          <p>{userUpdate.name}</p>
-          <p>{userUpdate.point} points</p>
+        <div className="left-ranking">
+          <MyRank />
         </div>
+        
         {loading ?
           <div id="total-ranking">
             <p>Number of ppl: {ranking.length}</p>

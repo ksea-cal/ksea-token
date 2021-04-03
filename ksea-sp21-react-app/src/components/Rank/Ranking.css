@@ -7,10 +7,8 @@
 #ranking img {
   padding: 5px;
 }
-#my-ranking {
-  width: 25%;
-  background-color: rgb(207, 233, 193);
-  padding: 0 1vw;
+#left-ranking {
+  width: 30%;
 }
 #total-ranking {
   width: 65%;

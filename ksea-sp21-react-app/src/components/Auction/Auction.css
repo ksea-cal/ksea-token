@@ -1,0 +1,15 @@
+.auction-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.auction-items {
+  width: 70%;
+}
+.auction-items iframe{
+  background-color: rgb(245, 232, 209);
+  padding: 2vw;
+}
+#left-ranking {
+  width: 25%;
+}
