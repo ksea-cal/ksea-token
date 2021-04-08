@@ -4,6 +4,15 @@ pragma solidity >=0.5.0 <0.7.0;
 import "../../KSEAToken/contracts/KSEAToken.sol";
 import "../../KSEAirdrop/contracts/KSEAirdrop.sol";
 
+
+/**
+=== RULE OF THE AUCTION ===
+1. Blind Auction: The highest Bid is visible but becomes invisible at the last 1 hour.
+2. There is no entry fee to enter the auction
+3. There is no Bid Limit!
+4. You cannot withdraw you bids. You can only add on more bids.
+ */
+
 contract KSEAuction is Ownable {
     using SafeMath for uint256;
 
@@ -11,15 +20,15 @@ contract KSEAuction is Ownable {
 
     uint256 public auctionEndTime;
     uint256 public highestBid;
-    uint256 public entryFee;
     address public highestBidder;
     bool ended;
 
     address[] bidders;
 
-    // Allowed withdrawals of previous bids
-    mapping(address => uint256) pendingReturns;
+    // maps address to user's total bid
     mapping(address => uint256) public bids;
+
+    //checks if this user already bidded 
     mapping(address => bool) private bidChecker;
 
     event HighestBidIncreased(address bidder, uint256 amount);
@@ -27,65 +36,19 @@ contract KSEAuction is Ownable {
 
     constructor(
         uint256 _biddingTime,
-        uint256 _entryFee,
         address _dobbyToken,
         address _owner
     ) public {
         auctionEndTime = block.timestamp + _biddingTime;
         dobbyToken = EIP20Interface(_dobbyToken);
-        entryFee = _entryFee;
         owner = _owner;
     }
 
+    /**
+    Bid Function handles the token transaction from user's wallet to this smart contract. If the user already has bids staked in the contract, the new bids gets added on to their total bids. 
+     */
     function bid(uint256 _amount) public {
-        require(block.timestamp <= auctionEndTime, "Auction already ended.");
-
-        require(_amount > highestBid, "There already is a higher bid.");
-
-        if (highestBid != 0) {
-            pendingReturns[highestBidder] += highestBid;
-        }
-
-        if (bidChecker[msg.sender] == true) {
-            internalWithdraw(msg.sender);
-            dobbyToken.transferFrom(msg.sender, address(this), _amount);
-        } else {
-            uint256 premiumBid = _amount + entryFee;
-            dobbyToken.transferFrom(msg.sender, address(this), premiumBid);
-            bidChecker[msg.sender] = true;
-        }
-
-        highestBidder = msg.sender;
-        highestBid = _amount;
-
-        emit HighestBidIncreased(msg.sender, _amount);
-    }
-
-    function internalWithdraw(address member) internal returns (bool) {
-        uint256 amount = pendingReturns[member];
-        if (amount > 0) {
-            pendingReturns[msg.sender] = 0;
-            if (dobbyToken.transfer(member, amount)) {
-                return true;
-            } else {
-                pendingReturns[member] = amount;
-                return false;
-            }
-        }
-    }
-
-    /// Withdraw a bid that was overbid.
-    function withdraw() public returns (bool) {
-        uint256 amount = pendingReturns[msg.sender];
-        if (amount > 0) {
-            pendingReturns[msg.sender] = 0;
-            if (dobbyToken.transfer(msg.sender, amount)) {
-                return true;
-            } else {
-                pendingReturns[msg.sender] = amount;
-                return false;
-            }
-        }
+    
     }
 
     /// End the auction and send the highest bid
@@ -103,7 +66,23 @@ contract KSEAuction is Ownable {
         dobbyToken.transferFrom(address(this), owner, highestBid);
     }
 
+    //returns the total bids staked in this smart contract
     function getTotalBids() public view returns (uint256) {
         return dobbyToken.balanceOf(address(this));
+    }
+
+    //returns the user's current bid
+    function getBid(address bidder) public view returns (uint256) {
+
+    }
+
+    //returns the current highest bid
+    function getHighestBid() public view returns (uint256) {
+
+    }
+
+    //returns the highest bidder's address
+    function getHigestBidder() public view returns (address) {
+
     }
 }
