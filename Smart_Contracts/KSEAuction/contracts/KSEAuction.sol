@@ -23,13 +23,8 @@ contract KSEAuction is Ownable {
     address public highestBidder;
     bool ended;
 
-    address[] bidders;
-
     // maps address to user's total bid
     mapping(address => uint256) public bids;
-
-    //checks if this user already bidded 
-    mapping(address => bool) private bidChecker;
 
     event HighestBidIncreased(address bidder, uint256 amount);
     event AuctionEnded(address winner, uint256 amount);
@@ -48,7 +43,21 @@ contract KSEAuction is Ownable {
     Bid Function handles the token transaction from user's wallet to this smart contract. If the user already has bids staked in the contract, the new bids gets added on to their total bids. 
      */
     function bid(uint256 _amount) public {
-    
+        require(block.timestamp <= auctionEndTime, "Auction already ended.");
+        require(_amount > 0, "The amount must be greater than 0.");
+
+        // update the highest bid and bidder
+        if (bids[msg.sender] + _amount > highestBid) {
+            highestBidder = msg.sender;
+            hightestBid = _amount;
+
+            emit HighestBidIncreased(msg.sender, _amount);
+        }
+
+        // transaction
+        bids[msg.sender] += _amount;
+        dobbyToken.transferFrom(msg.sender, address(this), _amount);
+
     }
 
     /// End the auction and send the highest bid
@@ -73,16 +82,16 @@ contract KSEAuction is Ownable {
 
     //returns the user's current bid
     function getBid(address bidder) public view returns (uint256) {
-
+        return bids[bidder];
     }
 
     //returns the current highest bid
     function getHighestBid() public view returns (uint256) {
-
+        return highestBid;
     }
 
     //returns the highest bidder's address
     function getHigestBidder() public view returns (address) {
-
+        return highestBidder;
     }
 }
