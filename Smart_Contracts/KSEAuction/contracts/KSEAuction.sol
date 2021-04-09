@@ -28,9 +28,6 @@ contract KSEAuction is Ownable {
     // maps address to user's total bid
     mapping(address => uint256) public bids;
 
-    //checks if this user already bidded 
-    mapping(address => bool) private bidChecker;
-
     event HighestBidIncreased(address bidder, uint256 amount);
     event AuctionEnded(address winner, uint256 amount);
 
@@ -73,7 +70,7 @@ contract KSEAuction is Ownable {
 
     //returns the user's current bid
     function getBid(address bidder) public view returns (uint256) {
-
+        return bids[bidder];
     }
 
     //returns the current highest bid
@@ -84,5 +81,9 @@ contract KSEAuction is Ownable {
     //returns the highest bidder's address
     function getHigestBidder() public view returns (address) {
 
+    }
+
+    function getTime() public view returns (uint256) {
+        return auctionEndTime;
     }
 }
