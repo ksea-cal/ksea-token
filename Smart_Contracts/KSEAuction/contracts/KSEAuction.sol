@@ -57,7 +57,6 @@ contract KSEAuction is Ownable {
         // transaction
         bids[msg.sender] += _amount;
         dobbyToken.transferFrom(msg.sender, address(this), _amount);
-
     }
 
     /// End the auction and send the highest bid
