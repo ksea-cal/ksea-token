@@ -4,16 +4,21 @@
   justify-content: space-between;
   align-items: flex-start;
 }
-#ranking img {
-  padding: 5px;
-}
 #left-ranking {
-  width: 30%;
+  width: 25%;
+}
+#left-ranking h2{
+  background-color: rgb(207, 233, 193);
+  padding: 4vh 2vw;
+  font-size: 2vw;
 }
 #total-ranking {
-  width: 65%;
+  width: 70%;
   background-color: rgb(245, 232, 209);
   padding: 2vw;
+}
+#total-ranking img {
+  padding: 5px;
 }
 .top3-ranking {
   background-color: rgb(212, 231, 229);
@@ -28,12 +33,10 @@
   object-fit: cover;
 }
 #rest-img {
-  width: 5vw;
-  height: 5vw;
+  width: 8vw;
+  height: 8vw;
   object-fit: cover;
 }
-#my-img {
-  width: 10vw;
-  height: 10vw;
-  object-fit: cover;
+thead {
+  text-align: center;
 }

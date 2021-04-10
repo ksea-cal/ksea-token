@@ -1,22 +1,28 @@
 import React from 'react';
-import Timer from './Timer';
 import MyRank from './../Rank/MyRank';
 import './Auction.css';
-import AuctionItems from './AuctionItems';
+import AuctionItem from './AuctionItem';
+import AuctionDB from './../../DB/AuctionDB';
 
-export default function Auction() {
+export default function Auction({user}) {
+  const AuctionItems = AuctionDB.map(eachItem => (
+    <AuctionItem item={eachItem} />
+  ))
+
    return (
     <div>
-      <Timer />
-      <p>This is Auction Page</p>
-      <div className="auction-content">
-        <div className="left-ranking">
-          <MyRank />
+      {user === undefined ?
+        <h2>Please connect your wallet</h2>
+        :
+        <div className="auction-content">
+          <div id="left-ranking">
+            <MyRank user={user}/>
+          </div>
+          <div className="auction-items">
+            {AuctionItems}
+          </div>
         </div>
-        <div className="auction-items">
-          <iframe src={AuctionItems} width="100%" height="100%"  name="current"></iframe>
-        </div>
-      </div>
+      }
     </div>
   )
 }

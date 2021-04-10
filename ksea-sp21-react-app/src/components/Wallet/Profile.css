@@ -1,9 +1,9 @@
-.my-wallet {
+.profile {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
-.my-wallet .photo{
+.profile .photo{
   display: flex;
   flex-direction: column;
   width: 30vh;
@@ -11,7 +11,7 @@
 .photo input {
   margin-top: 20px;
 }
-.my-wallet .info{
+.profile .info{
   display: flex;
   flex-direction: column;
   width: 50%;

@@ -1,14 +1,15 @@
 .display-center {
-    width: 70%;
-    margin: auto;
+  width: 70%;
+  margin: auto;
 }
 #page-container {
-    position: relative;
-    min-height: 100vh;
+  position: relative;
+  min-height: 100vh;
 }
 #content-wrap {
-    padding-bottom: 10rem;
+  padding-bottom: 10rem;
 }
+
 /* Footer css */
 footer {
   position: absolute;

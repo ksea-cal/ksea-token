@@ -1,0 +1,23 @@
+.item-detail {
+  width: 40%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(240, 214, 181);
+  padding: 4vh 0;
+  text-align: center;
+}
+.item-detail img{
+  width: 10vw;
+  height: 10vw;
+  object-fit: contain;
+  margin-bottom: 3vh;
+}
+.item-detail h1{
+  font-size: 2.7vw;
+}
+.item-detail h2{
+  font-size: 2vw;
+  margin: 1vh 0;
+}
