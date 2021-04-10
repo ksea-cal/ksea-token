@@ -20,7 +20,9 @@ contract KSEAuction is Ownable {
 
     uint256 public auctionEndTime;
     uint256 public highestBid;
+    uint256 public totalBid;
     address public highestBidder;
+    bool private paused;
     bool ended;
 
     // maps address to user's total bid
@@ -39,11 +41,31 @@ contract KSEAuction is Ownable {
         owner = _owner;
     }
 
+    /*
+    Control the execution state of the contract.
+    */
+    modifier whenPaused() {
+        require(paused, "Auction has been paused!");
+        _;
+    }
+
+    modifier whenUnpaused() {
+        require(!paused, "Auction not yet paused!");
+        _;
+    }
+
+    function _pause() public whenUnpaused {
+        paused = true;
+    }
+
+    function _unpause() public whenPaused {
+        paused = false;
+    }
+
     /**
     Bid Function handles the token transaction from user's wallet to this smart contract. If the user already has bids staked in the contract, the new bids gets added on to their total bids. 
      */
-    function bid(uint256 _amount) public {
-        require(block.timestamp <= auctionEndTime, "Auction already ended.");
+    function bid(uint256 _amount) public whenUnpaused {
         require(_amount > 0, "The amount must be greater than 0.");
 
         // update the highest bid and bidder
@@ -55,15 +77,15 @@ contract KSEAuction is Ownable {
         }
 
         // transaction
+        totalBid += _amount;
         bids[msg.sender] += _amount;
         dobbyToken.transferFrom(msg.sender, address(this), _amount);
     }
 
     /// End the auction and send the highest bid
     /// to the beneficiary.
-    function auctionEnd() public {
+    function auctionEnd() public whenPaused {
         // 1. Conditions
-        require(block.timestamp >= auctionEndTime, "Auction not yet ended.");
         require(!ended, "auctionEnd has already been called.");
 
         // 2. Effects
@@ -71,7 +93,8 @@ contract KSEAuction is Ownable {
         emit AuctionEnded(highestBidder, highestBid);
 
         // 3. Interaction
-        dobbyToken.transferFrom(address(this), owner, highestBid);
+        // dobbyToken.transferFrom(address(this), owner, highestBid);
+        dobbyToken.transferFrom(address(this), owner, totalBid);
     }
 
     //returns the total bids staked in this smart contract
@@ -92,9 +115,5 @@ contract KSEAuction is Ownable {
     //returns the highest bidder's address
     function getHigestBidder() public view returns (address) {
         return highestBidder;
-    }
-
-    function getTime() public view returns (uint256) {
-        return auctionEndTime;
     }
 }
