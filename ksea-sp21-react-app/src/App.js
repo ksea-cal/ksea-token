@@ -47,6 +47,7 @@ export default function App() {
 
     setOnboard(ob);
 
+    //retrieve user address and wallet connection status for persistence
     let user = window.localStorage.getItem('user');
     let walletConnection = window.localStorage.getItem('walletConnection');
     setUser(user);
@@ -61,6 +62,7 @@ export default function App() {
   //   }
   // }, [onboard]);
 
+  //connect wallet button event handler
   async function walletConnect() {
     let newUser;
     let state;
@@ -91,7 +93,6 @@ export default function App() {
     :
     <button onClick={walletConnect}>Connect Wallet</button>
   
-
   return (
     <div>
       <Router>
