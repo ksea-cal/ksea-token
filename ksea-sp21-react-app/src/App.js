@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 import Navbar from './components/Navbar';
 import {
@@ -14,26 +14,81 @@ import Officer from './components/Officer';
 import ItemDetail from './components/Auction/ItemDetail';
 import UserDB from './DB/UserDB';
 
+//blockchain related
+import initOnboard from './utils/initOnboard';
+import Web3 from 'web3'
+
 export default function App() {
-  const [walletConnect, setWalletConnect] = useState(false)
+  const [walletConnection, setWalletConnection] = useState(false)
   const [user, setUser] = useState()
 
-  const currUser = UserDB.filter(person => {
-    return person.id === 2 ?
-      person : undefined
-  })[0]
+  //blockchain related
+  const [onboard, setOnboard] = useState(null);
+  const [wallet, setWallet] = useState({});
+  const [address, setAddress] = useState(null);
+  const [balance, setBalance] = useState(null);
+  const [, setNetwork] = useState(null);
 
-  function handleClick() {
-    const newUser = walletConnect ?
-      undefined : currUser
+  const web3 = new Web3(wallet.provider);
+  useEffect(() => {
+    const ob = initOnboard({
+      address: setAddress,
+      network: setNetwork,
+      balance: setBalance,
+      wallet: (w) => {
+        if (w.provider) {
+          setWallet(w);
+          window.localStorage.setItem('selectedWallet', w.name);
+        } else {
+          setWallet({});
+        }
+      },
+    });
+
+    setOnboard(ob);
+
+    let user = window.localStorage.getItem('user');
+    let walletConnection = window.localStorage.getItem('walletConnection');
+    setUser(user);
+    setWalletConnection(walletConnection);
+  }, []);
+
+  useEffect(() => {
+    const prevWallet = window.localStorage.getItem('selectedWallet');
+    if (prevWallet && onboard) {
+      onboard.walletSelect(prevWallet);
+    }
+  }, [onboard]);
+
+  async function walletConnect() {
+    let newUser;
+    let state;
+    if (!walletConnection) {
+      await onboard.walletSelect();
+      await onboard.walletCheck();
+      state = await onboard.getState();
+      newUser = state.address;
+    } else {
+      await onboard.walletReset();
+      state = await onboard.getState();
+      newUser = undefined;
+    }
+    console.log(state);
+    window.localStorage.setItem('user', newUser);
+    if (walletConnection) {
+      window.localStorage.setItem('walletConnection', !walletConnection);
+    } else {
+      window.localStorage.setItem('walletConnection', walletConnection);
+    }
+    
     setUser(newUser)
-    setWalletConnect(curr => !curr)
+    setWalletConnection(curr => !curr)
   }
 
-  const walletBtn = walletConnect ?
-    <button onClick={handleClick}>Disconnect Wallet</button>
+  const walletBtn = walletConnection ?
+    <button onClick={walletConnect}>Disconnect Wallet</button>
     :
-    <button onClick={handleClick}>Connect Wallet</button>
+    <button onClick={walletConnect}>Connect Wallet</button>
   
 
   return (
