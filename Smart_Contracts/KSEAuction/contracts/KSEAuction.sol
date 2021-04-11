@@ -18,7 +18,6 @@ contract KSEAuction is Ownable {
 
     EIP20Interface private dobbyToken;
 
-    uint256 public auctionEndTime;
     uint256 public highestBid;
     uint256 public totalBid;
     address public highestBidder;
@@ -32,11 +31,9 @@ contract KSEAuction is Ownable {
     event AuctionEnded(address winner, uint256 amount);
 
     constructor(
-        uint256 _biddingTime,
         address _dobbyToken,
         address _owner
     ) public {
-        auctionEndTime = block.timestamp + _biddingTime;
         dobbyToken = EIP20Interface(_dobbyToken);
         owner = _owner;
     }
@@ -45,20 +42,20 @@ contract KSEAuction is Ownable {
     Control the execution state of the contract.
     */
     modifier whenPaused() {
-        require(paused, "Auction has been paused!");
+        require(paused, "Auction In Progress!");
         _;
     }
 
     modifier whenUnpaused() {
-        require(!paused, "Auction not yet paused!");
+        require(!paused, "Auction Not In Progress!");
         _;
     }
 
-    function _pause() public whenUnpaused {
+    function _pause() public onlyOwner whenUnpaused {
         paused = true;
     }
 
-    function _unpause() public whenPaused {
+    function _unpause() public onlyOwner whenPaused {
         paused = false;
     }
 
@@ -84,7 +81,7 @@ contract KSEAuction is Ownable {
 
     /// End the auction and send the highest bid
     /// to the beneficiary.
-    function auctionEnd() public whenPaused {
+    function auctionEnd() public onlyOwner whenPaused {
         // 1. Conditions
         require(!ended, "auctionEnd has already been called.");
 
