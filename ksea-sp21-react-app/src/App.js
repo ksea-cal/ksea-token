@@ -53,12 +53,13 @@ export default function App() {
     setWalletConnection(walletConnection);
   }, []);
 
-  useEffect(() => {
-    const prevWallet = window.localStorage.getItem('selectedWallet');
-    if (prevWallet && onboard) {
-      onboard.walletSelect(prevWallet);
-    }
-  }, [onboard]);
+  // useEffect(() => {
+  //   const prevWallet = window.localStorage.getItem('selectedWallet');
+  //   if (prevWallet && onboard) {
+  //     onboard.walletSelect(prevWallet);
+  //     onboard.walletCheck();
+  //   }
+  // }, [onboard]);
 
   async function walletConnect() {
     let newUser;
