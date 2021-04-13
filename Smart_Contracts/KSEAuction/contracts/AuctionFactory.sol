@@ -14,19 +14,19 @@ contract AuctionFactory {
 
     function createAuction(
         string calldata _name,
-        uint256 _entryFee,
-        uint256 _biddingTime,
+        //uint256 _entryFee,
+        //uint256 _biddingTime,
         address _dobbyToken
     ) external returns (bool) {
         KSEAuction k = new KSEAuction(
-            _biddingTime,
-            _entryFee,
+            //_biddingTime,
+            //_entryFee,
             _dobbyToken,
             msg.sender
         );
         addr = address(k);
         auctions[_name].name = _name;
-        auctions[_name].entryFee = _entryFee;
+        //auctions[_name].entryFee = _entryFee;
         auctions[_name].auctionAddr = addr;
         return true;
     }
@@ -46,7 +46,7 @@ contract AuctionFactory {
     {
         return auctions[_name].name;
     }
-
+/*
     function getEntryFee(string calldata _name)
         external
         view
@@ -54,4 +54,5 @@ contract AuctionFactory {
     {
         return auctions[_name].entryFee;
     }
+    */
 }

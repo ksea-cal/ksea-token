@@ -23,6 +23,40 @@ contract("KSEAuction", async () => {
     await airdrop.registerBoardMember(accounts[0], {from:accounts[0]});
     await airdrop.distributeDobbyTokens([accounts[1], accounts[2], accounts[3]], 100, {from: accounts[0]});
 
+    await token.approve(auction.address, 10000, {from: accounts[1]});
+    await auction.bid(10, {from: accounts[1]});
+    let highBid1 = await auction.highestBid();
+    assert.equal(10, highBid1);
+    await token.approve(auction.address, 10000, {from: accounts[2]});
+    await auction.bid(15, {from: accounts[2]});
+    await token.approve(auction.address, 10000, {from: accounts[3]});
+    await auction.bid(30, {from: accounts[3]});
+    let highBid2 = await auction.highestBid();
+    assert.equal(30, highBid2);
+  })
+  /*
+  it("is able to pause and unpause fund activity", async function () {
+        await auction.pause()
+
+        try {
+            await auction.sendTransaction({ value: 1e+18, from: donor })
+            assert.fail()
+        } catch (error) {
+            assert(error.toString().includes('invalid opcode'), error.toString())
+        }
+        const auctionAddress = await auction.address
+        assert.equal(web3.eth.getBalance(auctionAddress).toNumber(), 0)
+
+        await auction.unpause()
+        await auction.sendTransaction({ value: 1e+18, from: donor })
+        assert.equal(web3.eth.getBalance(auctionAddress).toNumber(), 1e+18)
+    })
+    */
+  /* it ("highestBid function test", async () => {
+    await token.approve(airdrop.address, 10000, {from: accounts[0]});
+    await airdrop.registerBoardMember(accounts[0], {from:accounts[0]});
+    await airdrop.distributeDobbyTokens([accounts[1], accounts[2], accounts[3]], 100, {from: accounts[0]});
+
 
     await token.approve(auction.address, 10000, {from: accounts[1]});
     await auction.bid(10, {from: accounts[1]});
@@ -60,4 +94,5 @@ contract("KSEAuction", async () => {
   it ("auctionEnd function test", async () => {
     setTimeout(auction.auctionEnd, 10000);
   });
+  */
 });

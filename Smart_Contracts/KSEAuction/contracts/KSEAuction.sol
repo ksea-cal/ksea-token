@@ -60,7 +60,7 @@ contract KSEAuction is Ownable {
     }
 
     /**
-    Bid Function handles the token transaction from user's wallet to this smart contract. If the user already has bids staked in the contract, the new bids gets added on to their total bids. 
+    Bid Function handles the token transaction from user's wallet to this smart contract. If the user already has bids staked in the contract, the new bids gets added on to their total bids.
      */
     function bid(uint256 _amount) public whenUnpaused {
         require(_amount > 0, "The amount must be greater than 0.");
@@ -68,7 +68,7 @@ contract KSEAuction is Ownable {
         // update the highest bid and bidder
         if (bids[msg.sender] + _amount > highestBid) {
             highestBidder = msg.sender;
-            hightestBid = _amount;
+            highestBid = _amount;
 
             emit HighestBidIncreased(msg.sender, _amount);
         }
