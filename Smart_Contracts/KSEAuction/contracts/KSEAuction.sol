@@ -68,7 +68,7 @@ contract KSEAuction is Ownable {
         // update the highest bid and bidder
         if (bids[msg.sender] + _amount > highestBid) {
             highestBidder = msg.sender;
-            highestBid = _amount;
+            highestBid = bids[msg.sender] + _amount;
 
             emit HighestBidIncreased(msg.sender, _amount);
         }

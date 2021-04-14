@@ -4,7 +4,7 @@ pragma solidity >=0.5.0 <0.7.0;
 import "../../KSEAToken/contracts/KSEAToken.sol";
 import "../../KSEAirdrop/contracts/KSEAirdrop.sol";
 
-contract KSEAuction is Ownable {
+contract KSEAuction_old is Ownable {
     using SafeMath for uint256;
 
     EIP20Interface private dobbyToken;

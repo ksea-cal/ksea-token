@@ -7,7 +7,7 @@ contract AuctionFactory {
 
     struct AuctionItem {
         string name;
-        uint256 entryFee;
+        //uint256 entryFee;
         address auctionAddr;
     }
     mapping(string => AuctionItem) private auctions;
