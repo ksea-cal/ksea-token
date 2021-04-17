@@ -1,13 +1,32 @@
 import './Officer.css'
+import kseaToken from './ethereum/KSEA_Token'
+import kseAirdrop from './ethereum/KSEAirdrop'
+import { useEffect, useState } from 'react'
 
-export default function Officer({user}) {
+export default function Officer({onboardState}) {
+  useEffect(() => {
+    async function fetchData() {
+
+      let t = await kseaToken()
+      setToken(t);
+
+      let a = await kseAirdrop()
+      setAirdrop(a);
+    }
+    fetchData();
+    // console.log("kseaToken: " + token.options.address);
+    // console.log("kseAirdrop: " + airdrop.options.address)
+  })
+
+  const [airdrop, setAirdrop] = useState(null);
+  const [token, setToken] = useState(null);
+
   return(
     <div>
-      {user === undefined ?
-        <h2>Please connect yout wallet</h2>
+      {!onboardState.address ?
+        <h2>Please Connect Your Wallet</h2>
         :
         <div>
-        {user.id < 5 ?
           <div id='officer'>
             <button>Register Board Member</button>
             <button>Deregister Board Member</button>
@@ -23,9 +42,6 @@ export default function Officer({user}) {
             <button>Create Checkin Event</button>
             <button>Create Auction</button>
           </div>
-          :
-          <h2>{user.name} is not an officer</h2>
-        }
         </div>
       }
     </div>

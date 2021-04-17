@@ -19,13 +19,13 @@ import initOnboard from './utils/initOnboard';
 import Web3 from 'web3'
 
 export default function App() {
-  const [walletConnection, setWalletConnection] = useState(false)
-  const [user, setUser] = useState()
+  // const [walletConnection, setWalletConnection] = useState(false)
+  // // const [user, setUser] = useState()
 
   //blockchain related
   const [onboard, setOnboard] = useState(null);
   const [wallet, setWallet] = useState({});
-  const [address, setAddress] = useState(null);
+  const [user, setAddress] = useState(null);
   const [balance, setBalance] = useState(null);
   const [, setNetwork] = useState(null);
 
@@ -45,68 +45,33 @@ export default function App() {
       },
     });
 
-    setOnboard(ob);
 
-    //retrieve user address and wallet connection status for persistence
-    let user = window.localStorage.getItem('user');
-    let walletConnection = window.localStorage.getItem('walletConnection');
-    setUser(user);
-    setWalletConnection(walletConnection);
+    setOnboard(ob);
+    // console.log("Address:" + user);
   }, []);
 
-  // useEffect(() => {
-  //   const prevWallet = window.localStorage.getItem('selectedWallet');
-  //   if (prevWallet && onboard) {
-  //     onboard.walletSelect(prevWallet);
-  //     onboard.walletCheck();
-  //   }
-  // }, [onboard]);
-
-  //connect wallet button event handler
-  async function walletConnect() {
-    let newUser;
-    let state;
-    if (!walletConnection) {
-      await onboard.walletSelect();
-      await onboard.walletCheck();
-      state = await onboard.getState();
-      newUser = state.address;
-    } else {
-      await onboard.walletReset();
-      state = await onboard.getState();
-      newUser = undefined;
+  useEffect(() => {
+    const prevWallet = window.localStorage.getItem('selectedWallet');
+    if (prevWallet && onboard) {
+      onboard.walletSelect(prevWallet);
     }
-    console.log(state);
-    window.localStorage.setItem('user', newUser);
-    if (walletConnection) {
-      window.localStorage.setItem('walletConnection', !walletConnection);
-    } else {
-      window.localStorage.setItem('walletConnection', walletConnection);
-    }
-    
-    setUser(newUser)
-    setWalletConnection(curr => !curr)
-  }
-
-  const walletBtn = walletConnection ?
-    <button onClick={walletConnect}>Disconnect Wallet</button>
-    :
-    <button onClick={walletConnect}>Connect Wallet</button>
+    // console.log("Address:" + user);
+  }, [onboard]);
   
-  return (
+  return onboard ? (
     <div>
       <Router>
         <div id="page-container">
           <div id="content-wrap">
-            <Navbar walletBtn={walletBtn}/>
+            <Navbar onboard={onboard} onboardState={onboard ? onboard.getState() : null}/>
             <div className="display-center">
               <Switch>
-                <Route path="/" exact><CheckIn user={user}/></Route>
-                <Route path="/checkin"><CheckIn user={user}/></Route>
-                <Route path="/ranking"><Ranking user={user} UserDB={UserDB}/></Route>
-                <Route path="/auction"><Auction user={user}/></Route>
-                <Route path="/officer"><Officer user={user}/></Route>
-                <Route path="/profile"><Profile user={user}/></Route>
+                <Route path="/" exact><CheckIn onboardState={onboard ? onboard.getState() : null}/></Route>
+                <Route path="/checkin"><CheckIn onboardState={onboard ? onboard.getState() : null}/></Route>
+                <Route path="/ranking"><Ranking onboardState={onboard ? onboard.getState() : null} user={user} UserDB={UserDB}/></Route>
+                <Route path="/auction"><Auction user={user} onboardState={onboard ? onboard.getState() : null}/></Route>
+                <Route path="/officer"><Officer onboardState={onboard ? onboard.getState() : null}/></Route>
+                <Route path="/profile"><Profile onboardState={onboard ? onboard.getState() : null}/></Route>
                 <Route path="/auction-item/:id" component={ItemDetail}/>
               </Switch>
             </div>
@@ -117,5 +82,7 @@ export default function App() {
         </div>
       </Router>
     </div>
+  ): (
+    <div>Loading...</div>
   )
 }

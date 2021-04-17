@@ -4,14 +4,14 @@ import './Auction.css';
 import AuctionItem from './AuctionItem';
 import AuctionDB from './../../DB/AuctionDB';
 
-export default function Auction({user}) {
+export default function Auction({user, onboardState}) {
   const AuctionItems = AuctionDB.map(eachItem => (
     <AuctionItem item={eachItem} />
   ))
 
    return (
     <div>
-      {user === undefined ?
+      {!onboardState.address ?
         <h2>Please connect your wallet</h2>
         :
         <div className="auction-content">

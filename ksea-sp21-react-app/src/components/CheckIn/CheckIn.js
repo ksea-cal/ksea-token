@@ -3,7 +3,7 @@ import './CheckIn.css';
 import CheckInItem from './CheckInItem';
 import EventDB from './../../DB/EventDB';
 
-export default function CheckIn({user}) {
+export default function CheckIn({onboardState}) {
   const [eventList, setEventList] = useState(EventDB);
   
   const currTime = new Date();
@@ -70,7 +70,7 @@ export default function CheckIn({user}) {
 
   return (
     <div>
-      {user === undefined ?
+      {!onboardState.address ?
         <h2>Please Connect Wallet</h2>
         :
         <div className="checkin">

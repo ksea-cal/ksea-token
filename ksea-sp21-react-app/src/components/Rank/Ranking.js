@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './Ranking.css';
 import MyRank from './MyRank';
 
-export default function Ranking({user, UserDB}) {
+export default function Ranking({user, UserDB, onboardState}) {
   const [ranking, setRanking] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -63,7 +63,7 @@ export default function Ranking({user, UserDB}) {
     {loading ?
       <div id="ranking">
         <div id="left-ranking">
-          {user === undefined ?
+          {!onboardState.address ?
             <h2>Please connect your wallet</h2>
             :
             <MyRank user={user}/>
