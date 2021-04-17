@@ -1,6 +1,6 @@
 import './Officer.css'
-import kseaToken from './ethereum/KSEA_Token'
-import kseAirdrop from './ethereum/KSEAirdrop'
+import kseaToken from '../ethereum/KSEA_Token'
+import kseAirdrop from '../ethereum/KSEAirdrop'
 import { useEffect, useState } from 'react'
 
 export default function Officer({onboardState}) {

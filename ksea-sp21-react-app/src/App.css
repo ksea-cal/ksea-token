@@ -1,26 +1,37 @@
 .display-center {
-  width: 70%;
+  width: 65%;
   margin: auto;
+  transition: all .2s ease-in-out;
 }
 #page-container {
   position: relative;
   min-height: 100vh;
 }
 #content-wrap {
-  padding-bottom: 10rem;
+  padding-bottom: 80vh;
 }
 
 /* Footer css */
-footer {
+#footer-section {
   position: absolute;
   bottom: 0;
-  width: 100%;
-  height: 4rem;
-  background-color: rgb(6, 94, 79);
-  color: white;
-  text-align: center;
-  font-size: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+}
+#footer-section .logo {
+  width: 4vw;
+  position: absolute;
+  bottom: 4vh;
+}
+#footer-section .fb-logo {
+  left: 10vw;
+}
+#footer-section .ig-logo {
+  left: 20vw;
+}
+#footer-section .ksea-logo {
+  right: 20vw;
+}
+#footer-section h1 {
+  position: absolute;
+  bottom: 5vh;
+  right: 25vw;
 }

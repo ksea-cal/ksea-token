@@ -2,10 +2,13 @@ import React, {useState} from 'react';
 import './CheckIn.css';
 import CheckInItem from './CheckInItem';
 import EventDB from './../../DB/EventDB';
+import {useToast} from "@chakra-ui/react"
 
 export default function CheckIn({onboardState}) {
   const [eventList, setEventList] = useState(EventDB);
-  
+  const toast = useToast()
+  const toastIdRef = React.useRef()
+
   const currTime = new Date();
   const upcomingEvents = 
     eventList.filter(event => 
@@ -34,10 +37,9 @@ export default function CheckIn({onboardState}) {
       event.id === id
     )[0]
     
-    const matched = inputKey === event.secretKey ?
-      'a correct' : 'an incorrect';
-
-    alert('You have submitted ' + matched + " key");
+    const alertText = inputKey === event.secretKey ?
+      "Correct secret key!" : "Wrong secret key!"
+    toastIdRef.current = toast({ description: alertText })
   };
 
   const upcomingE = upcomingEvents.map(event => {
@@ -73,30 +75,38 @@ export default function CheckIn({onboardState}) {
       {!onboardState.address ?
         <h2>Please Connect Wallet</h2>
         :
-        <div className="checkin">
-          <h2>Upcoming 이벤트</h2>
-          <div>
-            {
-              upcomingEvents.length === 0 ?
-              <p>You have no upcoming events!</p>
-              : upcomingE
-            }
+        <div id="checkin">
+          <div className="event-item">
+            <h2>Upcoming 이벤트</h2>
+            <div>
+              {
+                upcomingEvents.length === 0 ?
+                <p>You have no upcoming events!</p>
+                : upcomingE
+              }
+            </div>
           </div>
-          <h2>참여한 이벤트</h2>
-          <div>
-            {
-              completedEvents.length === 0 ?
-              <p>You have no completed events!</p>
-              : completedE
-            }
+
+          <div className="event-item">
+            <h2>참여한 이벤트</h2>
+            <div>
+              {
+                completedEvents.length === 0 ?
+                <p>You have no completed events!</p>
+                : completedE
+              }
+            </div>
           </div>
-          <h2>놓친 이벤트</h2>
-          <div>
-            {
-              missedEvents.length === 0 ?
-              <p>You have no missed events!</p>
-              : missedE
-            }
+
+          <div className="event-item">
+            <h2>놓친 이벤트</h2>
+            <div>
+              {
+                missedEvents.length === 0 ?
+                <p>You have no missed events!</p>
+                : missedE
+              }
+            </div>
           </div>
         </div>
       }

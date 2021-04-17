@@ -1,7 +1,10 @@
-.checkin {
+#checkin {
   width: 80%;
   margin: auto;
 }
-.checkin h2{
+#checkin h2{
  font-size: 3vh;
+}
+#checkin .event-item{
+  padding-top: 8vh;
 }

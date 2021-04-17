@@ -1,20 +1,23 @@
 import React, {useState} from 'react';
 import './CheckInItem.css';
-import Popup from './Popup';
+import {
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Input
+} from "@chakra-ui/react"
 
 export default function CheckInItem({event, handleSubmit}) {
-  const [ popupShown, setPopupShown ] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [ inputKey, setInputKey ] = useState("");
 
-  function showPopup() {
-    setPopupShown(true);
-  };
-  function closePopup() {
-    setPopupShown(false);
-    setInputKey("");
-  };
   function handleChange(e) {
-    console.log(e.target.value)
     setInputKey(e.target.value);
   }
  
@@ -25,37 +28,54 @@ export default function CheckInItem({event, handleSubmit}) {
           <h3>{event.name}</h3>
           <p>{event.dueDate.toString()}</p>
         </div>
-        {
-          handleSubmit === undefined ?
+        {handleSubmit === undefined ? 
           <div>
-            <button onClick={showPopup} className="check-in-button">
-              Details
-            </button>
-            <Popup 
-              show={popupShown}
-              close={closePopup}
-              eventName={event.name}
-            >
-              {event.details}
-            </Popup>
+            <Button colorScheme="green" onClick={onOpen}>Details</Button>
+
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>{event.name}</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  {event.details}
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button colorScheme="blue" mr={3} onClick={onClose}>
+                    Close
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
           </div>
           :
           <div>
-            <button onClick={showPopup} className="check-in-button">
-              Check In
-            </button>
-            <Popup 
-              show={popupShown}
-              submit={() => handleSubmit(event.id, inputKey)}
-              close={closePopup}
-            >
-              <input
-                type="text"
-                value={inputKey}
-                placeholder="Secret Key"
-                onChange={handleChange}
-              />
-            </Popup>
+            <Button colorScheme="blue" onClick={onOpen}>Check In</Button>
+
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Put Secret Key</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <Input type="text"
+                    value={inputKey}
+                    placeholder="Secret Key"
+                    onChange={handleChange}
+                  />
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button colorScheme="blue" mr={3} onClick={onClose}>
+                    Close
+                  </Button>
+                  <Button variant="ghost" onClick={() => handleSubmit(event.id, inputKey)}>
+                    Submit
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
           </div>
         }
       </div>

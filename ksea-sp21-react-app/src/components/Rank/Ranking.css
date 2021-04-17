@@ -1,42 +1,38 @@
 #ranking {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-#left-ranking {
-  width: 25%;
-}
-#left-ranking h2{
-  background-color: rgb(207, 233, 193);
-  padding: 4vh 2vw;
-  font-size: 2vw;
-}
-#total-ranking {
-  width: 70%;
-  background-color: rgb(245, 232, 209);
-  padding: 2vw;
-}
-#total-ranking img {
-  padding: 5px;
-}
-.top3-ranking {
-  background-color: rgb(212, 231, 229);
-}
-.rest-ranking {
-  margin-top: 2vw;
-  background-color: rgb(240, 223, 240);
-}
-#top3-img {
-  width: 15vw;
-  height: 15vw;
-  object-fit: cover;
-}
-#rest-img {
-  width: 8vw;
-  height: 8vw;
-  object-fit: cover;
-}
-thead {
+  flex-direction: column;
   text-align: center;
+  transition: all .2s ease-in-out;
+}
+#ranking .my-ranking {
+  margin-top: 3vh;
+}
+#ranking .my-ranking-box {
+  background-color: rgb(189, 240, 241);
+  border-radius: 30px;
+  padding: 2vh;
+  margin: 2vh 0 10vh;
+}
+#ranking .my-ranking h2{
+  font-size: 25px;
+  margin: 0 0 3vh;
+}
+#ranking .my-ranking-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+#ranking .my-ranking-content img {
+  border-radius: 100%;
+  width: 4vw;
+  height: 4vw;
+  object-fit: cover;
+}
+.total-ranking {
+  margin-bottom: 10vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }

@@ -1,0 +1,33 @@
+@import "./../../App.css";
+
+.navbar-background {
+  margin: 5vh 0 10vh;
+}
+.row-space-out {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.navbar {
+  padding: 7px 0;
+  font-size: 17px;
+  justify-content: space-between;
+}
+.nav-mid {
+  width: 40%;
+  justify-content: space-between;
+}
+.nav-right {
+  justify-content: flex-end;
+}
+.navbar-item {
+  padding: 15px 15px 15px 0;
+  text-decoration: none;
+  font-size: 15px;
+}
+.navbar-item:hover {
+  cursor: pointer;
+  color: blueviolet;
+  text-decoration: none;
+  /* border-bottom: 5px solid black; */
+}

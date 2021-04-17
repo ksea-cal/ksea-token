@@ -10,3 +10,24 @@
   flex-wrap: wrap;
   justify-content: space-between;
 }
+.auction-content .user-info{
+  width: 25%;
+}
+.auction-content div.my-ranking {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+  padding: 3vh 0;
+  background-color: #BDF0F1;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 20px;
+}
+.auction-content .my-ranking img{
+  border-radius: 50%;
+  width: 8vw;
+  height: 8vw;
+  object-fit: cover;
+  margin: 2vh 0;
+}

@@ -1,8 +1,9 @@
 .item {
   border: 2px solid rgb(184, 180, 180);
-  border-radius: 5px;
-  margin: 20px 30px;
-  padding: 10px 30px;
+  border-radius: 20px;
+  margin: 8vh 3vw;
+  padding: 3vh 3vw;
+  transition: all .2s ease-in-out;
 }
 .check-in-item {
   display: flex;
@@ -29,17 +30,4 @@
 }
 .check-in-info h3{
   font-size: 2.8vh;
-}
-.check-in-button {
-  padding: 8px 5px;
-  border-radius: 10px;
-  background-color: cadetblue;
-}
-.check-in-button:hover {
-  cursor: pointer;
-  background-color: rgb(202, 236, 5);
-}
-.check-in-button:active {
-  padding: 10px 7px;
-  cursor: pointer;
 }

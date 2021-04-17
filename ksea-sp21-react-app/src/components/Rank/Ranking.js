@@ -1,10 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import './Ranking.css';
-import MyRank from './MyRank';
+import UserRank from './UserRank';
+import { CircularProgress} from "@chakra-ui/react";
 
-export default function Ranking({user, UserDB, onboardState}) {
+export default function Ranking({UserDB, onboardState}) {
   const [ranking, setRanking] = useState([]);
   const [loading, setLoading] = useState(false);
+  const user = {
+    "id": 2,
+    "img": "https://source.unsplash.com/collection/1051/3",
+    "name": "박하민",
+    "point": 32,
+    "rank": 31
+  }
 
   useEffect(() => {
     const sorted = UserDB.sort((a, b) => b.point - a.point);
@@ -19,71 +27,49 @@ export default function Ranking({user, UserDB, onboardState}) {
     setLoading(true);
   }, [])
 
-  function createTableContent(person, cssId) {
-    return (
-      <tr>
-        <td><h2>{person.rank}</h2></td>
-        <td>
-          <img src={person.img} id={cssId} alt="headshot"/>
-        </td>
-        <td><h4>{person.name}</h4></td>
-        <td><h4>{person.point}</h4></td>
-      </tr>
-    )
-  }
-
-  const top3Table = ranking.slice(0,3).map(person =>
-    createTableContent(person, "top3-img")
+  const top3Rank = ranking.slice(0,3).map(person =>
+    <UserRank user={person} rankingSel={0}/>
   )
-  const restTable = ranking.slice(3).map(person => 
-    createTableContent(person, "rest-img")
+  const restRank = ranking.slice(3).map(person => 
+    <UserRank user={person} rankingSel={1}/>
   )
-
-  function rankTable(tableContent) {
-    return (
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Img</th>
-              <th>Name</th>
-              <th>Points</th>
-            </tr>
-          </thead>
-          <tbody>{tableContent}</tbody>
-          <tfoot></tfoot>
-        </table>
-      </div>
-    )
-  }
 
   return (
     <div>
     {loading ?
       <div id="ranking">
-        <div id="left-ranking">
-          {!onboardState.address ?
+        {!onboardState.address ?
+          <div className="my-ranking">
             <h2>Please connect your wallet</h2>
-            :
-            <MyRank user={user}/>
-          }
-        </div>
-
-        <div id="total-ranking">
-          <p>Number of ppl: {ranking.length}</p>
-          <div className="top3-ranking">
-            <h2>명예의 전당</h2>
-            {rankTable(top3Table)}
           </div>
-          <div className="rest-ranking">
-            <h4>Rest ranking</h4>
-            {rankTable(restTable)}
+          :
+          <div className="my-ranking">
+            <h2>My rank</h2>
+            <div className="my-ranking-box">
+              <div className="my-ranking-content">
+                <img src={user.img} id="my-img" alt="headshot"/>
+                <h5>Rank #1</h5>
+                <p>{user.name}</p>
+                <p>{user.point} points</p>
+              </div>
+            </div>
+          </div>
+        }
+
+        <p>Number of ppl: {ranking.length}</p>
+        <div>
+          <h2>명예의 전당</h2>
+          <div className="total-ranking">
+            {top3Rank}
+          </div>
+          <h4>Rest ranking</h4>
+          <div className="total-ranking">
+            {restRank}
           </div>
         </div>
       </div>
       :
-      <h2>Loading...</h2>
+      <CircularProgress isIndeterminate color="green.300" />
     }
     </div>
   )

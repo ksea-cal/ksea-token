@@ -1,5 +1,6 @@
 import './Navbar.css';
 import { Link } from 'react-router-dom';
+import { Button } from "@chakra-ui/react"
 
 export default function Navbar({onboard, onboardState}) {
 
@@ -14,27 +15,33 @@ export default function Navbar({onboard, onboardState}) {
     const ready = await onboard.walletCheck();
     return ready;
   }
-
+  
   return (
     <div>
       <header className="navbar-background">
         <div className="display-center">
           <div className="navbar row-space-out">
-            <div className="nav-left row-space-out">
+            <Link to="/" className="navbar-item">Dobby Chain</Link>
+            <div className="nav-mid row-space-out">
               <Link to="/checkin" className="navbar-item">Check In</Link>
               <Link to="/ranking" className="navbar-item">Ranking</Link>
               <Link to="/auction" className="navbar-item">Auction</Link>
-              <Link to="/officer" className="navbar-item">Officer</Link>
+              {/* <Link to="/officer" className="navbar-item">Officer</Link> */}
+              <Link to="/profile" className="navbar-item">Profile</Link>
+              
             </div>
             <div className="nav-right row-space-out">
-              <Link to="/profile" className="navbar-item">Profile</Link>
-            {!onboardState.address && (
-              <button onClick={() => readyToTransact()}>Connect Wallet</button>
-            )}
-            
-            {onboardState.address && (
-              <button>{`${address?.substr(0, 6)}...${address?.substr(address.length - 4)}`}</button>
-            )}  
+              {!onboardState.address && (
+                <Button onClick={() => readyToTransact()} colorScheme="teal" variant="outline">
+                  Connect Wallet
+                </Button>
+              )}
+              
+              {onboardState.address && (
+                <Button colorScheme="teal" variant="outline">
+                  {`${address?.substr(0, 6)}...${address?.substr(address.length - 4)}`}
+                </Button>
+              )} 
             </div>
           </div>
         </div>
