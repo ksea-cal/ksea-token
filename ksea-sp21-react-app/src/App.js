@@ -24,8 +24,6 @@ import initOnboard from './utils/initOnboard';
 import Web3 from 'web3'
 
 export default function App() {
-  // const [walletConnection, setWalletConnection] = useState(false)
-  // // const [user, setUser] = useState()
   
   //blockchain related
   const [onboard, setOnboard] = useState(null);

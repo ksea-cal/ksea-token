@@ -26,7 +26,7 @@ export default function Navbar({onboard, onboardState}) {
               <Link to="/checkin" className="navbar-item">Check In</Link>
               <Link to="/ranking" className="navbar-item">Ranking</Link>
               <Link to="/auction" className="navbar-item">Auction</Link>
-              {/* <Link to="/officer" className="navbar-item">Officer</Link> */}
+              <Link to="/officer" className="navbar-item">Officer</Link>
               <Link to="/profile" className="navbar-item">Profile</Link>
               
             </div>

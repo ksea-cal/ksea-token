@@ -88,6 +88,10 @@ contract KSEAirdrop is Ownable {
         external
         payable
     {
+        require(
+            isBoardMember(msg.sender) == true,
+            "You are not the board member!"
+        );
         for (uint256 i = 0; i < _members.length; i++) {
             _members[i].transfer(msg.value / _members.length);
             emit EtherTransferredToken(
