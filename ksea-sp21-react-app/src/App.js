@@ -6,12 +6,6 @@ import {
   Switch
 } from "react-router-dom";
 
-//import imgs
-import bottom from './img/bottom.png';
-import fbLogo from './img/fb-logo.png';
-import igLogo from './img/ig-logo.png';
-import kseaLogo from './img/ksea-logo.png';
-
 //Import components
 import Navbar from './components/Main/Navbar';
 import Main from './components/Main/Main';
@@ -21,7 +15,8 @@ import Profile from './components/UserInfo/Profile';
 import Auction from './components/Auction/Auction';
 import Officer from './components/UserInfo/Officer';
 import ItemDetail from './components/Auction/ItemDetail';
-import AboutUs from './components/Main/AboutUs';
+import AboutUs from './components/AboutUs/AboutUs';
+import Footer from './components/Main/Footer';
 import UserDB from './DB/UserDB';
 
 //blockchain related
@@ -87,21 +82,7 @@ export default function App() {
             </div>
           </div>
           <div id="footer-section">
-            <div className="logo fb-logo">
-              <a href="https://www.facebook.com/kseaatcal">
-                <img src={fbLogo} alt="fb logo"/>
-              </a>
-            </div>
-            <div className="logo ig-logo">
-              <a href="https://www.instagram.com/kseaatcal/">
-                <img src={igLogo} alt="ig logo"/>
-              </a>
-            </div>
-            <h1>Created & Designed by</h1>
-            <div className="logo ksea-logo">
-              <img src={kseaLogo} alt="ksea logo"/>
-            </div>
-            <img src={bottom} alt="bottom"/>
+            <Footer />
           </div>
         </div>
       </Router>
