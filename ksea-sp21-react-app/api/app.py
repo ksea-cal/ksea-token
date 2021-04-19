@@ -16,13 +16,15 @@ class User(db.Model):
   img = db.Column(db.String(200))
   point = db.Column(db.String(10))
   rank = db.Column(db.String(10))
+  address = db.Column(db.String(100))
   #events = db.relationship('Event', backref='user')
 
-  def __init__(self, name, img, point, rank):
+  def __init__(self, name, img, point, rank, address):
     self.name = name
     self.img = img
     self.point = point
     self.rank = rank
+    self.address = address
     #self.events = events
 
 
@@ -50,8 +52,9 @@ def add_user():
   img = request.json['img']
   point = request.json['point']
   rank = request.json['rank']
+  address = request.json['address']
 
-  new_user = User(name, img, point, rank)
+  new_user = User(name, img, point, rank, address)
 
   db.session.add(new_user)
   db.session.commit()
@@ -62,7 +65,8 @@ def add_user():
         "name": new_user.name,
         "img": new_user.img,
         "point": new_user.point,
-        "rank": new_user.rank
+        "rank": new_user.rank,
+        "address": new_user.address
     }
   )
 
@@ -75,8 +79,10 @@ def add_users():
     img = user['img']
     point = user['point']
     rank = user['rank']
+    assert type(address) == str
+    address = user['address'].lower()
 
-    new_user = User(name, img, point, rank)
+    new_user = User(name, img, point, rank, address)
 
     db.session.add(new_user)
     db.session.commit()
@@ -93,14 +99,15 @@ def get_users():
           "name": user.name,
           "img": user.img,
           "point": user.point,
-          "rank": user.rank
+          "rank": user.rank,
+          "address": user.address
       } for user in all_users]
   )
 
 #Get one user
-@app.route('/api/user/<id>', methods=['GET'])
-def get_user(id):
-  user = User.query.get(id)
+@app.route('/api/user/<address>', methods=['GET'])
+def get_user(address):
+  user = User.query.filter(User.address == address).first()
   return jsonify(
       {
           "id": user.id,
@@ -120,11 +127,13 @@ def update_user(id):
   img = request.json['img']
   point = request.json['point']
   rank = request.json['rank']
+  address = request.json['address']
 
   user.name = name
   user.img = img
   user.point = point
   user.rank = rank
+  user.address = address
 
   db.session.commit()
 

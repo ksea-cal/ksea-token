@@ -5,16 +5,11 @@ import {
   Input,
   Stack
 } from "@chakra-ui/react"
+import { useSelector } from 'react-redux';
 
 export default function Profile() {
   const [edit, setEdit] = useState(false);
-  const user = {
-    "id": 2,
-    "img": "https://source.unsplash.com/collection/1051/3",
-    "name": "박하민",
-    "point": 32,
-    "rank": 31
-  }
+  const user = useSelector((state) => state.allUsers.selUser)
 
   function handleChange(e) {
     const {name, value} = e.target
@@ -23,7 +18,7 @@ export default function Profile() {
 
   return (
     <div>
-      {user === undefined ?
+      {user === {} ?
         <h2>Please connect your wallet</h2>
         :
         <div className="profile">

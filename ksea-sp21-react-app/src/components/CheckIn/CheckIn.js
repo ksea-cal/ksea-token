@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './CheckIn.css';
 import CheckInItem from './CheckInItem';
 import EventDB from './../../SampleDB/EventDB';
 import {useToast} from "@chakra-ui/react"
+import { useSelector } from 'react-redux';
 
 export default function CheckIn({onboardState}) {
   const [eventList, setEventList] = useState(EventDB);

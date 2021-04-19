@@ -2,18 +2,13 @@ import React from 'react';
 import './Auction.css';
 import AuctionItem from './AuctionItem';
 import AuctionDB from './../../SampleDB/AuctionDB';
+import { useSelector } from 'react-redux';
 
 export default function Auction({onboardState}) {
-  const user = {
-    "id": 2,
-    "img": "https://source.unsplash.com/collection/1051/3",
-    "name": "박하민",
-    "point": 32,
-    "rank": 31
-  }
+  const user = useSelector((state) => state.allUsers.selUser)
 
   const AuctionItems = AuctionDB.map(eachItem => (
-    <AuctionItem item={eachItem} />
+    <AuctionItem item={eachItem} key={eachItem.id} />
   ))
 
    return (
@@ -26,7 +21,7 @@ export default function Auction({onboardState}) {
             <div className="my-ranking">
               <h4>My rank</h4>
               <img src={user.img} id="my-img" alt="headshot"/>
-              <h5>Rank #1</h5>
+              <h5>Rank #{user.rank}</h5>
               <p>{user.name}</p>
               <p>{user.point} points</p>
             </div>

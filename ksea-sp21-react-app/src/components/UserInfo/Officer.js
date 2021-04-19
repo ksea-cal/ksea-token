@@ -5,6 +5,7 @@ import auctionFactory from '../ethereum/AuctionFactory'
 import KSEA_Token from "../../abis/KSEAToken.json";
 import { useEffect, useState, useRef } from 'react'
 import web3 from "../ethereum/Web3";
+import { useSelector } from 'react-redux';
 
 import {
   NumberInput,
@@ -17,7 +18,8 @@ import {
   Select  
 } from "@chakra-ui/react"
 
-export default function Officer({user, onboardState}) {
+export default function Officer({onboardState}) {
+  const user = useSelector((state) => state.allUsers.selUser)
 
   // const [provider, loadweb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
   const [airdrop, setAirdrop] = useState(undefined);

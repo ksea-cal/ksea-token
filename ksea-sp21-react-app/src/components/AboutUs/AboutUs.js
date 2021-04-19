@@ -16,7 +16,7 @@ export default function AboutUs() {
       <div className="team">
         <h1>Business team</h1>
         <div className="team-member">
-          <MemberAbt name="희수" img={link}/>
+          <MemberAbt name="Heesoo Kim 김희수" img={link}/>
           <MemberAbt name="조수빈" img={link}/>
           <MemberAbt name="Seungtaek Oh 오승택" img={link}/>
         </div>
@@ -38,7 +38,7 @@ export default function AboutUs() {
         <h1>Smart contract team</h1>
         <div className="team-member">
           <MemberAbt name="Kathy Lee 이경민" img={link}/>
-          <MemberAbt name="항식" img={link}/>
+          <MemberAbt name="Harold Kim 김항식" img={link}/>
         </div>
       </div>
     </div>

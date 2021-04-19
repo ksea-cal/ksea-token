@@ -3,19 +3,32 @@ import './Ranking.css';
 import UserRank from './UserRank';
 import { CircularProgress} from "@chakra-ui/react";
 
-export default function Ranking({UserDB, onboardState}) {
+//redux imports
+import { setUsers } from './../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+
+export default function Ranking({onboardState}) {
   const [ranking, setRanking] = useState([]);
   const [loading, setLoading] = useState(false);
-  const user = {
-    "id": 2,
-    "img": "https://source.unsplash.com/collection/1051/3",
-    "name": "박하민",
-    "point": 32,
-    "rank": 31
+  
+  //redux
+  const user = useSelector((state) => state.allUsers.selUser)
+  const allUsers = useSelector((state) => state.allUsers.users)
+  const dispatch = useDispatch()
+
+  const fetchUsers = async () => {
+    const res = await axios
+      .get(`http://localhost:5000//api/users`)
+      .catch((err) => {
+        console.log("Error:", err);
+      })
+    dispatch(setUsers(res.data))
   }
 
   useEffect(() => {
-    const sorted = UserDB.sort((a, b) => b.point - a.point);
+    fetchUsers()
+    const sorted = allUsers.sort((a, b) => b.point - a.point);
     setRanking(
       sorted.map(person => {
         const rankIndex = sorted.findIndex(p => person.id === p.id)+1
@@ -25,13 +38,13 @@ export default function Ranking({UserDB, onboardState}) {
       })
     )
     setLoading(true);
-  }, [])
+  }, [allUsers])
 
   const top3Rank = ranking.slice(0,3).map(person =>
-    <UserRank user={person} rankingSel={0}/>
+    <UserRank user={person} rankingSel={0} key={person.id} />
   )
   const restRank = ranking.slice(3).map(person => 
-    <UserRank user={person} rankingSel={1}/>
+    <UserRank user={person} rankingSel={1} key={person.id} />
   )
 
   return (
@@ -56,13 +69,13 @@ export default function Ranking({UserDB, onboardState}) {
           </div>
         }
 
-        <p>Number of ppl: {ranking.length}</p>
         <div>
           <h2>명예의 전당</h2>
+          <p>Number of ppl: {ranking.length}</p>
           <div className="total-ranking">
             {top3Rank}
           </div>
-          <h4>Rest ranking</h4>
+          <h2>Rest ranking</h2>
           <div className="total-ranking">
             {restRank}
           </div>

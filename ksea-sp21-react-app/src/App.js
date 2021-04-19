@@ -6,6 +6,11 @@ import {
   Switch
 } from "react-router-dom";
 
+//redux imports
+import { selectedUser } from './redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+
 //Import components
 import Navbar from './components/Main/Navbar';
 import Main from './components/Main/Main';
@@ -17,7 +22,6 @@ import Officer from './components/UserInfo/Officer';
 import ItemDetail from './components/Auction/ItemDetail';
 import AboutUs from './components/AboutUs/AboutUs';
 import Footer from './components/Main/Footer';
-import UserDB from './SampleDB/UserDB';
 
 //blockchain related
 import initOnboard from './utils/initOnboard';
@@ -28,7 +32,7 @@ export default function App() {
   //blockchain related
   const [onboard, setOnboard] = useState(null);
   const [wallet, setWallet] = useState({});
-  const [user, setAddress] = useState(null);
+  const [address, setAddress] = useState(null);
   const [balance, setBalance] = useState(null);
   const [, setNetwork] = useState(null);
 
@@ -49,16 +53,34 @@ export default function App() {
     });
 
     setOnboard(ob);
-    // console.log("Address:" + user);
+    // console.log("Address:" + address);
+    
   }, []);
 
   useEffect(() => {
     const prevWallet = window.localStorage.getItem('selectedWallet');
     if (prevWallet && onboard) {
-      onboard.walletSelect(prevWallet);
+      onboard.walletSelect(prevWallet);      
     }
-    // console.log("Address:" + user);
-  }, [onboard]);
+    //fetch api
+    if (address) {
+      fetchUser();
+    }
+  }, [address, onboard]);
+
+  //redux
+  const user = useSelector((state) => state.allUsers.selUser)
+  const dispatch = useDispatch()
+
+  const fetchUser = async () => {
+    const res = await axios
+      .get(`http://localhost:5000//api/user/${address}`)
+      .catch((err) => {
+        console.log("Error:", err);
+      })
+    dispatch(selectedUser(res.data))
+  }
+  //console.log(user)
   
   return onboard ? (
     <div>
@@ -70,12 +92,13 @@ export default function App() {
               <Switch>
                 <Route path="/" exact component={Main}/>
                 <Route path="/checkin"><CheckIn onboardState={onboard ? onboard.getState() : null}/></Route>
-                <Route path="/ranking"><Ranking user={user} onboardState={onboard ? onboard.getState() : null} UserDB={UserDB}/></Route>
-                <Route path="/auction"><Auction user={user} onboardState={onboard ? onboard.getState() : null}/></Route>
-                <Route path="/officer"><Officer user={user} onboardState={onboard ? onboard.getState() : null}/></Route>
-                <Route path="/profile"><Profile user={user} onboardState={onboard ? onboard.getState() : null}/></Route>
+                <Route path="/ranking"><Ranking onboardState={onboard ? onboard.getState() : null}/></Route>
+                <Route path="/auction"><Auction onboardState={onboard ? onboard.getState() : null}/></Route>
+                <Route path="/officer"><Officer onboardState={onboard ? onboard.getState() : null}/></Route>
+                <Route path="/profile"><Profile /></Route>
                 <Route path="/auction-item/:id" component={ItemDetail}/>
                 <Route path="/about-us" component={AboutUs}/>
+                <Route>404 Not Found</Route>
               </Switch>
             </div>
           </div>
