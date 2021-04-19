@@ -17,7 +17,7 @@ import Officer from './components/UserInfo/Officer';
 import ItemDetail from './components/Auction/ItemDetail';
 import AboutUs from './components/AboutUs/AboutUs';
 import Footer from './components/Main/Footer';
-import UserDB from './DB/UserDB';
+import UserDB from './SampleDB/UserDB';
 
 //blockchain related
 import initOnboard from './utils/initOnboard';

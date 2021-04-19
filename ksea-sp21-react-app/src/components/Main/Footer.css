@@ -1,19 +1,19 @@
 #footer-section .logo {
-  width: 4vw;
+  width: 3vw;
   position: absolute;
-  bottom: 4vh;
+  bottom: 4vw;
 }
 #footer-section .fb-logo {
-  left: 10vw;
+  left: 17.5vw;
 }
 #footer-section .ig-logo {
-  left: 20vw;
+  left: 22.5vw;
 }
 #footer-section .ksea-logo {
-  right: 20vw;
+  right: 17.5vw;
 }
 #footer-section h1 {
   position: absolute;
-  bottom: 5vh;
-  right: 25vw;
+  bottom: 4vw;
+  right: 22.5vw;
 }

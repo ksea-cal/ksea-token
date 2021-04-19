@@ -1,13 +1,12 @@
 .auction-item {
-  border: 2px solid rgb(68, 67, 67);
+  border: 2px solid rgb(165, 165, 165);
   border-radius: 10px;
   width: 220px;
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
   align-items: center;
-  padding: 1vw;
-  margin-bottom: 4vh;
+  padding: 2vw;
+  margin-bottom: 6vh;
   text-align: center;
   position: relative;
 }
@@ -22,17 +21,18 @@
   height: 100%;
   width: 100%;
   transition: 0.3s;
-  background-color: navy;
+  background-color: rgb(135, 135, 248);
 }
 .auction-item:hover .auction-item-overlay {
   opacity: 0.5;
   cursor: pointer;
 }
-.auction-item img{
-  width: 10vw;
-  height: 10vw;
+.auction-item img {
+  display: inline-block;
+  width: 9vw;
+  height: 9vw;
   object-fit: contain;
-  margin-bottom: 1vh;
+  margin: 1vh 0;
 }
 .auction-item h1,h2{
   margin-block-start: 0;

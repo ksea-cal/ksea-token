@@ -3,8 +3,8 @@
   margin: auto;
 }
 #checkin h2{
- font-size: 3vh;
+  font-size: 3vh;
 }
 #checkin .event-item{
-  padding-top: 8vh;
+  padding-bottom: 8vh;
 }

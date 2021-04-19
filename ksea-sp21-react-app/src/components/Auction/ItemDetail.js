@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Timer from './Timer';
-import AuctionDB from './../../DB/AuctionDB';
+import AuctionDB from './../../SampleDB/AuctionDB';
 import './ItemDetail.css';
 
 export default function ItemDetail({match}) {

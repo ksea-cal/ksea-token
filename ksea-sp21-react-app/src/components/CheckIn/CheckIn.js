@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './CheckIn.css';
 import CheckInItem from './CheckInItem';
-import EventDB from './../../DB/EventDB';
+import EventDB from './../../SampleDB/EventDB';
 import {useToast} from "@chakra-ui/react"
 
 export default function CheckIn({onboardState}) {
