@@ -1,7 +1,7 @@
 import React from 'react';
 import './Auction.css';
 import AuctionItem from './AuctionItem';
-import AuctionDB from './../../DB/AuctionDB';
+import AuctionDB from './../../SampleDB/AuctionDB';
 
 export default function Auction({onboardState}) {
   const user = {

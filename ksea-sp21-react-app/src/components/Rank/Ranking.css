@@ -5,7 +5,7 @@
   transition: all .2s ease-in-out;
 }
 #ranking .my-ranking {
-  margin-top: 3vh;
+  margin-bottom: 4vh;
 }
 #ranking .my-ranking-box {
   background-color: rgb(189, 240, 241);
@@ -14,7 +14,12 @@
   margin: 2vh 0 10vh;
 }
 #ranking .my-ranking h2{
-  font-size: 25px;
+  font-size: 4vh;
+  font-weight: 500;
+  margin: 0 0 3vh;
+}
+#ranking .my-ranking p{
+  font-size: 3vh;
   margin: 0 0 3vh;
 }
 #ranking .my-ranking-content {

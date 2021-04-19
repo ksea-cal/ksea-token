@@ -1,6 +1,3 @@
-#about-us{
-
-}
 #about-us .team{
   margin: 10vh 0;
 }
@@ -12,7 +9,7 @@
   align-items: center;
 }
 #about-us h1 {
-  font-size: 20px;
+  font-size: 4vh;
   font-weight: 600;
 }
 .member-about {
@@ -30,4 +27,7 @@
   width: 7vw;
   height: 7vw;
   object-fit: cover;
+}
+.member-about h2 {
+  font-size: 3vh;
 }

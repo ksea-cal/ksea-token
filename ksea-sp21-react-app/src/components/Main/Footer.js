@@ -7,7 +7,7 @@ import igLogo from './../../img/ig-logo.png';
 import kseaLogo from './../../img/ksea-logo.png';
 
 export default function Footer() {
-  return(
+  return (
     <div>
       <div className="logo fb-logo">
         <a href="https://www.facebook.com/kseaatcal">
