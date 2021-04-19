@@ -36,6 +36,9 @@ export default function ItemDetail({match}) {
     setInputBid('')
   }
 
+   //auction contract function callers 
+
+
    return (
     <Stack spacing="2vh" className="item-detail">
       <img src={img} alt="item-img"/>

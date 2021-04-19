@@ -1,7 +1,10 @@
 import './Officer.css'
 import kseaToken from '../ethereum/KSEA_Token'
 import kseAirdrop from '../ethereum/KSEAirdrop'
+import auctionFactory from '../ethereum/AuctionFactory'
+import KSEA_Token from "../../abis/KSEAToken.json";
 import { useEffect, useState, useRef } from 'react'
+import web3 from "../ethereum/Web3";
 
 import {
   NumberInput,
@@ -19,9 +22,12 @@ export default function Officer({user, onboardState}) {
   // const [provider, loadweb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
   const [airdrop, setAirdrop] = useState(undefined);
   const [token, setToken] = useState(undefined);
+  const [factory, setFactory] = useState(undefined);
   const [boardValue, setBoardValue] = useState('');
   const [memberValue, setMemberValue] = useState('');
   const [listOfMembers, setListOfMembers] = useState([]);
+  const [listOfAuctions, setListOfAuctions] = useState([]);
+  const [auctionInput, setAuctionInput] = useState('');
   const [eventName, setEventName] = useState('');
   const [bool, setBool] = useState(false);
   let eventValue = useRef(0);
@@ -34,8 +40,8 @@ export default function Officer({user, onboardState}) {
       let a = await kseAirdrop()
       setAirdrop(a);
 
-      // let b = await a.methods.isBoardMember(user).call();
-      // setBool(b);
+      let f = await auctionFactory()
+      setFactory(f);
     }
     fetchData();
   }, []);
@@ -55,6 +61,10 @@ export default function Officer({user, onboardState}) {
     eventValue = event.target.value
   }
 
+  function handleAuctionChange(event) {
+    setAuctionInput(event.target.value);
+  }
+
   function handleRegister(event) {
     event.preventDefault();
     registerBoardMem(boardValue)
@@ -69,6 +79,14 @@ export default function Officer({user, onboardState}) {
   function handleDistribute(event) {
     event.preventDefault();
     distributeTokens(listOfMembers, eventValue);
+  }
+
+  async function handleAuction(event) {
+    event.preventDefault();
+    const networkId = await web3.eth.net.getId();
+    const networkData1 = KSEA_Token.networks[networkId]
+    await createAuction(auctionInput, networkData1.address)
+    console.log(listOfAuctions);
   }
 
 
@@ -95,9 +113,17 @@ export default function Officer({user, onboardState}) {
 
   //Auction
   /** 
-   * 
+   * 1. create auction 
+   * 2. put into a list of auction addresses
    * 
    */
+   async function createAuction(name, tokenAddr) {
+    await factory.methods.createAuction(name, tokenAddr).send({from:user});
+    let auctionAddr = await factory.methods.getAuctionAddr(name).call();
+    console.log(auctionAddr);
+    setListOfAuctions([...listOfAuctions, auctionAddr]);
+    console.log(1);
+  }
 
 
   return airdrop && token ? (
@@ -131,7 +157,8 @@ export default function Officer({user, onboardState}) {
               </NumberInput>
               <Button colorScheme="blue">Distribute Ether</Button>
               <button>Create Checkin Event</button>
-              <button>Create Auction</button>
+              <Input onChange={handleAuctionChange} placeholder="medium size" size="md" />
+              <Button onClick={handleAuction} colorScheme="blue">Create Auction</Button>
             </div>
           {/* //   :
           //   <div>You Are Not An Officer</div>
