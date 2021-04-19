@@ -1,6 +1,6 @@
 .navbar {
-  background: white;
   height: 20vh;
+  padding: 0;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

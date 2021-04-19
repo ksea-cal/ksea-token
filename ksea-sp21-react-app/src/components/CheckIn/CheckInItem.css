@@ -11,9 +11,10 @@
   justify-content: space-between;
   align-items: center;
 }
-.check-in-item input{
-  width: 100px;
-  padding: 8px;
+.check-in-item .btn{
+  height: 7vh;
+  font-size: 2.5vh;
+  margin-left: 3vw;
 }
 .check-in-info {
   display: flex;

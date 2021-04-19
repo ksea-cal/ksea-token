@@ -37,8 +37,14 @@ export default function CheckIn({onboardState}) {
       event.id === id
     )[0]
     
-    const alertText = inputKey === event.secretKey ?
-      "Correct secret key!" : "Wrong secret key!"
+    let alertText;
+     if (inputKey === event.secretKey) {
+      alertText = "Correct secret key!"
+     } else if (inputKey === '') {
+       alertText = "Please put a secret key!"
+     } else {
+      alertText = "Wrong secret key!"
+     }
     toastIdRef.current = toast({ description: alertText })
   };
 

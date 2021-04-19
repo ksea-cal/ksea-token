@@ -30,7 +30,9 @@ export default function CheckInItem({event, handleSubmit}) {
         </div>
         {handleSubmit === undefined ? 
           <div>
-            <Button colorScheme="green" onClick={onOpen}>Details</Button>
+            <Button  className="btn" colorScheme="green" onClick={onOpen}>
+              Details
+            </Button>
 
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
@@ -51,7 +53,9 @@ export default function CheckInItem({event, handleSubmit}) {
           </div>
           :
           <div>
-            <Button colorScheme="blue" onClick={onOpen}>Check In</Button>
+            <Button className="btn" colorScheme="blue" onClick={onOpen}>
+              Check In
+            </Button>
 
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />

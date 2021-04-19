@@ -25,6 +25,15 @@
   position: sticky;
   top: 20px;
 }
+.auction-content .my-ranking h4{
+  font-size: 3vh;
+}
+.auction-content .my-ranking h5{
+  font-size: 2.5vh;
+}
+.auction-content .my-ranking p{
+  font-size: 2vh;
+}
 .auction-content .my-ranking img{
   border-radius: 50%;
   width: 8vw;

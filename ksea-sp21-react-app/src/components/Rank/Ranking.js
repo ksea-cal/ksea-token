@@ -48,7 +48,7 @@ export default function Ranking({UserDB, onboardState}) {
             <div className="my-ranking-box">
               <div className="my-ranking-content">
                 <img src={user.img} id="my-img" alt="headshot"/>
-                <h5>Rank #1</h5>
+                <p>Rank #{user.rank}</p>
                 <p>{user.name}</p>
                 <p>{user.point} points</p>
               </div>

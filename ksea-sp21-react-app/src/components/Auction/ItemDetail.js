@@ -1,10 +1,23 @@
 import React, {useState} from 'react';
+import {
+  useToast,
+  Button,
+  Stack,
+  Input,
+  InputGroup,
+  InputLeftAddon
+} from "@chakra-ui/react"
+import { CheckIcon } from '@chakra-ui/icons'
+
+//import components
 import Timer from './Timer';
 import AuctionDB from './../../SampleDB/AuctionDB';
 import './ItemDetail.css';
 
 export default function ItemDetail({match}) {
   const [inputBid, setInputBid] = useState('');
+  const toast = useToast()
+  const toastIdRef = React.useRef()
 
   const id = match.params.id;
   const itemSel = AuctionDB.filter(item => (
@@ -17,28 +30,40 @@ export default function ItemDetail({match}) {
     setInputBid(e.target.value)
   }
   function handleSubmit() {
-    const bidConfirm = inputBid !== '' ?
+    const alertText = inputBid !== '' ?
       "You've made a bid!" : "Please make a bid!"
-    alert(bidConfirm)
+    toastIdRef.current = toast({ description: alertText })
     setInputBid('')
   }
 
    return (
-    <div className="item-detail">
+    <Stack spacing="2vh" className="item-detail">
       <img src={img} alt="item-img"/>
         <h1>{name}</h1>
         <h2>Entry fee: {entry_fee} token(s)</h2>
         <h2>Best Bid: {best_bid} token(s)</h2>
         <Timer dueDate={dueDate}/>
-        <input 
-          type="text"
-          value={inputBid}
-          placeholder="Your bid"
-          onChange={handleChange}
-        />
-        <button onClick={handleSubmit}>
+        
+        <InputGroup style={{width: "80%"}}>
+          <InputLeftAddon children="$"/>
+          <Input 
+            type="number"
+            value={inputBid}
+            placeholder="Your bid"
+            variant="filled"
+            onChange={handleChange}
+            style={{fontSize: "3vh"}}
+          />
+        </InputGroup>
+        <Button 
+          onClick={handleSubmit}
+          rightIcon={<CheckIcon />} 
+          colorScheme="blue" 
+          variant="outline"
+          className="btn"
+        >
           Make a bid
-        </button>
-    </div>
+        </Button>
+    </Stack>
   )
 }

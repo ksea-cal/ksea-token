@@ -31,7 +31,7 @@ export default function AboutUs() {
       <div className="team">
         <h1>Back-end team</h1>
         <div className="team-member">
-          <MemberAbt name="Beomjin Lee 이범진" img={link}/>
+          <MemberAbt name="Brian Lee 이범진" img={link}/>
         </div>
       </div>
       <div className="team">

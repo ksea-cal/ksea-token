@@ -1,5 +1,5 @@
 .auction-item {
-  border: 2px solid rgb(165, 165, 165);
+  border: 1px solid rgb(165, 165, 165);
   border-radius: 10px;
   width: 220px;
   display: flex;
@@ -32,6 +32,7 @@
   width: 9vw;
   height: 9vw;
   object-fit: contain;
+  opacity: 0.8;
   margin: 1vh 0;
 }
 .auction-item h1,h2{
@@ -42,5 +43,6 @@
 }
 .auction-item h1{
   margin: 1vh;
-  font-size: 2vw;
+  font-size: 3vh;
+  font-weight: 500;
 }

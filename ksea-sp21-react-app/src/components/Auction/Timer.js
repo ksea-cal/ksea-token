@@ -26,7 +26,7 @@ export default function Timer({ dueDate }) {
 });
 
   return (
-    <div>
+    <div id="timer">
       <h3>
         You have {timeLeft[0]} day(s)
         <br/>
