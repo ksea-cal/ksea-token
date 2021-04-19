@@ -31,6 +31,7 @@ export default function Officer({user, onboardState}) {
   const [eventName, setEventName] = useState('');
   const [bool, setBool] = useState(false);
   let eventValue = useRef(0);
+  // let listOfAuctions = [];
 
   useEffect(() => {
     async function fetchData() {
@@ -121,8 +122,8 @@ export default function Officer({user, onboardState}) {
     await factory.methods.createAuction(name, tokenAddr).send({from:user});
     let auctionAddr = await factory.methods.getAuctionAddr(name).call();
     console.log(auctionAddr);
-    setListOfAuctions([...listOfAuctions, auctionAddr]);
-    console.log(1);
+    setListOfAuctions(listOfAuctions => [...listOfAuctions, auctionAddr])
+    console.log(listOfAuctions);
   }
 
 
