@@ -17,7 +17,7 @@ contract AuctionFactory {
         //uint256 _entryFee,
         //uint256 _biddingTime,
         address _dobbyToken
-    ) external returns (bool) {
+    ) external returns (address) {
         KSEAuction k = new KSEAuction(
             //_biddingTime,
             //_entryFee,
@@ -28,7 +28,7 @@ contract AuctionFactory {
         auctions[_name].name = _name;
         //auctions[_name].entryFee = _entryFee;
         auctions[_name].auctionAddr = addr;
-        return true;
+        return addr;
     }
 
     function getAuctionAddr(string calldata _name)

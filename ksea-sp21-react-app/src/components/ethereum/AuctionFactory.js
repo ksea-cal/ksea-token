@@ -1,6 +1,7 @@
 import FactoryAbi from "../../abis/AuctionFactory.json";
 import web3 from "./Web3";
 
+//function factoryFunc({provider})
 const factory = async () => {
     // Network ID
     const networkId = await web3.eth.net.getId()

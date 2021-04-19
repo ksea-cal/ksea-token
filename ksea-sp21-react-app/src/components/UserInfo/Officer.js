@@ -15,17 +15,31 @@ import {
 } from "@chakra-ui/react"
 
 export default function Officer({user, onboardState}) {
+
+  // const [provider, loadweb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+  const [airdrop, setAirdrop] = useState(undefined);
+  const [token, setToken] = useState(undefined);
+  const [boardValue, setBoardValue] = useState('');
+  const [memberValue, setMemberValue] = useState('');
+  const [listOfMembers, setListOfMembers] = useState([]);
+  const [eventName, setEventName] = useState('');
+  const [bool, setBool] = useState(false);
+  let eventValue = useRef(0);
+
   useEffect(() => {
     async function fetchData() {
-
       let t = await kseaToken()
       setToken(t);
 
       let a = await kseAirdrop()
       setAirdrop(a);
+
+      // let b = await a.methods.isBoardMember(user).call();
+      // setBool(b);
     }
     fetchData();
   }, []);
+
 
   //KSEAirdrop button handlers. These functions will get called when buttons are clicked
   function handleBoardChange(event) {
@@ -78,48 +92,51 @@ export default function Officer({user, onboardState}) {
     console.log(total_val)
   }
 
-  const [airdrop, setAirdrop] = useState(null);
-  const [token, setToken] = useState(null);
-  const [boardValue, setBoardValue] = useState('');
-  const [memberValue, setMemberValue] = useState('');
-  const [listOfMembers, setListOfMembers] = useState([]);
-  const [eventName, setEventName] = useState('');
-  let eventValue = useRef(0);
+
+  //Auction
+  /** 
+   * 
+   * 
+   */
+
 
   return airdrop && token ? (
+
     <div>
       {!onboardState.address ?
         <h2>Please Connect Your Wallet</h2>
         :
         <div>
-          <div id='officer'>
-            <Input onChange={handleBoardChange} placeholder="medium size" size="md" />
-            <Button onClick={handleRegister} colorScheme="blue">Register Officer</Button>
-            <Input onChange={handleBoardChange} placeholder="medium size" size="md" />
-            <Button onClick={handleDeregister} colorScheme="blue">
-              Deregister Officer</Button>
-            <Select onChange={handleEventChange} placeholder="Choose Event">
-              <option value="2">GM: 2 Dobbies</option>
-              <option value="3">Focus Group: 3 Dobbies</option>
-              <option value="1">KSEA Chat: 1 Dobby</option>
-              <option value="4">Lead Focus Group: 4 Dobbies</option>
-              <option value="1">Small Group: 1 Dobby</option>
-              <option value="1">Social: 1 Dobby</option>
-              <option value="1">Workshop: 1 Dobby</option>
-              <option value="1">Review: 1 Dobby</option>
-            </Select>
-            <Button onClick={handleDistribute} colorScheme="blue">Distribute Dobby</Button>
-            <NumberInput min={0}>
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-            <Button colorScheme="blue">Distribute Ether</Button>
-            <button>Create Checkin Event</button>
-            <button>Create Auction</button>
-          </div>
+          {/* {bool ? */}
+            <div id='officer'>
+              <Input onChange={handleBoardChange} placeholder="medium size" size="md" />
+              <Button onClick={handleRegister} colorScheme="blue">Register Officer</Button>
+              <Input onChange={handleBoardChange} placeholder="medium size" size="md" />
+              <Button onClick={handleDeregister} colorScheme="blue">
+                Deregister Officer</Button>
+              <NumberInput min={0}>
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+              <Button onClick={handleDistribute} colorScheme="blue">Distribute Dobby</Button>
+              <NumberInput min={0}>
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+              <Button colorScheme="blue">Distribute Ether</Button>
+              <button>Create Checkin Event</button>
+              <button>Create Auction</button>
+            </div>
+          {/* //   :
+          //   <div>You Are Not An Officer</div>
+          // } */}
+
         </div>
       }
     </div>
