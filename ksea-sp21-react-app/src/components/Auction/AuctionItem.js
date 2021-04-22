@@ -8,28 +8,28 @@ import KSEA_Auction from "../../abis/KSEAuction.json";
 
 export default function AuctionItem({contractAddr, item}) {
   
-  // const [auction, setAuction] = useState(undefined);
+  const [auction, setAuction] = useState(undefined);
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     let auction = await kseAuction();
-  //     setAuction(auction);
-  //   }
-  //   fetchData();
-  // }, [])
+  useEffect(() => {
+    async function fetchData() {
+      let auction = await kseAuction();
+      setAuction(auction);
+    }
+    fetchData();
+  }, [])
 
-  // const kseAuction = async () => {
-  //   if(contractAddr) {
-  //   const auction = new web3.eth.Contract(KSEA_Auction.abi, contractAddr)
-  //   //   console.log("airdrop address:", airdrop.options.address)
+  const kseAuction = async () => {
+    if(contractAddr) {
+    const auction = new web3.eth.Contract(KSEA_Auction.abi, contractAddr)
+    //   console.log("airdrop address:", airdrop.options.address)
 
-  //     return auction
-  //   } else {
-  //     // ***Devs*** uncomment this after deploying smart contracts
-  //     // window.alert('Airdrop contract not deployed to detected network.')
-  //     console.log('Smart contracts not deployed to detected network.')
-  //   }
-  // }
+      return auction
+    } else {
+      // ***Devs*** uncomment this after deploying smart contracts
+      // window.alert('Airdrop contract not deployed to detected network.')
+      console.log('Smart contracts not deployed to detected network.')
+    }
+  }
 
   return (
     <div className="auction-item">

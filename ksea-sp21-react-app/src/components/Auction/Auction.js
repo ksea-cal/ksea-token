@@ -6,9 +6,11 @@ import { useSelector } from 'react-redux';
 
 export default function Auction({onboardState}) {
   const user = useSelector((state) => state.allUsers.selUser)
+  const auctionList = useSelector((state) => state.allUsers.auctionList)
+  console.log(auctionList)
 
-  const AuctionItems = AuctionDB.map(eachItem => (
-    <AuctionItem item={eachItem} key={eachItem.id} />
+  const AuctionItems = auctionList.map(eachItem => (
+    <AuctionItem contractAddr={eachItem} key={eachItem.id} />
   ))
 
    return (

@@ -6,7 +6,7 @@ import KSEA_Token from "../../abis/KSEAToken.json";
 import { useEffect, useState, useRef } from 'react'
 import web3 from "../ethereum/Web3";
 import { useDispatch, useSelector } from 'react-redux';
-import { setAuctionList } from './../../redux/userActions';
+import { setAuctionList } from './../../redux/actions/userActions';
 
 import {
   NumberInput,
@@ -49,13 +49,11 @@ export default function Officer({address, onboardState}) {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    console.log(listOfAuctions);
-    dispatch(setAuctionList(listOfAuctions))
-    const auctionL = useSelector((state) => state.allUsers.auctionList)
-    console.log(auctionL)
-  }, [listOfAuctions])
 
+  useEffect(() => {
+    console.log("list of auctions: " + listOfAuctions);
+    dispatch(setAuctionList(listOfAuctions))
+  }, [listOfAuctions])
 
   //KSEAirdrop button handlers. These functions will get called when buttons are clicked
   function handleBoardChange(event) {
@@ -96,7 +94,7 @@ export default function Officer({address, onboardState}) {
     const networkId = await web3.eth.net.getId();
     const networkData1 = KSEA_Token.networks[networkId]
     await createAuction(auctionInput, networkData1.address)
-    console.log(listOfAuctions);
+    // console.log(listOfAuctions);
   }
 
 
