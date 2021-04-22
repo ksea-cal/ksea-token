@@ -21,7 +21,6 @@ import {
 export default function Officer({address, onboardState}) {
   const user = useSelector((state) => state.allUsers.selUser)
 
-  // const [provider, loadweb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
   const [airdrop, setAirdrop] = useState(undefined);
   const [token, setToken] = useState(undefined);
   const [factory, setFactory] = useState(undefined);
@@ -33,7 +32,6 @@ export default function Officer({address, onboardState}) {
   const [eventName, setEventName] = useState('');
   const [bool, setBool] = useState(false);
   let eventValue = useRef(0);
-  // let listOfAuctions = [];
 
   useEffect(() => {
     async function fetchData() {
