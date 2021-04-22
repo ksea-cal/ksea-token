@@ -96,7 +96,7 @@ export default function App() {
                 <Route path="/checkin"><CheckIn onboardState={onboard ? onboard.getState() : null}/></Route>
                 <Route path="/ranking"><Ranking onboardState={onboard ? onboard.getState() : null}/></Route>
                 <Route path="/auction"><Auction onboardState={onboard ? onboard.getState() : null}/></Route>
-                <Route path="/officer"><Officer onboardState={onboard ? onboard.getState() : null}/></Route>
+                <Route path="/officer"><Officer address = {address} onboardState={onboard ? onboard.getState() : null}/></Route>
                 <Route path="/profile"><Profile /></Route>
                 <Route path="/auction-item/:id" component={ItemDetail}/>
                 <Route path="/about-us" component={AboutUs}/>

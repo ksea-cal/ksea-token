@@ -18,7 +18,7 @@ import {
   Select  
 } from "@chakra-ui/react"
 
-export default function Officer({onboardState}) {
+export default function Officer({address, onboardState}) {
   const user = useSelector((state) => state.allUsers.selUser)
 
   // const [provider, loadweb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
@@ -48,6 +48,10 @@ export default function Officer({onboardState}) {
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    console.log(listOfAuctions);
+  }, [listOfAuctions])
 
 
   //KSEAirdrop button handlers. These functions will get called when buttons are clicked
@@ -95,21 +99,21 @@ export default function Officer({onboardState}) {
 
   //KSEAirdrop Smart contract function calls. These functions will interact with the deployed smart contracts.
   async function registerBoardMem(_address) {
-    await airdrop.methods.registerBoardMember(_address).send({from:user})
+    await airdrop.methods.registerBoardMember(_address).send({from:address})
     let board = await airdrop.methods.isBoardMember(_address).call();
     console.log("IsBoardMember: ", board);
   }
 
   async function deregisterBoardMem(_address) {
-    await airdrop.methods.deregisterBoardMember(_address).send({from:user})
+    await airdrop.methods.deregisterBoardMember(_address).send({from:address})
     let board = await airdrop.methods.isBoardMember(_address).call();
     console.log("IsBoardMember: ", board);
   }
 
   async function distributeTokens(_addresses, _value) {
     let total_val = _value * _addresses.length
-    await token.methods.approve(airdrop._address, total_val).send({from:user});
-    await airdrop.methods.distributeDobbyTokens(_addresses, _value).send({from:user})
+    await token.methods.approve(airdrop._address, total_val).send({from:address});
+    await airdrop.methods.distributeDobbyTokens(_addresses, _value).send({from:address})
     console.log(total_val)
   }
 
@@ -121,11 +125,10 @@ export default function Officer({onboardState}) {
    * 
    */
    async function createAuction(name, tokenAddr) {
-    await factory.methods.createAuction(name, tokenAddr).send({from:user});
-    let auctionAddr = await factory.methods.getAuctionAddr(name).call();
-    console.log(auctionAddr);
-    setListOfAuctions(listOfAuctions => [...listOfAuctions, auctionAddr])
-    console.log(listOfAuctions);
+    await factory.methods.createAuction(name, tokenAddr).send({from:address});
+    await factory.methods.getAuctionAddr(name).call().then(auctionAddr => {
+      setListOfAuctions(listOfAuctions => [...listOfAuctions, auctionAddr]);
+    });   
   }
 
 
