@@ -22,7 +22,7 @@ import Timer from './Timer';
 import web3 from "../ethereum/Web3";
 import KSEA_Auction from "../../abis/KSEAuction.json";
 
-export default function AuctionItem({contractAddr}) {
+export default function AuctionItem({address, contractAddr}) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   
   //page
@@ -54,16 +54,39 @@ export default function AuctionItem({contractAddr}) {
   }
 
 
+  //Auction Contract interacting functions 
+  async function makeBid(_amount) {
+    await auction.methods.bid(_amount).send({from:address})
+    let myBid = await auction.methods.getBid(address).call();
+    console.log("my bid: ", myBid);
+  }
+
+  async function getHighestBid() {
+    let highestBid = await auction.methods.getHighestBid().call();
+    console.log("highest Bid: ", highestBid);
+  }
+
+  async function getHighestBidder() {
+    let highestBidder = await auction.methods.getHighestBidder().call();
+    console.log("highest Bidder: ", highestBidder);
+  }
+
+
   const {name, img, dueDate, entry_fee, best_bid} = contractAddr
 
   function handleChange(e) {
     setInputBid(e.target.value)
   }
   function handleSubmit() {
-    const alertText = inputBid !== '' ?
-      "You've made a bid!" : "Please make a bid!"
-    toastIdRef.current = toast({ description: alertText })
-    setInputBid('')
+    if (inputBid <= 0) {
+      toastIdRef.current = toast({ description: "너같으면 마이너스 배팅이 되겠냐? ㅡ.ㅡ" })
+    } else {
+      setTimeout(() => {
+        makeBid(inputBid);
+      }, 500);
+      toastIdRef.current = toast({ description: "짝짝짝! 성공적으로 배팅하셨습니다!" })
+      setInputBid('')
+    }
   }
 
   return (

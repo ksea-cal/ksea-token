@@ -4,13 +4,13 @@ import AuctionItem from './AuctionItem';
 import AuctionDB from './../../SampleDB/AuctionDB';
 import { useSelector } from 'react-redux';
 
-export default function Auction({onboardState}) {
+export default function Auction({address, onboardState}) {
   const user = useSelector((state) => state.allUsers.selUser)
   const auctionList = useSelector((state) => state.allUsers.auctionList)
   console.log(auctionList)
 
   const AuctionItems = AuctionDB.map(eachAddr => (
-    <AuctionItem contractAddr={eachAddr} key={eachAddr} />
+    <AuctionItem address = {address} contractAddr={eachAddr} key={eachAddr} />
   ))
 
    return (
