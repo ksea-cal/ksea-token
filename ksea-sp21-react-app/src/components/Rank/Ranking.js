@@ -23,7 +23,9 @@ export default function Ranking({onboardState}) {
       .catch((err) => {
         console.log("Error:", err);
       })
-    dispatch(setUsers(res.data))
+    if (res) {
+      dispatch(setUsers(res.data))
+    }
   }
 
   useEffect(() => {

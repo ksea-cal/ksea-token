@@ -78,7 +78,9 @@ export default function App() {
       .catch((err) => {
         console.log("Error:", err);
       })
-    dispatch(selectedUser(res.data))
+    if (res) {
+      dispatch(selectedUser(res.data))
+    }
   }
   //console.log(user)
   
