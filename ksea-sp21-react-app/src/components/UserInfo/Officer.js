@@ -52,6 +52,7 @@ export default function Officer({address, onboardState}) {
 
   useEffect(() => {
     console.log("list of auctions: " + listOfAuctions);
+    // window.localStorage.setItem('listOfAuction', listOfAuction);   
     dispatch(setAuctionList(listOfAuctions))
   }, [listOfAuctions])
 
@@ -129,7 +130,7 @@ export default function Officer({address, onboardState}) {
     await factory.methods.createAuction(name, tokenAddr).send({from:address});
     await factory.methods.getAuctionAddr(name).call().then(auctionAddr => {
       setListOfAuctions(listOfAuctions => [...listOfAuctions, auctionAddr]);
-    });   
+    });
   }
 
 

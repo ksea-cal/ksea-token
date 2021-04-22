@@ -9,7 +9,7 @@ export default function Auction({address, onboardState}) {
   const auctionList = useSelector((state) => state.allUsers.auctionList)
   console.log(auctionList)
 
-  const AuctionItems = AuctionDB.map(eachAddr => (
+  const AuctionItems = auctionList.map(eachAddr => (
     <AuctionItem address = {address} contractAddr={eachAddr} key={eachAddr} />
   ))
 

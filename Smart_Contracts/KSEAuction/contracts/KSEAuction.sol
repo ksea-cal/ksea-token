@@ -36,6 +36,7 @@ contract KSEAuction is Ownable {
     ) public {
         dobbyToken = EIP20Interface(_dobbyToken);
         owner = _owner;
+        paused = false;
     }
 
     /*

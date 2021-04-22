@@ -21,6 +21,7 @@ import Timer from './Timer';
 
 import web3 from "../ethereum/Web3";
 import KSEA_Auction from "../../abis/KSEAuction.json";
+import KseaToken from "../ethereum/KSEA_Token";
 
 export default function AuctionItem({address, contractAddr}) {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -31,11 +32,15 @@ export default function AuctionItem({address, contractAddr}) {
   const toastIdRef = React.useRef()
 
   const [auction, setAuction] = useState(undefined);
+  const [token, setToken] = useState(undefined);
 
   useEffect(() => {
     async function fetchData() {
       let auction = await kseAuction();
       setAuction(auction);
+
+      let token = await KseaToken();
+      setToken(token);
     }
     fetchData();
   }, [])
@@ -56,6 +61,7 @@ export default function AuctionItem({address, contractAddr}) {
 
   //Auction Contract interacting functions 
   async function makeBid(_amount) {
+    await token.methods.approve(contractAddr, _amount).send({from:address});
     await auction.methods.bid(_amount).send({from:address})
     let myBid = await auction.methods.getBid(address).call();
     console.log("my bid: ", myBid);
@@ -71,8 +77,6 @@ export default function AuctionItem({address, contractAddr}) {
     console.log("highest Bidder: ", highestBidder);
   }
 
-
-  const {name, img, dueDate, entry_fee, best_bid} = contractAddr
 
   function handleChange(e) {
     setInputBid(e.target.value)
@@ -91,7 +95,29 @@ export default function AuctionItem({address, contractAddr}) {
 
   return (
     <div>
-      <div className="auction-item">
+      {contractAddr}
+       <InputGroup>
+        <InputLeftAddon children="DOBBY"/>
+        <Input 
+          type="number"
+          value={inputBid}
+          placeholder="Your bid"
+          variant="filled"
+          onChange={handleChange}
+          style={{fontSize: "3vh"}}
+        />
+      </InputGroup>
+      <Button 
+        onClick={handleSubmit}
+        rightIcon={<CheckIcon />} 
+        colorScheme="blue" 
+        variant="outline"
+        className="btn"
+      >
+        Bid
+      </Button>
+
+      {/* <div className="auction-item">
         <img src={img} alt="contractAddr-img"/>
         <div className="auction-contractAddr-overlay"/>
         <h1>{name}</h1>
@@ -142,17 +168,8 @@ export default function AuctionItem({address, contractAddr}) {
           </ModalContent>
         </Modal>
       </div>
-      
+       */}
     </div>
   )
 }
 
-
-{/* <div className="auction-item">
-      <Link to={`/auction-item/${item.id}`}>
-        <img src={item.img} alt="item-img"/>
-        <div className="auction-item-overlay"></div>
-        <h1>{item.name}</h1>
-        <Timer dueDate={item.dueDate}/>
-      </Link>
-    </div> */}
