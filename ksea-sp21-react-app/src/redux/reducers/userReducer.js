@@ -2,7 +2,8 @@ import {ActionTypes} from '../actions/types';
 
 const initialState = {
   users: [],
-  selUser: {}
+  selUser: {},
+  auctionList: []
 }
 
 export function userReducer(state = initialState, action) {
@@ -18,6 +19,11 @@ export function userReducer(state = initialState, action) {
       return { 
         ...state, 
         selUser: action.payload 
+      };
+    case ActionTypes.SET_AUCTION_LIST:
+      return { 
+        ...state, 
+        auctionList: action.payload 
       };
   }
 }

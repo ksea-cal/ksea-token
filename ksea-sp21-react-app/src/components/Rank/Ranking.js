@@ -40,7 +40,7 @@ export default function Ranking({onboardState}) {
       })
     )
     setLoading(true);
-  }, [allUsers])
+  }, [user])
 
   const top3Rank = ranking.slice(0,3).map(person =>
     <UserRank user={person} rankingSel={0} key={person.id} />

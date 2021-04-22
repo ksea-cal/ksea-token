@@ -13,3 +13,10 @@ export function selectedUser(user) {
     payload: user
   }
 }
+
+export function setAuctionList(auctionList) {
+  return {
+    type: ActionTypes.SET_AUCTION_LIST,
+    payload: auctionList
+  }
+}

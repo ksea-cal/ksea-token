@@ -5,7 +5,8 @@ import auctionFactory from '../ethereum/AuctionFactory'
 import KSEA_Token from "../../abis/KSEAToken.json";
 import { useEffect, useState, useRef } from 'react'
 import web3 from "../ethereum/Web3";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAuctionList } from './../../redux/userActions';
 
 import {
   NumberInput,
@@ -19,6 +20,7 @@ import {
 } from "@chakra-ui/react"
 
 export default function Officer({address, onboardState}) {
+  const dispatch = useDispatch()
   const user = useSelector((state) => state.allUsers.selUser)
 
   const [airdrop, setAirdrop] = useState(undefined);
@@ -49,6 +51,9 @@ export default function Officer({address, onboardState}) {
 
   useEffect(() => {
     console.log(listOfAuctions);
+    dispatch(setAuctionList(listOfAuctions))
+    const auctionL = useSelector((state) => state.allUsers.auctionList)
+    console.log(auctionL)
   }, [listOfAuctions])
 
 
