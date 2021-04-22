@@ -9,8 +9,8 @@ export default function Auction({onboardState}) {
   const auctionList = useSelector((state) => state.allUsers.auctionList)
   console.log(auctionList)
 
-  const AuctionItems = auctionList.map(eachItem => (
-    <AuctionItem contractAddr={eachItem} key={eachItem.id} />
+  const AuctionItems = AuctionDB.map(eachAddr => (
+    <AuctionItem contractAddr={eachAddr} key={eachAddr} />
   ))
 
    return (
