@@ -49,10 +49,14 @@ export default function Officer({address, onboardState}) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    let list = JSON.parse(localStorage.getItem('listOfAuction', listOfAuctions));  
+    setListOfAuctions(list); 
+  }, [])
 
   useEffect(() => {
     console.log("list of auctions: " + listOfAuctions);
-    // window.localStorage.setItem('listOfAuction', listOfAuction);   
+    localStorage.setItem('listOfAuction', JSON.stringify(listOfAuctions));   
     dispatch(setAuctionList(listOfAuctions))
   }, [listOfAuctions])
 
