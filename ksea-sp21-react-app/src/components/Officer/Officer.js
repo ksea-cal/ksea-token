@@ -65,20 +65,32 @@ export default function Officer({address, onboardState}) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    let list = JSON.parse(localStorage.getItem('listOfAuction', listOfAuctions));  
+    setListOfAuctions(list); 
+  }, [])
 
   useEffect(() => {
     console.log("list of auctions: " + listOfAuctions);
+    // window.localStorage.setItem('listOfAuction', listOfAuction);   
+    localStorage.setItem('listOfAuction', JSON.stringify(listOfAuctions));   
     dispatch(setAuctionList(listOfAuctions))
-    // let formData = new FormData();
-    // formData.append('auctionList', listOfAuctions);
-    // axios.post("http://127.0.0.1:5000/auction_list", formData)
-    //   .then(response => {
-    //       console.log(response);
-    //   })
-    //   .catch(error => {
-    //       console.log(error);
-    //   });
   }, [listOfAuctions])
+
+
+  // useEffect(() => {
+  //   console.log("list of auctions: " + listOfAuctions);
+  //   dispatch(setAuctionList(listOfAuctions))
+  //   // let formData = new FormData();
+  //   // formData.append('auctionList', listOfAuctions);
+  //   // axios.post("http://127.0.0.1:5000/auction_list", formData)
+  //   //   .then(response => {
+  //   //       console.log(response);
+  //   //   })
+  //   //   .catch(error => {
+  //   //       console.log(error);
+  //   //   });
+  // }, [listOfAuctions])
 
   //KSEAirdrop button handlers. These functions will get called when buttons are clicked
   function handleBoardChange(event) {
@@ -133,6 +145,7 @@ export default function Officer({address, onboardState}) {
    * 1. create auction 
    * 2. put into a list of auction addresses
    */
+  
 
   function handleAuctionChange(event) {
     event.preventDefault();

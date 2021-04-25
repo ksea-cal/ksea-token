@@ -111,7 +111,7 @@ contract KSEAuction is Ownable {
     }
 
     //returns the highest bidder's address
-    function getHigestBidder() public view returns (address) {
+    function getHighestBidder() public view returns (address) {
         return highestBidder;
     }
 }

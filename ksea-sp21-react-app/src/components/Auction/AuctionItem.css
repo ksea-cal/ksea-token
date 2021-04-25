@@ -43,6 +43,7 @@
 }
 .auction-item h1{
   margin: 1vh;
-  font-size: 3vh;
+  font-size: 7px;
   font-weight: 500;
+  word-wrap: break-word;
 }

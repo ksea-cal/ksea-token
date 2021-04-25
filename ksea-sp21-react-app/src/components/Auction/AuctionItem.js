@@ -24,9 +24,11 @@ import KSEA_Auction from "../../abis/KSEAuction.json";
 import KseaToken from "../ethereum/KSEA_Token";
 import { useSelector } from 'react-redux';
 
-export default function AuctionItem({address, item}) {
+export default function AuctionItem({address, contractAddr}) {
   const user = useSelector((state) => state.allUsers.selUser)
   const [inputBid, setInputBid] = useState('');
+  const [highestBid, setHighestBid] = useState(0);
+  const [highestBidder, setHighestBidder] = useState('');
   
   //design
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -48,9 +50,27 @@ export default function AuctionItem({address, item}) {
     fetchData();
   }, [])
 
+  useEffect(() => {
+    console.log("highest bid: " + highestBid);
+    // window.localStorage.setItem('listOfAuction', listOfAuction);   
+    console.log("highest Bidder" + highestBidder);
+  }, [highestBid, highestBidder])
+
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const highestBid = await getHighestBid();
+  //     setHighestBid(highestBid);
+
+  //     const highestBidder = await getHighestBidder();
+  //     setHighestBidder(highestBidder);
+  //   }
+
+  //   fetchData();
+  // }, [contractAddr])
+
   const kseAuction = async () => {
-    if(item.contractAddr) {
-    const auction = new web3.eth.Contract(KSEA_Auction.abi, item.contractAddr)
+    if(contractAddr) {
+    const auction = new web3.eth.Contract(KSEA_Auction.abi, contractAddr)
     //   console.log("airdrop address:", airdrop.options.address)
 
       return auction
@@ -64,20 +84,26 @@ export default function AuctionItem({address, item}) {
 
   //Auction Contract interacting functions 
   async function makeBid(_amount) {
-    await token.methods.approve(item.contractAddr, _amount).send({from:address});
+    await token.methods.approve(contractAddr, _amount).send({from:address});
     await auction.methods.bid(_amount).send({from:address})
     let myBid = await auction.methods.getBid(address).call();
+    let highestBid = await getHighestBid();
+    setHighestBid(highestBid);
+    let highestBidder = await getHighestBidder();
+    setHighestBidder(highestBidder);
     console.log("my bid: ", myBid);
   }
 
   async function getHighestBid() {
     let highestBid = await auction.methods.getHighestBid().call();
     console.log("highest Bid: ", highestBid);
+    return highestBid;
   }
 
   async function getHighestBidder() {
     let highestBidder = await auction.methods.getHighestBidder().call();
     console.log("highest Bidder: ", highestBidder);
+    return highestBidder;
   }
 
 
@@ -96,85 +122,49 @@ export default function AuctionItem({address, item}) {
     }
   }
 
+
+
   return (
-    <div>
-      {item.contractAddr}
-       <InputGroup>
-        <InputLeftAddon children="DOBBY"/>
-        <Input 
-          type="number"
-          value={inputBid}
-          placeholder="Your bid"
-          variant="filled"
-          onChange={handleChange}
-          style={{fontSize: "3vh"}}
-        />
-      </InputGroup>
-      <Button 
-        onClick={handleSubmit}
-        rightIcon={<CheckIcon />} 
-        colorScheme="blue" 
-        variant="outline"
-        className="btn"
-      >
-        Bid
-      </Button>
+    <div className="auction-item">
+      <div className="auction-contractAddr-overlay"/>
+      <Button onClick={onOpen}>Choose</Button>
 
-      {/* <div className="auction-item">
-      <Button onClick={onOpen}>{item.contractAddr}</Button>
+      <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{contractAddr}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <Stack spacing="2vh">
+              <h2>Highest Bid: {highestBid} token(s)</h2>
+              <h2>Highest Bidder: {highestBidder} </h2>
+                <InputGroup>
+                  <InputLeftAddon children="DOBBY"/>
+                  <Input 
+                    type="number"
+                    value={inputBid}
+                    placeholder="Your bid"
+                    variant="filled"
+                    onChange={handleChange}
+                    style={{fontSize: "3vh"}}
+                  />
+                </InputGroup>
+                <Button 
+                  onClick={handleSubmit}
+                  rightIcon={<CheckIcon />} 
+                  colorScheme="blue" 
+                  variant="outline"
+                  className="btn"
+                >
+                  Bid
+                </Button>
+            </Stack>
+          </ModalBody>
 
-      <div className="auction-item">
-        <img src={img} alt="contractAddr-img"/>
-        <div className="auction-contractAddr-overlay"/>
-        <h1>{name}</h1>
-        <Timer dueDate={dueDate}/>
-        <Button onClick={onOpen}>Choose</Button>
-
-        <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>{name}</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody pb={6}>
-              <Stack spacing="2vh">
-                <img src={img} style={{width: "50%", margin: "auto"}} alt="item-img"/>
-                  <h2>Highest Bid: {best_bid} token(s)</h2>
-                  <h2>Highest Bidder: name</h2>
-                  <Timer dueDate={dueDate}/>
-                  
-                  <InputGroup>
-                    <InputLeftAddon children="DOBBY"/>
-                    <Input 
-                      type="number"
-                      value={inputBid}
-                      placeholder="Your bid"
-                      variant="filled"
-                      onChange={handleChange}
-                      style={{fontSize: "3vh"}}
-                    />
-                  </InputGroup>
-                  <Button 
-                    onClick={handleSubmit}
-                    rightIcon={<CheckIcon />} 
-                    colorScheme="blue" 
-                    variant="outline"
-                    className="btn"
-                  >
-                    Bid
-                  </Button>
-              </Stack>
-            </ModalBody>
-
-            <ModalFooter>
-              <Button colorScheme="blue" mr={3}>
-                Save
-              </Button>
-              <Button onClick={onClose}>Cancel</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </div>
-       */}
+          <ModalFooter>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   )
 }

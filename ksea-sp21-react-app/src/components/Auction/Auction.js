@@ -9,16 +9,21 @@ export default function Auction({address, onboardState}) {
   const user = useSelector((state) => state.allUsers.selUser)
   const [auctions, setAuctions] = useState([]);
 
-  useEffect(() => {
-    axios.get("http://127.0.0.1:5000/auction")
-      .then(res => { 
-        console.log(res.data)
-        setAuctions(res.data)
-      })
-  }, [user])
+  // useEffect(() => {
+  //   axios.get("http://127.0.0.1:5000/auction")
+  //     .then(res => { 
+  //       console.log(res.data)
+  //       setAuctions(res.data)
+  //     })
+  // }, [user])
 
-  const auctionItems = auctions.map(item => (
-    <AuctionItem address={address} item={item} key={item.aid} />
+  useEffect(() => {
+    let list = JSON.parse(localStorage.getItem('listOfAuction'));  
+    setAuctions(list); 
+  }, [])
+
+  const auctionItems = auctions.map(contractAddr => (
+    <AuctionItem address={address} contractAddr={contractAddr} key={contractAddr} />
   ))
 
    return (
