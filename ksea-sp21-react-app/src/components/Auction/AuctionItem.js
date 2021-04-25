@@ -25,7 +25,7 @@ import KSEA_Auction from "../../abis/KSEAuction.json";
 import KseaToken from "../ethereum/KSEA_Token";
 import { useSelector } from 'react-redux';
 
-export default function AuctionItem({address, contractAddr}) {
+export default function AuctionItem({address, item}) {
   const user = useSelector((state) => state.allUsers.selUser)
   const [inputBid, setInputBid] = useState('');
   const [highestBid, setHighestBid] = useState(0);
@@ -95,8 +95,8 @@ export default function AuctionItem({address, contractAddr}) {
   // }, [contractAddr])
 
   const kseAuction = async () => {
-    if(contractAddr) {
-    const auction = new web3.eth.Contract(KSEA_Auction.abi, contractAddr)
+    if(item.contractAddr) {
+    const auction = new web3.eth.Contract(KSEA_Auction.abi, item.contractAddr)
     //   console.log("airdrop address:", airdrop.options.address)
 
       return auction
@@ -110,7 +110,7 @@ export default function AuctionItem({address, contractAddr}) {
 
   //Auction Contract interacting functions 
   async function makeBid(_amount) {
-    await token.methods.approve(contractAddr, _amount).send({from:address});
+    await token.methods.approve(item.contractAddr, _amount).send({from:address});
     await auction.methods.bid(_amount).send({from:address})
     let myBid = await auction.methods.getBid(address).call();
     await getHighest().then(highest => {

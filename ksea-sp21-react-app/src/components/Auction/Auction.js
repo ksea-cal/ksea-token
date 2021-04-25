@@ -28,8 +28,8 @@ export default function Auction({address, onboardState}) {
     fetchAllAuctions();
   }, [user])
 
-  const auctionItems = auctions.map(contractAddr => (
-    <AuctionItem address={address} contractAddr={contractAddr} key={contractAddr} />
+  const auctionItems = auctions.map(item => (
+    <AuctionItem address={address} item={item} key={item.aid} />
   ))
 
    return (
