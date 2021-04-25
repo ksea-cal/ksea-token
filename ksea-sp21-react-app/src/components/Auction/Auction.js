@@ -2,23 +2,23 @@ import React, {useState, useEffect} from 'react';
 
 import './Auction.css';
 import AuctionItem from './AuctionItem';
-import AuctionDB from './../../SampleDB/AuctionDB';
+import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 export default function Auction({address, onboardState}) {
   const user = useSelector((state) => state.allUsers.selUser)
-  // const auctionList = useSelector((state) => state.allUsers.auctionList)
-  // // localStorage.setItem("auctionList", JSON.stringify(auctionList));
-
   const [auctions, setAuctions] = useState([]);
 
   useEffect(() => {
-    let list = JSON.parse(localStorage.getItem('listOfAuction'));  
-    setAuctions(list); 
-  }, [])
+    axios.get("http://127.0.0.1:5000/auction")
+      .then(res => { 
+        console.log(res.data)
+        setAuctions(res.data)
+      })
+  }, [user])
 
-  const AuctionItems = auctions.map(eachAddr => (
-    <AuctionItem address = {address} contractAddr={eachAddr} key={eachAddr} />
+  const auctionItems = auctions.map(item => (
+    <AuctionItem address={address} item={item} key={item.aid} />
   ))
 
    return (
@@ -31,13 +31,12 @@ export default function Auction({address, onboardState}) {
             <div className="my-ranking">
               <h4>My rank</h4>
               <img src={user.img} id="my-img" alt="headshot"/>
-              <h5>Rank #{user.rank}</h5>
               <p>{user.name}</p>
               <p>{user.point} points</p>
             </div>
           </div>
           <div className="auction-items">
-            {AuctionItems}
+            {auctionItems}
           </div>
         </div>
       }

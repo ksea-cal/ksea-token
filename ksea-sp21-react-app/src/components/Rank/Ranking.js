@@ -9,49 +9,57 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
 export default function Ranking({onboardState}) {
+  //window.location.reload()
   const [ranking, setRanking] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [myRank, setMyRank] = useState(null);
   
   //redux
   const user = useSelector((state) => state.allUsers.selUser)
-  const allUsers = useSelector((state) => state.allUsers.users)
   const dispatch = useDispatch()
 
   const fetchUsers = async () => {
+    console.log("fetching...")
     const res = await axios
-      .get(`http://localhost:5000//api/users`)
+      .get(`http://localhost:5000//members`)
       .catch((err) => {
         console.log("Error:", err);
       })
     if (res) {
       dispatch(setUsers(res.data))
+      const sorted = res.data.sort((a, b) => b.num_points - a.num_points);
+      //console.log(sorted)
+      const ranking = sorted.map(person => {
+        const rankIndex = sorted.findIndex(p => person.uid === p.uid)+1
+        //console.log(person.address, rankIndex)
+        if (person.address == user.address) {
+          setMyRank(rankIndex)
+        }
+        return ({...person, rank: rankIndex})
+      })
+      setRanking(ranking)
     }
   }
 
   useEffect(() => {
-    fetchUsers()
-    const sorted = allUsers.sort((a, b) => b.point - a.point);
-    setRanking(
-      sorted.map(person => {
-        const rankIndex = sorted.findIndex(p => person.id === p.id)+1
-        return(
-          {...person, rank: rankIndex}
-        )
-      })
-    )
+    fetchUsers();
     setLoading(true);
   }, [user])
 
-  const top3Rank = ranking.slice(0,3).map(person =>
-    <UserRank user={person} rankingSel={0} key={person.id} />
+  const top1Rank = ranking.slice(0,1).map(person =>
+    <UserRank user={person} rankingSel={1} key={person.uid} />
+  )
+  const top2Rank = ranking.slice(1,2).map(person =>
+    <UserRank user={person} rankingSel={2} key={person.uid} />
+  )
+  const top3Rank = ranking.slice(2,3).map(person =>
+    <UserRank user={person} rankingSel={3} key={person.uid} />
   )
   const restRank = ranking.slice(3).map(person => 
-    <UserRank user={person} rankingSel={1} key={person.id} />
+    <UserRank user={person} rankingSel={0} key={person.uid} />
   )
 
   return (
-    <div>
-    {loading ?
       <div id="ranking">
         {!onboardState.address ?
           <div className="my-ranking">
@@ -61,28 +69,27 @@ export default function Ranking({onboardState}) {
           <div className="my-ranking">
             <h2>My rank</h2>
             <div className="my-ranking-box">
-              <div className="my-ranking-content">
-                <img src={user.img} id="my-img" alt="headshot"/>
-                <p>Rank #{user.rank}</p>
-                <p>{user.name}</p>
-                <p>{user.point} points</p>
-              </div>
+              <img src={user.img} id="my-img" alt="headshot"/>
+              <p>Rank #{myRank}</p>
+              <p>{user.name}</p>
+              <p>{user.num_points} points</p>
             </div>
           </div>
         }
-
+      {loading ?
         <div>
           <h2>명예의 전당</h2>
           <p>Number of ppl: {ranking.length}</p>
           <div className="total-ranking">
+            {top2Rank}
+            {top1Rank}
             {top3Rank}
           </div>
           <h2>Rest ranking</h2>
-          <div className="total-ranking">
+          <div className="total-ranking ranking-wrap">
             {restRank}
           </div>
         </div>
-      </div>
       :
       <CircularProgress isIndeterminate color="green.300" />
     }

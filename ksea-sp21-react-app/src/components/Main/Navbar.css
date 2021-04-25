@@ -10,6 +10,12 @@
   text-decoration: none;
   margin-bottom: 10vh;
 }
+.navbar .logo-name {
+  text-decoration: none;
+}
+.navbar .logo-name:active {
+  text-decoration: none;
+}
 .nav-menu {
   display: grid;
   grid-template-columns: repeat(6, auto);

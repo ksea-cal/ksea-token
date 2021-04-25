@@ -34,8 +34,8 @@ export default function Navbar({onboard, onboardState}) {
   return (
     <div>
       <div className="display-center">
-        <nav className='navbar'>
-          <Link to="/">Dobby Chain</Link>
+        <nav className="navbar">
+          <Link to="/" className="logo-name">Dobby Chain</Link>
           <div className='menu-icon' onClick={handleClick}>
             {menuClick?
               <CloseIcon w={6} h={6}/>

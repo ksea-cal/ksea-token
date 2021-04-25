@@ -1,9 +1,0 @@
-#officer {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-#officer button,select {
-  margin: 5px 0;
-  padding: 3px;
-}

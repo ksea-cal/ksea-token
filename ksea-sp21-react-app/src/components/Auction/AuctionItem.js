@@ -22,15 +22,18 @@ import Timer from './Timer';
 import web3 from "../ethereum/Web3";
 import KSEA_Auction from "../../abis/KSEAuction.json";
 import KseaToken from "../ethereum/KSEA_Token";
+import { useSelector } from 'react-redux';
 
-export default function AuctionItem({address, contractAddr}) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  
-  //page
+export default function AuctionItem({address, item}) {
+  const user = useSelector((state) => state.allUsers.selUser)
   const [inputBid, setInputBid] = useState('');
+  
+  //design
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
   const toastIdRef = React.useRef()
-
+  
+  //auction
   const [auction, setAuction] = useState(undefined);
   const [token, setToken] = useState(undefined);
 
@@ -46,8 +49,8 @@ export default function AuctionItem({address, contractAddr}) {
   }, [])
 
   const kseAuction = async () => {
-    if(contractAddr) {
-    const auction = new web3.eth.Contract(KSEA_Auction.abi, contractAddr)
+    if(item.contractAddr) {
+    const auction = new web3.eth.Contract(KSEA_Auction.abi, item.contractAddr)
     //   console.log("airdrop address:", airdrop.options.address)
 
       return auction
@@ -61,7 +64,7 @@ export default function AuctionItem({address, contractAddr}) {
 
   //Auction Contract interacting functions 
   async function makeBid(_amount) {
-    await token.methods.approve(contractAddr, _amount).send({from:address});
+    await token.methods.approve(item.contractAddr, _amount).send({from:address});
     await auction.methods.bid(_amount).send({from:address})
     let myBid = await auction.methods.getBid(address).call();
     console.log("my bid: ", myBid);
@@ -87,7 +90,7 @@ export default function AuctionItem({address, contractAddr}) {
     } else {
       setTimeout(() => {
         makeBid(inputBid);
-      }, 500);
+      }, 5000);
       toastIdRef.current = toast({ description: "짝짝짝! 성공적으로 배팅하셨습니다!" })
       setInputBid('')
     }
@@ -95,7 +98,7 @@ export default function AuctionItem({address, contractAddr}) {
 
   return (
     <div>
-      {contractAddr}
+      {item.contractAddr}
        <InputGroup>
         <InputLeftAddon children="DOBBY"/>
         <Input 
@@ -118,6 +121,9 @@ export default function AuctionItem({address, contractAddr}) {
       </Button>
 
       {/* <div className="auction-item">
+      <Button onClick={onOpen}>{item.contractAddr}</Button>
+
+      <div className="auction-item">
         <img src={img} alt="contractAddr-img"/>
         <div className="auction-contractAddr-overlay"/>
         <h1>{name}</h1>

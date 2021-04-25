@@ -25,8 +25,8 @@ export default function CheckInItem({event, handleSubmit}) {
     <div className="item">
       <div className="check-in-item">
         <div className="check-in-info">
-          <h3>{event.name}</h3>
-          <p>{event.dueDate.toString()}</p>
+          <h3>{event.eventName}</h3>
+          <p>Due: {event.dueDate} + {event.timeLimit} minutes</p>
         </div>
         {handleSubmit === undefined ? 
           <div>
@@ -37,10 +37,10 @@ export default function CheckInItem({event, handleSubmit}) {
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>{event.name}</ModalHeader>
+                <ModalHeader>{event.eventName}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                  {event.details}
+                  Event Details
                 </ModalBody>
 
                 <ModalFooter>
@@ -74,7 +74,10 @@ export default function CheckInItem({event, handleSubmit}) {
                   <Button colorScheme="blue" mr={3} onClick={onClose}>
                     Close
                   </Button>
-                  <Button variant="ghost" onClick={() => handleSubmit(event.id, inputKey)}>
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => handleSubmit(event.eid, inputKey)}
+                  >
                     Submit
                   </Button>
                 </ModalFooter>

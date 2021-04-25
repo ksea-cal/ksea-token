@@ -16,10 +16,9 @@ import Navbar from './components/Main/Navbar';
 import Main from './components/Main/Main';
 import CheckIn from './components/CheckIn/CheckIn';
 import Ranking from './components/Rank/Ranking';
-import Profile from './components/UserInfo/Profile';
+import Profile from './components/Profile';
 import Auction from './components/Auction/Auction';
-import Officer from './components/UserInfo/Officer';
-import ItemDetail from './components/Auction/ItemDetail';
+import Officer from './components/Officer/Officer';
 import AboutUs from './components/AboutUs/AboutUs';
 import Footer from './components/Main/Footer';
 
@@ -74,15 +73,16 @@ export default function App() {
 
   const fetchUser = async () => {
     const res = await axios
-      .get(`http://localhost:5000//api/user/${address}`)
+      .get(`http://localhost:5000//member?address=${address}`)
       .catch((err) => {
         console.log("Error:", err);
       })
     if (res) {
+      console.log(res.data);
       dispatch(selectedUser(res.data))
     }
   }
-  //console.log(user)
+  
   
   return onboard ? (
     <div>
@@ -98,7 +98,7 @@ export default function App() {
                 <Route path="/auction"><Auction address = {address} onboardState={onboard ? onboard.getState() : null}/></Route>
                 <Route path="/officer"><Officer address = {address} onboardState={onboard ? onboard.getState() : null}/></Route>
                 <Route path="/profile"><Profile /></Route>
-                <Route path="/auction-item/:id" component={ItemDetail}/>
+                {/* <Route path="/auction-item/:id" component={ItemDetail}/> */}
                 <Route path="/about-us" component={AboutUs}/>
                 <Route>404 Not Found</Route>
               </Switch>

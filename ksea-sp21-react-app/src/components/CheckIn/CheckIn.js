@@ -1,120 +1,112 @@
 import React, {useState, useEffect} from 'react';
 import './CheckIn.css';
 import CheckInItem from './CheckInItem';
-import EventDB from './../../SampleDB/EventDB';
 import {useToast} from "@chakra-ui/react"
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 export default function CheckIn({onboardState}) {
-  const [eventList, setEventList] = useState(EventDB);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [completedEvents, setCompletedEvents] = useState([]);
+  const [missedEvents, setMissedEvents] = useState([]);
+  const [status, setStatus] = useState('')
+  const [loading, setLoading] = useState(true)
+  const user = useSelector((state) => state.allUsers.selUser)
+
   const toast = useToast()
   const toastIdRef = React.useRef()
 
-  const currTime = new Date();
-  const upcomingEvents = 
-    eventList.filter(event => 
-      event.dueDate.getTime() > currTime.getTime() &&
-      event.completed === false
-    )
-  const completedEvents =
-    eventList.filter(event => 
-      event.completed === true
-    )
-  const missedEvents = 
-    eventList.filter(event => 
-      event.dueDate.getTime() <= currTime.getTime() &&
-      event.completed === false
-    )
+  const fetchEventLists = async () => {
+    console.log("fetching event lists...")
+    const res = await axios
+      .get(`http://127.0.0.1:5000/checkin?address=${user.address}`, )
+      .catch((err) => {
+        console.log("Error:", err);
+      })
+    if (res) {
+      console.log(res.data)
+      setCompletedEvents(res.data.completed)
+      setUpcomingEvents(res.data.upcoming)
+      setMissedEvents(res.data.missed)
+      setLoading(false)
+    }
+  }
 
-  function handleSubmit(id, inputKey) {
-    setEventList(
-      eventList.map(event => 
-        event.id === id && inputKey === event.secretKey ?
-          {...event, completed: true}
-          : event
-      )
-    )
-    const event = eventList.filter(event => 
-      event.id === id
-    )[0]
-    
-    let alertText;
-     if (inputKey === event.secretKey) {
-      alertText = "Correct secret key!"
-     } else if (inputKey === '') {
-       alertText = "Please put a secret key!"
-     } else {
-      alertText = "Wrong secret key!"
-     }
-    toastIdRef.current = toast({ description: alertText })
+  useEffect(() => {
+    fetchEventLists ();
+  }, [user, status])
+
+  function handleSubmit(eventId, inputKey) {
+    let formData = new FormData();
+    formData.append('eventId', eventId); 
+    formData.append('password', inputKey); 
+    formData.append('address', user.address); 
+    console.log(eventId, inputKey, user.address)
+    axios.post("http://127.0.0.1:5000/checkin", formData)
+      .then(res => { 
+        console.log(res.data.curr_status)
+        setStatus(res.data.curr_status)
+        toastIdRef.current = toast({ description: res.data.curr_status })
+      })
   };
 
-  const upcomingE = upcomingEvents.map(event => {
-    return (
-      <CheckInItem 
-        key={event.id} 
-        event={event}
-        handleSubmit={handleSubmit}
-      />
-    )
-  });
 
-  const missedE = missedEvents.map(event => {
-    return (
-      <CheckInItem
-        key={event.id} 
-        event={event}
-      />
-    )
-  });
+  const completedE = completedEvents.map(event => 
+    <CheckInItem event={event} key={event.eid} />
+  )
+  const upcomingE = upcomingEvents.map(event => 
+    <CheckInItem event={event} handleSubmit={handleSubmit} key={event.eid} />
+  )
+  const missedE = missedEvents.map(event => 
+    <CheckInItem event={event} key={event.eid} />
+  )
 
-  const completedE = completedEvents.map(event => {
-    return (
-      <CheckInItem
-        key={event.id} 
-        event={event}
-      />
-    )
-  });
+  
 
   return (
     <div>
       {!onboardState.address ?
         <h2>Please Connect Wallet</h2>
         :
-        <div id="checkin">
-          <div className="event-item">
-            <h2>Upcoming 이벤트</h2>
-            <div>
-              {
-                upcomingEvents.length === 0 ?
-                <p>You have no upcoming events!</p>
-                : upcomingE
-              }
+        <div>
+        {loading ?
+          <p>Loading...</p>
+          :
+          <div id="checkin">
+            <div className="event-item">
+              <h2>Upcoming 이벤트</h2>
+              <div>
+                {
+                  upcomingEvents.length === 0 ?
+                  <p>You have no upcoming events!</p>
+                  : upcomingE
+                }
+              </div>
             </div>
-          </div>
 
-          <div className="event-item">
-            <h2>참여한 이벤트</h2>
-            <div>
-              {
-                completedEvents.length === 0 ?
-                <p>You have no completed events!</p>
-                : completedE
-              }
+            <div className="event-item">
+              <h2>참여한 이벤트</h2>
+              <div>
+                {
+                  completedEvents.length === 0 ?
+                  <p>You have no completed events!</p>
+                  : completedE
+                }
+              </div>
             </div>
-          </div>
 
-          <div className="event-item">
-            <h2>놓친 이벤트</h2>
-            <div>
-              {
-                missedEvents.length === 0 ?
-                <p>You have no missed events!</p>
-                : missedE
-              }
+            <div className="event-item">
+              <h2>Missed 이벤트</h2>
+              <div>
+                {
+                  missedEvents.length === 0 ?
+                  <p>You have no upcoming events!</p>
+                  : missedE
+                }
+              </div>
             </div>
           </div>
+        }
         </div>
       }
     </div>
