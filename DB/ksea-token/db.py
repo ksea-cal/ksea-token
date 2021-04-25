@@ -2,8 +2,12 @@ import flask
 import datetime
 from flask_sqlalchemy import SQLAlchemy
 from app import app
+from flask_cors import CORS
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/ksea-token9.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ksea-token9.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+CORS(app)
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -12,6 +16,8 @@ class User(db.Model):
     name = db.Column(db.String(128), index=True)
     email = db.Column(db.Text)
     address = db.Column(db.Text, unique=True)
+    img = db.Column(db.String(200))
+    rank = db.Column(db.Integer)
 
     # Application specific 
     num_points = db.Column(db.Integer)
@@ -40,3 +46,14 @@ class Checkin(db.Model):
 
     def __repr__(self):
         return '<Checkin {} for {}>'.format(self.cid, self.user)
+
+
+class Auction(db.Model):
+  aid = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String(20), nullable=False)
+  img = db.Column(db.String(200))
+  contractAddr = db.Column(db.String(50))
+  duration = db.Column(db.Integer)
+
+  def __repr__(self):
+      return '<Auction {} for {}>'.format(self.aid, self.name)
