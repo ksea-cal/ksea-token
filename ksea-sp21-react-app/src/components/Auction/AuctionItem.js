@@ -18,6 +18,7 @@ import {
 import { CheckIcon } from '@chakra-ui/icons'
 import './AuctionItem.css';
 import Timer from './Timer';
+import axios from 'axios';
 
 import web3 from "../ethereum/Web3";
 import KSEA_Auction from "../../abis/KSEAuction.json";
@@ -39,6 +40,11 @@ export default function AuctionItem({address, contractAddr}) {
   const [auction, setAuction] = useState(undefined);
   const [token, setToken] = useState(undefined);
 
+  // useEffect(() => {
+  //   console.log("highest bid: " + highestBid);
+  //   console.log("highest Bidder" + highestBidder);
+  // }, [highestBid, highestBidder])
+
   useEffect(() => {
     async function fetchData() {
       let auction = await kseAuction();
@@ -49,6 +55,26 @@ export default function AuctionItem({address, contractAddr}) {
     }
     fetchData();
   }, [])
+  
+  const fetchItemInfo = async () => {
+    console.log("fetching item info...")
+    const res = await axios
+      .get(`http://127.0.0.1:5000/auction?getAll=false&aid=${item.aid}`)
+      .catch(err => {
+        console.log("Error:", err)
+      })
+    
+    if(res) {
+      //console.log(res.data)
+      setHighestBid(res.data.highestBid)
+      setHighestBidder(res.data.highestBidder)
+    }
+  }
+
+  useEffect(() => {
+    fetchItemInfo();
+  }, [item])
+
 
   useEffect(() => {
     console.log("highest bid: " + highestBid);
@@ -87,23 +113,24 @@ export default function AuctionItem({address, contractAddr}) {
     await token.methods.approve(contractAddr, _amount).send({from:address});
     await auction.methods.bid(_amount).send({from:address})
     let myBid = await auction.methods.getBid(address).call();
-    let highestBid = await getHighestBid();
-    setHighestBid(highestBid);
-    let highestBidder = await getHighestBidder();
-    setHighestBidder(highestBidder);
+    await getHighest().then(highest => {
+      console.log(highest[0], highest[1])
+      let formData = new FormData();
+      formData.append('aid', item.aid); 
+      formData.append('highestBid', highest[0]); 
+      formData.append('highestBidder', highest[1]);
+      axios.put(`http://127.0.0.1:5000/auction`, formData)
+      .then(res => {
+        console.log(res.data.highestBidder)
+      })
+    });
     console.log("my bid: ", myBid);
   }
 
-  async function getHighestBid() {
+  async function getHighest() {
     let highestBid = await auction.methods.getHighestBid().call();
-    console.log("highest Bid: ", highestBid);
-    return highestBid;
-  }
-
-  async function getHighestBidder() {
     let highestBidder = await auction.methods.getHighestBidder().call();
-    console.log("highest Bidder: ", highestBidder);
-    return highestBidder;
+    return [highestBid, highestBidder];
   }
 
 
@@ -127,15 +154,21 @@ export default function AuctionItem({address, contractAddr}) {
   return (
     <div className="auction-item">
       <div className="auction-contractAddr-overlay"/>
+
+      <img src={item.img} alt="contractAddr-img"/>
+      <div className="auction-contractAddr-overlay"/>
+      <h1>{item.name}</h1>
       <Button onClick={onOpen}>Choose</Button>
 
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{contractAddr}</ModalHeader>
+          <ModalHeader>{item.name}</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <Stack spacing="2vh">
+              <h2>Auction Address:</h2>
+              <h2>{item.contractAddr}</h2>
               <h2>Highest Bid: {highestBid} token(s)</h2>
               <h2>Highest Bidder: {highestBidder} </h2>
                 <InputGroup>

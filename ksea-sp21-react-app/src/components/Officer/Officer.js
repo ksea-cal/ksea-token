@@ -170,19 +170,21 @@ export default function Officer({address, onboardState}) {
   async function createAuction(name, tokenAddr) {
     await factory.methods.createAuction(name, tokenAddr).send({from:address});
     await factory.methods.getAuctionAddr(name).call().then(auctionAddr => {
-      setListOfAuctions(listOfAuctions => [...listOfAuctions, auctionAddr]);
+      //setListOfAuctions(listOfAuctions => [...listOfAuctions, auctionAddr]);
+      let formData = new FormData();
+      formData.append('name', auctionName); 
+      formData.append('img', auctionImg); 
+      formData.append('contractAddr', auctionAddr); 
+      formData.append('duration', auctionDuration); 
+      axios.post("http://127.0.0.1:5000/auction", formData)
+        .then(res => { 
+          console.log(res.data.status)
+          toastIdRef.current = toast({ description: `Auction ${name} created`})
+        })
     });
-    // post auction info to api endpoint
-    let formData = new FormData();
-    formData.append('name', auctionName); 
-    formData.append('img', auctionImg); 
-    formData.append('contractAddr', user.address); 
-    formData.append('duration', auctionDuration); 
-    axios.post("http://127.0.0.1:5000/auction", formData)
-      .then(res => { 
-        console.log(res.data.status)
-        toastIdRef.current = toast({ description: `Auction ${name} created`})
-      })
+    setAuctionImg('');
+    setAuctionName('');
+    setAuctionDuration('');
   }
 
 // airdrop && token ?

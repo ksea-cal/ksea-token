@@ -50,7 +50,6 @@ def member():
   
   elif request.method == "POST":
     # Add new member
-    uid = request.json['uid']
     name = request.json['name']
     img = request.json['img']
     num_points = request.json['num_points']
@@ -59,7 +58,6 @@ def member():
     assert type(address) == str
 
     new_member = User(
-          uid=uid,
           name=name,
           email=email,
           num_points=num_points,
@@ -239,7 +237,7 @@ def event():
 
 
 # Auction
-@app.route("/auction", methods=["POST", "GET", "DELETE"])
+@app.route("/auction", methods=["POST", "GET", "PUT", "DELETE"])
 def auction():
   if request.method == "POST":
     name = request.values['name']
@@ -260,19 +258,53 @@ def auction():
     return jsonify({"status": "success"})
     
   elif request.method == "GET":
-    all_auctions = Auction.query.all()
-    return jsonify(
-      [{
-          "aid": a.aid,
-          "name": a.name,
-          "img": a.img,
-          "contractAddr": a.contractAddr,
-          "duration": a.duration,
-      } for a in all_auctions]
-    )
+    getAll = request.args.get("getAll")
+
+    if getAll == 'true':
+      all_auctions = Auction.query.all()
+      return jsonify(
+        [{
+            "aid": a.aid,
+            "name": a.name,
+            "img": a.img,
+            "contractAddr": a.contractAddr,
+            "duration": a.duration,
+            "highestBid": a.highestBid,
+            "highestBidder": a.highestBidder
+        } for a in all_auctions]
+      )
+    
+    else:
+      aid = request.args.get("aid")
+      auction = Auction.query.get(aid)
+      return jsonify({"aid": auction.aid,
+                      "highestBid": auction.highestBid,
+                      "highestBidder": auction.highestBidder})
+
+
+
+  elif request.method == "PUT":
+    aid = request.values['aid']
+    highestBid = request.values['highestBid']
+    highestBidder = request.values['highestBidder'].lower()
+
+    auction = Auction.query.get(aid)
+    auction.highestBid = highestBid
+    curr_member = User.query.filter(User.address == highestBidder).first()
+    auction.highestBidder = curr_member.name
+
+    db.session.commit()
+
+    return jsonify({"aid": auction.aid,
+                    "highestBid": auction.highestBid,
+          "highestBidder": auction.highestBidder})
 
   else:
-    pass
+    all_auctions = Auction.query.all()
+    for auction in all_auctions:
+      db.session.delete(auction)
+      db.session.commit()
+    return jsonify({"success": True})
 
 
 if __name__ == "__main__":
