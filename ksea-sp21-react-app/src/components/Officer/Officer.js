@@ -153,13 +153,20 @@ export default function Officer({address, onboardState}) {
       toastIdRef.current = toast({ description: `Must view members`})
       return;
     }
-    distributeTokens(listOfMembers, inputToken);
+    distributeDobbyTokens(listOfMembers, inputToken);
   }
 
-  async function distributeTokens(_addresses, _value) {
+  async function distributeDobbyTokens(_addresses, _value) {
     let total_val = _value * _addresses.length
     await token.methods.approve(airdrop._address, total_val).send({from:address});
     await airdrop.methods.distributeDobbyTokens(_addresses, _value).send({from:address})
+    console.log(total_val)
+  }
+
+  async function distributeEther(_addresses, _value) {
+    let total_val = _value * _addresses.length
+    await token.methods.approve(airdrop._address, total_val).send({from:address});
+    await airdrop.methods.distributeEther(_addresses, _value).send({from:address})
     console.log(total_val)
   }
 
