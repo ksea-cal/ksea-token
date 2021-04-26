@@ -14,11 +14,6 @@ import axios from 'axios';
 import {useToast} from "@chakra-ui/react"
 
 import {
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
   Button, 
   Input,
   Stack
@@ -52,7 +47,10 @@ export default function Officer({address, onboardState}) {
   const [boardValue, setBoardValue] = useState('');
   const [listOfMembers, setListOfMembers] = useState([]);
   const [listOfAuctions, setListOfAuctions] = useState([]);
-  const [inputToken, setInputToken] = useState([]);
+
+  //input token/ether
+  const [inputToken, setInputToken] = useState('');
+  const [inputEther, setInputEther] = useState('');
 
   useEffect(() => {
     async function fetchData() {
@@ -147,7 +145,7 @@ export default function Officer({address, onboardState}) {
     }
   }
 
-  function handleDistribute(event) {
+  function handleDistributeToken(event) {
     event.preventDefault();
     if (listOfMembers.length < 1) {
       toastIdRef.current = toast({ description: `Must view members`})
@@ -163,19 +161,14 @@ export default function Officer({address, onboardState}) {
     console.log(total_val)
   }
 
-  async function distributeEther(_addresses, _value) {
-    let total_val = _value * _addresses.length
-    await token.methods.approve(airdrop._address, total_val).send({from:address});
-    await airdrop.methods.distributeEther(_addresses, _value).send({from:address})
-    console.log(total_val)
-  }
-
-  function handledistributeTokensChange(event) {
+  function handleDistributeChange(event) {
     const {name, value} = event.target
     if (name === "inputToken") {
       setInputToken(value)
-    } else {
+    } else if (name == "eventId") {
       setEventId(value)
+    } else {
+      setInputEther(value)
     }
   }
 
@@ -188,6 +181,33 @@ export default function Officer({address, onboardState}) {
       <p>{member}</p>
     )
   })
+
+  //Distribute Ether
+  
+  async function distributeEther(_addresses) {
+    await airdrop.methods.distributeEther(_addresses).send({from:address})
+  }
+
+  const distributeEtherToMembers = async () => {
+    console.log("fetching all members...")
+    const res = await axios
+      .get(`http://localhost:5000//members`)
+      .catch(err => {
+        console.log("Error:", err)
+      })
+    
+    if(res) {
+      console.log(res.data)
+      const wholeList = res.data
+      const listofAllMembers = wholeList.map(eachMember => eachMember.address)
+      distributeEther(listofAllMembers);
+    }
+  }
+
+  function handleDistributeEther(event) {
+    event.preventDefault();
+    distributeEtherToMembers();
+  }
 
 
   //Auction
@@ -262,7 +282,7 @@ export default function Officer({address, onboardState}) {
                   name="eventId"
                   type="number"
                   value={eventId}
-                  onChange={handledistributeTokensChange} 
+                  onChange={handleDistributeChange} 
                   placeholder="event Id"
                 />
                 <Button onClick={handleViewCheckedinMembers} colorScheme="blue">View members</Button>
@@ -271,22 +291,22 @@ export default function Officer({address, onboardState}) {
                   name="inputToken"
                   type="number"
                   value={inputToken}
-                  onChange={handledistributeTokensChange} 
+                  onChange={handleDistributeChange} 
                   placeholder="token amount"
                 />
-                <Button onClick={handleDistribute} colorScheme="blue">Distribute Dobby</Button>
+                <Button onClick={handleDistributeToken} colorScheme="blue">Distribute Dobby</Button>
               </Stack>
 
-              <div>
-                <NumberInput min={0}>
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-                <Button colorScheme="blue">Distribute Ether</Button>
-              </div>
+              <Stack spacing={5} className="create-new">
+                <Input
+                  name="inputEther"
+                  type="number"
+                  value={inputEther}
+                  onChange={handleDistributeChange} 
+                  placeholder="Ether amount"
+                />
+                <Button onClick={handleDistributeEther} colorScheme="blue">Distribute Ether</Button>
+              </Stack>
 
               <CreateAuction
                 auctionName = {auctionName}

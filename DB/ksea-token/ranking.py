@@ -14,7 +14,7 @@ def index():
     return {"curr_sem_users": [c.name for c in curr_sem_users], "curr_sem_points": [c.num_points for c in curr_sem_users]}
 
 
-@app.route("/members", methods=["GET"])
+@app.route("/members", methods=["GET", "DELETE"])
 def all_members():
   if request.method == "GET":
     all_members = User.query.all()
@@ -30,6 +30,13 @@ def all_members():
           "rank": member.rank
       } for member in all_members]
     )
+  
+  else:
+    all_members = User.query.all()
+    for member in all_members:
+      db.session.delete(member)
+      db.session.commit()
+    return jsonify({"success": True})
 
 
 @app.route("/member", methods=["GET", "POST", "PUT", "DELETE"])
