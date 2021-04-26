@@ -26,6 +26,7 @@ export default function CheckInItem({event, handleSubmit}) {
       <div className="check-in-item">
         <div className="check-in-info">
           <h3>{event.eventName}</h3>
+          <p>Event ID: {event.eid}</p>
           <p>Due: {event.dueDate} + {event.timeLimit} minutes</p>
         </div>
         {handleSubmit === undefined ? 

@@ -37,6 +37,9 @@ export default function Officer({address, onboardState}) {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.allUsers.selUser)
 
+  // Event id
+  const [eventId, setEventId] = useState('');
+
   // New auction item info
   const [auctionImg, setAuctionImg] = useState('');
   const [auctionName, setAuctionName] = useState('');
@@ -49,7 +52,7 @@ export default function Officer({address, onboardState}) {
   const [boardValue, setBoardValue] = useState('');
   const [listOfMembers, setListOfMembers] = useState([]);
   const [listOfAuctions, setListOfAuctions] = useState([]);
-  let eventValue = useRef(0);
+  const [inputToken, setInputToken] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -114,10 +117,6 @@ export default function Officer({address, onboardState}) {
     deregisterBoardMem(boardValue)
   }
 
-  function handleDistribute(event) {
-    event.preventDefault();
-    distributeTokens(listOfMembers, eventValue);
-  }
 
   //KSEAirdrop Smart contract function calls. These functions will interact with the deployed smart contracts.
   async function registerBoardMem(_address) {
@@ -132,12 +131,56 @@ export default function Officer({address, onboardState}) {
     console.log("IsBoardMember: ", board);
   }
 
+
+  // Distribute Token
+  const fetchCheckedinMembers = async () => {
+    console.log("fetching checked in members...")
+    const res = await axios
+      .get(`http://localhost:5000//checkedinMembers?eventId=${eventId}`)
+      .catch(err => {
+        console.log("Error:", err)
+      })
+    
+    if(res) {
+      console.log(res.data)
+      setListOfMembers(res.data)
+    }
+  }
+
+  function handleDistribute(event) {
+    event.preventDefault();
+    if (listOfMembers.length < 1) {
+      toastIdRef.current = toast({ description: `Must view members`})
+      return;
+    }
+    distributeTokens(listOfMembers, inputToken);
+  }
+
   async function distributeTokens(_addresses, _value) {
     let total_val = _value * _addresses.length
     await token.methods.approve(airdrop._address, total_val).send({from:address});
     await airdrop.methods.distributeDobbyTokens(_addresses, _value).send({from:address})
     console.log(total_val)
   }
+
+  function handledistributeTokensChange(event) {
+    const {name, value} = event.target
+    if (name === "inputToken") {
+      setInputToken(value)
+    } else {
+      setEventId(value)
+    }
+  }
+
+  function handleViewCheckedinMembers() {
+    fetchCheckedinMembers();
+  }
+
+  const viewListofMember = listOfMembers.map(member => {
+    return (
+      <p>{member}</p>
+    )
+  })
 
 
   //Auction
@@ -207,16 +250,25 @@ export default function Officer({address, onboardState}) {
                   Deregister Officer</Button>
               </div>
 
-              <div>
-                <NumberInput min={0}>
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
+              <Stack spacing={5} className="create-new">
+                <Input
+                  name="eventId"
+                  type="number"
+                  value={eventId}
+                  onChange={handledistributeTokensChange} 
+                  placeholder="event Id"
+                />
+                <Button onClick={handleViewCheckedinMembers} colorScheme="blue">View members</Button>
+                <div>List of members: {viewListofMember}</div>
+                <Input
+                  name="inputToken"
+                  type="number"
+                  value={inputToken}
+                  onChange={handledistributeTokensChange} 
+                  placeholder="token amount"
+                />
                 <Button onClick={handleDistribute} colorScheme="blue">Distribute Dobby</Button>
-              </div>
+              </Stack>
 
               <div>
                 <NumberInput min={0}>

@@ -8,7 +8,7 @@ import { setUsers } from './../../redux/actions/userActions'
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
-export default function Ranking({onboardState}) {
+export default function Ranking({address, onboardState}) {
   //window.location.reload()
   const [ranking, setRanking] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -32,7 +32,7 @@ export default function Ranking({onboardState}) {
       const ranking = sorted.map(person => {
         const rankIndex = sorted.findIndex(p => person.uid === p.uid)+1
         //console.log(person.address, rankIndex)
-        if (person.address == user.address) {
+        if (person.address == address) {
           setMyRank(rankIndex)
         }
         return ({...person, rank: rankIndex})

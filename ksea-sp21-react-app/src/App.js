@@ -62,6 +62,7 @@ export default function App() {
       onboard.walletSelect(prevWallet);      
     }
     //fetch api
+    console.log(address)
     if (address) {
       fetchUser();
     }
@@ -93,8 +94,8 @@ export default function App() {
             <div className="display-center">
               <Switch>
                 <Route path="/" exact component={Main}/>
-                <Route path="/checkin"><CheckIn onboardState={onboard ? onboard.getState() : null}/></Route>
-                <Route path="/ranking"><Ranking onboardState={onboard ? onboard.getState() : null}/></Route>
+                <Route path="/checkin"><CheckIn address = {address} onboardState={onboard ? onboard.getState() : null}/></Route>
+                <Route path="/ranking"><Ranking address = {address} onboardState={onboard ? onboard.getState() : null}/></Route>
                 <Route path="/auction"><Auction address = {address} onboardState={onboard ? onboard.getState() : null}/></Route>
                 <Route path="/officer"><Officer address = {address} onboardState={onboard ? onboard.getState() : null}/></Route>
                 <Route path="/profile"><Profile /></Route>

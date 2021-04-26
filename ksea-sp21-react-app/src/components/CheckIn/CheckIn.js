@@ -5,7 +5,7 @@ import {useToast} from "@chakra-ui/react"
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-export default function CheckIn({onboardState}) {
+export default function CheckIn({address, onboardState}) {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [completedEvents, setCompletedEvents] = useState([]);
   const [missedEvents, setMissedEvents] = useState([]);
@@ -19,7 +19,7 @@ export default function CheckIn({onboardState}) {
   const fetchEventLists = async () => {
     console.log("fetching event lists...")
     const res = await axios
-      .get(`http://127.0.0.1:5000/checkin?address=${user.address}`, )
+      .get(`http://127.0.0.1:5000/checkin?address=${address}`, )
       .catch((err) => {
         console.log("Error:", err);
       })
@@ -40,8 +40,8 @@ export default function CheckIn({onboardState}) {
     let formData = new FormData();
     formData.append('eventId', eventId); 
     formData.append('password', inputKey); 
-    formData.append('address', user.address); 
-    console.log(eventId, inputKey, user.address)
+    formData.append('address', address); 
+    console.log(eventId, inputKey, address)
     axios.post("http://127.0.0.1:5000/checkin", formData)
       .then(res => { 
         console.log(res.data.curr_status)

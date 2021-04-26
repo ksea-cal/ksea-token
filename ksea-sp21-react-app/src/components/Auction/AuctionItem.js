@@ -30,6 +30,7 @@ export default function AuctionItem({address, item}) {
   const [inputBid, setInputBid] = useState('');
   const [highestBid, setHighestBid] = useState(0);
   const [highestBidder, setHighestBidder] = useState('');
+  const [myBid, setMyBid] = useState(0);
   
   //design
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -58,6 +59,7 @@ export default function AuctionItem({address, item}) {
   
   const fetchItemInfo = async () => {
     console.log("fetching item info...")
+    //console.log(item.aid)
     const res = await axios
       .get(`http://127.0.0.1:5000/auction?getAll=false&aid=${item.aid}`)
       .catch(err => {
@@ -65,9 +67,10 @@ export default function AuctionItem({address, item}) {
       })
     
     if(res) {
-      //console.log(res.data)
+      console.log(res.data)
       setHighestBid(res.data.highestBid)
       setHighestBidder(res.data.highestBidder)
+      setMyBid(res.data.myBid)
     }
   }
 
@@ -112,13 +115,14 @@ export default function AuctionItem({address, item}) {
   async function makeBid(_amount) {
     await token.methods.approve(item.contractAddr, _amount).send({from:address});
     await auction.methods.bid(_amount).send({from:address})
-    let myBid = await auction.methods.getBid(address).call();
+    let getMyBid = await auction.methods.getBid(address).call();
     await getHighest().then(highest => {
       console.log(highest[0], highest[1])
       let formData = new FormData();
       formData.append('aid', item.aid); 
       formData.append('highestBid', highest[0]); 
       formData.append('highestBidder', highest[1]);
+      formData.append('myBid', getMyBid);
       axios.put(`http://127.0.0.1:5000/auction`, formData)
       .then(res => {
         console.log(res.data.highestBidder)
@@ -171,6 +175,7 @@ export default function AuctionItem({address, item}) {
               <h2>{item.contractAddr}</h2>
               <h2>Highest Bid: {highestBid} token(s)</h2>
               <h2>Highest Bidder: {highestBidder} </h2>
+              <h2>My Bid: {myBid} token(s)</h2>
                 <InputGroup>
                   <InputLeftAddon children="DOBBY"/>
                   <Input 

@@ -132,6 +132,14 @@ def create_checkin():
   return jsonify({"success": True})
 
 
+@app.route("/checkedinMembers", methods=["GET"])
+def checkedin_members():
+  eventId = request.args.get("eventId")
+  all_checkedin_members = Checkin.query.filter(Checkin.event == eventId)
+  return jsonify(
+    [ c.user for c in all_checkedin_members])
+
+
 @app.route("/checkin", methods=["GET", "POST", "DELETE"])
 def checkin():
   curr_status = "waiting"
@@ -270,7 +278,8 @@ def auction():
             "contractAddr": a.contractAddr,
             "duration": a.duration,
             "highestBid": a.highestBid,
-            "highestBidder": a.highestBidder
+            "highestBidder": a.highestBidder,
+            "myBid": a.myBid
         } for a in all_auctions]
       )
     
@@ -279,7 +288,8 @@ def auction():
       auction = Auction.query.get(aid)
       return jsonify({"aid": auction.aid,
                       "highestBid": auction.highestBid,
-                      "highestBidder": auction.highestBidder})
+                      "highestBidder": auction.highestBidder,
+                      "myBid": auction.myBid})
 
 
 
@@ -287,9 +297,11 @@ def auction():
     aid = request.values['aid']
     highestBid = request.values['highestBid']
     highestBidder = request.values['highestBidder'].lower()
+    myBid = int(request.values['myBid'])
 
     auction = Auction.query.get(aid)
     auction.highestBid = highestBid
+    auction.myBid = myBid
     curr_member = User.query.filter(User.address == highestBidder).first()
     auction.highestBidder = curr_member.name
 
@@ -297,7 +309,8 @@ def auction():
 
     return jsonify({"aid": auction.aid,
                     "highestBid": auction.highestBid,
-          "highestBidder": auction.highestBidder})
+          "highestBidder": auction.highestBidder,
+          "myBid": auction.myBid})
 
   else:
     all_auctions = Auction.query.all()
@@ -309,3 +322,9 @@ def auction():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+# once created new db
+# 1.add me as a new member
+# 2. updatedb.py then ranking.py(returning all variables)
+# 3. testing with postman (check params or form-data)

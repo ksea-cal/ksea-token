@@ -56,6 +56,7 @@ class Auction(db.Model):
   duration = db.Column(db.Integer)
   highestBid = db.Column(db.Integer)
   highestBidder = db.Column(db.String(20))
+  myBid = db.Column(db.Integer)
 
   def __repr__(self):
       return '<Auction {} for {}>'.format(self.aid, self.name)
