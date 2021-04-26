@@ -40,10 +40,9 @@ export default function Auction({address, onboardState}) {
         <div className="auction-content">
           <div className="user-info">
             <div className="my-ranking">
-              <h4>My rank</h4>
               <img src={user.img} id="my-img" alt="headshot"/>
               <p>{user.name}</p>
-              <p>{user.point} points</p>
+              <p>{user.num_points} points</p>
             </div>
           </div>
           <div className="auction-items">

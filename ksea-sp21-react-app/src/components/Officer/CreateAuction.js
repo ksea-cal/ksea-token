@@ -7,14 +7,15 @@ import {
 } from "@chakra-ui/react"
 import './Officer.css'
 
-export default function Createcheckin(
+export default function CreateAuction(
   {auctionName, auctionImg, auctionDuration, 
     handleAuction, handleAuctionChange}
     ) {
 
   return (
     <Stack spacing={5} className="create-new">
-      <h1>Auction Name:</h1>
+      <h1>Auction</h1>
+      <h2>Auction Name:</h2>
       <Input
         name="auctionName" 
         value={auctionName}
@@ -22,7 +23,7 @@ export default function Createcheckin(
         placeholder="name"
       />
       <Stack spacing={2}>
-        <h1>Auction Image:</h1>
+        <h2>Auction Image:</h2>
         <Input
           name="auctionImg"
           value={auctionImg}
@@ -30,7 +31,7 @@ export default function Createcheckin(
           placeholder="img link"
         />
       </Stack>
-      <h1>Auction Duration:</h1>
+      <h2>Auction Duration:</h2>
       <InputGroup>
         <Input
           name="auctionDuration" 

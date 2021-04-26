@@ -1,16 +1,18 @@
-import React, { useState} from 'react'
+import React, { useState} from 'react';
 import {
   Button, 
   Input,
   Stack,
   InputRightAddon,
-  InputGroup
-} from "@chakra-ui/react"
-import './Officer.css'
+  InputGroup,
+  Textarea,
+  Text
+} from "@chakra-ui/react";
+import './Officer.css';
 import axios from 'axios';
-import {useToast} from "@chakra-ui/react"
+import {useToast} from "@chakra-ui/react";
 
-export default function Createcheckin() {
+export default function CreateCheckin() {
   //design
   const toast = useToast()
   const toastIdRef = React.useRef()
@@ -19,22 +21,30 @@ export default function Createcheckin() {
   const [name, setName] = useState('');
   const [timelimit, setTimelimit] = useState('');
   const [password, setPassword] = useState('');
+  const [detail, setDetail] = useState('');
+  const [eventPoint, setEventPoint] = useState('');
 
   
   // Manage checkins
   function handleSubmit(event) {
     event.preventDefault();
-    axios.post(`http://localhost:5000//createcheckin`, 
-      {
-        "password": password,
-        "timeLimit": timelimit,
-        "eventName": name
-      }
-    )
-    toastIdRef.current = toast({ description: `${name} created` })
-    setName('');
-    setTimelimit('')
-    setPassword('');
+    let formData = new FormData();
+    formData.append('eventName', name); 
+    formData.append('timeLimit', timelimit);
+    formData.append('password', password);
+    formData.append('eventPoint', eventPoint);
+    formData.append('eventDetails', detail);
+    axios.post(`http://localhost:5000//createcheckin`, formData)
+      .then(res => {
+        if (res.data.status === "success") {
+          toastIdRef.current = toast({ description: `${name} created` })
+          setName('');
+          setTimelimit('');
+          setPassword('');
+          setDetail('');
+          setEventPoint('');
+        }
+      })
   }
 
   function handleChange(event) {
@@ -44,28 +54,51 @@ export default function Createcheckin() {
       setName(value);
     } else if (name === "timelimit") {
       setTimelimit(value)
-    } else {
+    } else if (name === "password") {
       setPassword(value);
+    } else if (name === "detail") {
+      setDetail(value);
+    } else {
+      setEventPoint(value);
     }
   }
       
   return (
     <Stack spacing={5} className="create-new">
-      <h1>Event Name:</h1>
+      <h1>Checkin Event</h1>
+      <h2>Event Name:</h2>
       <Input
         value={name}
         onChange={handleChange} 
         name="name" 
         placeholder="name"
       />
-      <h1>Event Password:</h1>
+      <h2>Event Password:</h2>
       <Input
         value={password}
         onChange={handleChange} 
         name="password" 
         placeholder="password"
       />
-      <h1>Event Time Limit:</h1>
+      <h2>Event Points:</h2>
+      <InputGroup>
+        <Input
+          type="number"
+          value={eventPoint}
+          onChange={handleChange} 
+          name="eventPoint"
+          placeholder="points"
+        />
+        <InputRightAddon children="points" />
+      </InputGroup>
+      <h2>Event Details:</h2>
+      <Textarea
+        name="detail"
+        value={detail}
+        onChange={handleChange}
+        placeholder="details"
+      />
+      <h2>Event Time Limit:</h2>
       <InputGroup>
         <Input
           type="number"

@@ -156,13 +156,11 @@ export default function AuctionItem({address, item}) {
 
 
   return (
-    <div className="auction-item">
-      <div className="auction-contractAddr-overlay"/>
+    <div onClick={onOpen} className="auction-item">
+      <div className="auction-contractAddr-overlay"></div>
 
-      <img src={item.img} alt="contractAddr-img"/>
-      <div className="auction-contractAddr-overlay"/>
+      <img src={item.img} className="auction-item-img" alt="item img"/>
       <h1>{item.name}</h1>
-      <Button onClick={onOpen}>Choose</Button>
 
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -171,6 +169,7 @@ export default function AuctionItem({address, item}) {
           <ModalCloseButton />
           <ModalBody pb={6}>
             <Stack spacing="2vh">
+              <img src={item.img} className="contractAddr-img" alt="item img"/>
               <h2>Auction Address:</h2>
               <h2>{item.contractAddr}</h2>
               <h2>Highest Bid: {highestBid} token(s)</h2>

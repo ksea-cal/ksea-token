@@ -1,25 +1,72 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './Profile.css';
 import {
   Button,
   Input,
-  Stack
-} from "@chakra-ui/react"
-import { useSelector } from 'react-redux';
+  Stack,
+  useToast
+} from "@chakra-ui/react";
+//import { useSelector } from 'react-redux';
+import axios from 'axios';
 
-export default function Profile() {
+export default function Profile({address}) {
   const [edit, setEdit] = useState(false);
-  const user = useSelector((state) => state.allUsers.selUser)
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [user, setUser] = useState('');
+
+  //design
+  const toast = useToast()
+  const toastIdRef = React.useRef()
+
+  const fetchUser = async () => {
+    const res = await axios
+      .get(`http://localhost:5000//member?address=${address}`)
+      .catch((err) => {
+        console.log("Error:", err);
+      })
+    if (res) {
+      console.log(res.data);
+      setUser(res.data)
+    }
+  }
+
+  useEffect(() => {
+    fetchUser();
+  }, [address, name, email, edit])
+
+  const updateUserInfo = async () => {
+    console.log("update member info...")
+    let formData = new FormData();
+    formData.append('address', address); 
+    formData.append('name', name); 
+    formData.append('email', email);
+    const res = await axios
+      .put(`http://localhost:5000/member`, formData)
+      .catch(err => {
+        console.log("Error:", err)
+      })
+    
+    if(res) {
+      console.log(res.data.status)
+      toastIdRef.current = toast({ description: "Your info has been updated!" })
+    }
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    updateUserInfo();
+    setEdit(false);
+  }
 
   function handleChange(e) {
     const {name, value} = e.target
-    //setMyUser({...myUser, [name]: value})
+    if (name === "name") {
+      setName(value)
+    } else {
+      setEmail(value)
+    }
   }
-
-  const defaultInfo = <div>
-    <h5>{user.name}</h5>
-    <h5>{user.email}</h5>
-  </div>
 
   return (
     <div>
@@ -34,18 +81,18 @@ export default function Profile() {
                 <Input 
                   type="text"
                   name="name"
-                  value={user.name}
+                  value={name}
                   placeholder="New Name"
                   onChange={handleChange}
                 />
                 <Input 
                   type="text"
-                  name="name"
-                  value={user.email}
-                  placeholder="Email Address"
+                  name="email"
+                  value={email}
+                  placeholder="New Email Address"
                   onChange={handleChange}
                 />
-                <Button onClick={() => setEdit(false)} colorScheme="teal" variant="outline">
+                <Button onClick={handleSubmit} colorScheme="teal" variant="outline">
                   Finish Edit
                 </Button>
               </Stack>

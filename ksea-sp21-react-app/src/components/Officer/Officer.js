@@ -1,9 +1,9 @@
-import './Officer.css'
-import kseaToken from '../ethereum/KSEA_Token'
-import kseAirdrop from '../ethereum/KSEAirdrop'
-import auctionFactory from '../ethereum/AuctionFactory'
+import './Officer.css';
+import kseaToken from '../ethereum/KSEA_Token';
+import kseAirdrop from '../ethereum/KSEAirdrop';
+import auctionFactory from '../ethereum/AuctionFactory';
 import KSEA_Token from "../../abis/KSEAToken.json";
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react';
 import web3 from "../ethereum/Web3";
 
 //redux imports
@@ -11,18 +11,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAuctionList } from '../../redux/actions/userActions';
 
 import axios from 'axios';
-import {useToast} from "@chakra-ui/react"
-
 import {
   Button, 
   Input,
-  Stack
+  Stack,
+  useToast
 } from "@chakra-ui/react"
 
 //Import officer components
 import CreateAuction from './CreateAuction';
 import CreateCheckin from './CreateCheckin';
-import CreateMember from './CreateMember';
+import ManageMember from './ManageMember';
 
 export default function Officer({address, onboardState}) {
   //design
@@ -45,12 +44,15 @@ export default function Officer({address, onboardState}) {
   const [token, setToken] = useState(undefined);
   const [factory, setFactory] = useState(undefined);
   const [boardValue, setBoardValue] = useState('');
-  const [listOfMembers, setListOfMembers] = useState([]);
   const [listOfAuctions, setListOfAuctions] = useState([]);
 
   //input token/ether
   const [inputToken, setInputToken] = useState('');
   const [inputEther, setInputEther] = useState('');
+
+  //list of members
+  const [listOfMembers, setListOfMembers] = useState([]);
+  const [listOfMembersNames, setListOfMembersNames] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -141,7 +143,8 @@ export default function Officer({address, onboardState}) {
     
     if(res) {
       console.log(res.data)
-      setListOfMembers(res.data)
+      setListOfMembers(res.data.addresses)
+      setListOfMembersNames(res.data.names)
     }
   }
 
@@ -158,7 +161,9 @@ export default function Officer({address, onboardState}) {
     let total_val = _value * _addresses.length
     await token.methods.approve(airdrop._address, total_val).send({from:address});
     await airdrop.methods.distributeDobbyTokens(_addresses, _value).send({from:address})
-    console.log(total_val)
+    //console.log(total_val)
+    setEventId('')
+    setInputToken('')
   }
 
   function handleDistributeChange(event) {
@@ -176,16 +181,20 @@ export default function Officer({address, onboardState}) {
     fetchCheckedinMembers();
   }
 
-  const viewListofMember = listOfMembers.map(member => {
+  const viewListofMembers = listOfMembersNames.map(member=> {
     return (
-      <p>{member}</p>
+      <p key={member}>{member}</p>
     )
   })
 
   //Distribute Ether
   
-  async function distributeEther(_addresses) {
-    await airdrop.methods.distributeEther(_addresses).send({from:address})
+  async function distributeEther(_addresses, _value) {
+    let _ether = _value * 1e18
+    let total_val = _ether * _addresses.length
+    await airdrop.methods.distributeEther(_addresses).send({from:address, value:total_val})
+    setInputEther('')
+    //console.log(total_val)
   }
 
   const distributeEtherToMembers = async () => {
@@ -200,7 +209,7 @@ export default function Officer({address, onboardState}) {
       console.log(res.data)
       const wholeList = res.data
       const listofAllMembers = wholeList.map(eachMember => eachMember.address)
-      distributeEther(listofAllMembers);
+      distributeEther(listofAllMembers, inputEther);
     }
   }
 
@@ -265,19 +274,23 @@ export default function Officer({address, onboardState}) {
         :
         <div>
           {/* {bool ? */}
-            <Stack spacing={5} id='officer'>
-              <div>
-                <Input onChange={handleBoardChange} placeholder="medium size" size="md" />
-                <Button onClick={handleRegister} colorScheme="blue">Register Officer</Button>
-              </div>
+            <Stack spacing={10} id='officer'>
+              <Stack spacing={5} className="create-new">
+                <h1>Officer Management</h1>
+                <div>
+                  <Input onChange={handleBoardChange} placeholder="medium size" size="md" />
+                  <Button onClick={handleRegister} colorScheme="blue">Register Officer</Button>
+                </div>
 
-              <div>
-                <Input onChange={handleBoardChange} placeholder="medium size" size="md" />
-                <Button onClick={handleDeregister} colorScheme="blue">
-                  Deregister Officer</Button>
-              </div>
+                <div>
+                  <Input onChange={handleBoardChange} placeholder="medium size" size="md" />
+                  <Button onClick={handleDeregister} colorScheme="blue">
+                    Deregister Officer</Button>
+                </div>
+              </Stack>
 
               <Stack spacing={5} className="create-new">
+                <h1>Distribute Dobby</h1>
                 <Input
                   name="eventId"
                   type="number"
@@ -286,7 +299,7 @@ export default function Officer({address, onboardState}) {
                   placeholder="event Id"
                 />
                 <Button onClick={handleViewCheckedinMembers} colorScheme="blue">View members</Button>
-                <div>List of members: {viewListofMember}</div>
+                <div>List of members: {viewListofMembers}</div>
                 <Input
                   name="inputToken"
                   type="number"
@@ -298,6 +311,7 @@ export default function Officer({address, onboardState}) {
               </Stack>
 
               <Stack spacing={5} className="create-new">
+                <h1>Distribute Ether</h1>
                 <Input
                   name="inputEther"
                   type="number"
@@ -318,7 +332,7 @@ export default function Officer({address, onboardState}) {
 
               <CreateCheckin />
 
-              <CreateMember />
+              <ManageMember />
 
             </Stack>
           {/* //   :

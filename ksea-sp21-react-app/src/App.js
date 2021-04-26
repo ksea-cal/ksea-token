@@ -98,7 +98,7 @@ export default function App() {
                 <Route path="/ranking"><Ranking address = {address} onboardState={onboard ? onboard.getState() : null}/></Route>
                 <Route path="/auction"><Auction address = {address} onboardState={onboard ? onboard.getState() : null}/></Route>
                 <Route path="/officer"><Officer address = {address} onboardState={onboard ? onboard.getState() : null}/></Route>
-                <Route path="/profile"><Profile /></Route>
+                <Route path="/profile"><Profile address = {address}/></Route>
                 {/* <Route path="/auction-item/:id" component={ItemDetail}/> */}
                 <Route path="/about-us" component={AboutUs}/>
                 <Route>404 Not Found</Route>

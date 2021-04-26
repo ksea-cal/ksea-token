@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import './CheckIn.css';
 import CheckInItem from './CheckInItem';
-import {useToast} from "@chakra-ui/react"
+import {useToast} from "@chakra-ui/react";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
