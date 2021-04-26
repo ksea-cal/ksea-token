@@ -1,3 +1,5 @@
 __pycache__/*
 *.pyc
 .DS_Store
+
+/Smart_Contracts/KSEAuction/build/contracts

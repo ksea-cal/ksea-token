@@ -6,6 +6,12 @@
 .pnp.js
 venv
 
+#abis
+/src/abis/AuctionFactory.json
+/src/abis/KSEAirdrop.json
+/src/abis/KSEAToken.json
+/src/abis/KSEAuction.json
+
 # testing
 /coverage
 
