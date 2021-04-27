@@ -122,7 +122,6 @@ export default function AuctionItem({address, item}) {
     return [highestBid, highestBidder];
   }
 
-
   function handleChange(e) {
     setInputBid(e.target.value)
   }
@@ -143,18 +142,15 @@ export default function AuctionItem({address, item}) {
     }
   }
 
-
-
   return (
     <div onClick={onOpen} className="auction-item">
-      <div className="auction-contractAddr-overlay"></div>
 
       <img src={item.img} className="auction-item-img" alt="item img"/>
       <h1>{item.name}</h1>
 
-      <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+      <Modal closeOnOverlayClick={false} size="xl" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent className="auction-item-box">
           <ModalHeader>{item.name}</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>

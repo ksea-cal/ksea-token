@@ -6,12 +6,15 @@ import {
   InputRightAddon,
   InputGroup,
   Textarea,
-  useToast
+  useToast,
+  FormControl,
+  FormLabel,
+  Switch
 } from "@chakra-ui/react";
 import './Officer.css';
 import axios from 'axios';
 
-export default function CreateCheckin() {
+export default function ManageCheckin() {
   //design
   const toast = useToast();
   const toastIdRef = React.useRef();
@@ -22,6 +25,7 @@ export default function CreateCheckin() {
   const [password, setPassword] = useState('');
   const [detail, setDetail] = useState('');
   const [eventPoint, setEventPoint] = useState('');
+  const [deleteEventId, setDeleteEventId] = useState('');
 
   
   // Manage checkins
@@ -33,7 +37,7 @@ export default function CreateCheckin() {
     formData.append('password', password);
     formData.append('eventPoint', eventPoint);
     formData.append('eventDetails', detail);
-    axios.post(`https://dobchain-testing.herokuapp.com/createcheckin`, formData)
+    axios.post(`https://dobchain-testing.herokuapp.com/event`, formData)
       .then(res => {
         if (res.data.status === "success") {
           toastIdRef.current = toast({ description: `${name} created` })
@@ -44,6 +48,12 @@ export default function CreateCheckin() {
           setEventPoint('');
         }
       })
+  }
+
+  function handleDeleteEvent(event) {
+    event.preventDefault();
+    /* TODO: DELTE EVENT WITH ID */
+    toastIdRef.current = toast({ description: `not implemented yet` })
   }
 
   function handleChange(event) {
@@ -57,14 +67,15 @@ export default function CreateCheckin() {
       setPassword(value);
     } else if (name === "detail") {
       setDetail(value);
-    } else {
+    } else if (name === "eventPoint") {
       setEventPoint(value);
+    } else {
+      setDeleteEventId(value);
     }
   }
       
   return (
     <Stack spacing={5} className="create-new">
-      <h1>Checkin Event</h1>
       <h2>Event Name:</h2>
       <Input
         value={name}
@@ -112,6 +123,23 @@ export default function CreateCheckin() {
         onClick={handleSubmit} 
         colorScheme="green">
         Create Event
+      </Button>
+
+      <h2>Delete Event</h2>
+      <Input
+        name="deleteEventId"
+        value={deleteEventId}
+        onChange={handleChange} 
+        placeholder="event id"
+      />
+      <FormControl display="flex" alignItems="center">
+        <FormLabel htmlFor="email-alerts" mb="3">
+          <h5>Delete All?</h5>
+        </FormLabel>
+        <Switch id="email-alerts" colorScheme="red" />
+      </FormControl>
+      <Button onClick={handleDeleteEvent} colorScheme="red">
+        Delete Event
       </Button>
     </Stack>
   )

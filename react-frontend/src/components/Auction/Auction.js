@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from 'react';
-
 import './Auction.css';
 import AuctionItem from './AuctionItem';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { CircularProgress} from "@chakra-ui/react"
 
 export default function Auction({domain, address, onboardState}) {
   const user = useSelector((state) => state.allUsers.selUser)
   const [auctions, setAuctions] = useState([]);
-
+  const [loading, setLoading] = useState(true);
 
   const fetchAllAuctions = async () => {
     console.log("fetching all...")
@@ -20,7 +20,8 @@ export default function Auction({domain, address, onboardState}) {
     
     if(res) {
       console.log(res.data)
-      setAuctions(res.data)
+      setAuctions(res.data);
+      setLoading(false);
     }
   }
 
@@ -45,9 +46,13 @@ export default function Auction({domain, address, onboardState}) {
               <p>{user.num_points} points</p>
             </div>
           </div>
-          <div className="auction-items">
-            {auctionItems}
-          </div>
+          {loading?
+            <CircularProgress isIndeterminate color="blue.300" />
+            :
+            <div className="auction-items">
+              {auctionItems}
+            </div>
+          }
         </div>
       }
     </div>

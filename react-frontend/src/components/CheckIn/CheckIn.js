@@ -104,7 +104,7 @@ export default function CheckIn({address, onboardState}) {
               <div>
                 {
                   missedEvents.length === 0 ?
-                  <p>You have no upcoming events!</p>
+                  <p>You have no missed events!</p>
                   : missedE
                 }
               </div>

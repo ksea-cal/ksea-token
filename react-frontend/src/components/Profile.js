@@ -4,7 +4,8 @@ import {
   Button,
   Input,
   Stack,
-  useToast
+  useToast,
+  CircularProgress
 } from "@chakra-ui/react";
 //import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -14,6 +15,7 @@ export default function Profile({address}) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [user, setUser] = useState('');
+  const [loading, setLoading] = useState(true)
 
   //design
   const toast = useToast()
@@ -28,6 +30,7 @@ export default function Profile({address}) {
     if (res) {
       console.log(res.data);
       setUser(res.data)
+      setLoading(false);
     }
   }
 
@@ -37,10 +40,14 @@ export default function Profile({address}) {
 
   const updateUserInfo = async () => {
     console.log("update member info...")
+    let newName = name
+    let newEmail = email
+    if (name === '') newName = user.name
+    if (email === '') newEmail = user.email
     let formData = new FormData();
     formData.append('address', address); 
-    formData.append('name', name); 
-    formData.append('email', email);
+    formData.append('name', newName); 
+    formData.append('email', newEmail);
     const res = await axios
       .put(`https://dobchain-testing.herokuapp.com/member`, formData)
       .catch(err => {
@@ -73,40 +80,47 @@ export default function Profile({address}) {
       {user === {} ?
         <h2>Please connect your wallet</h2>
         :
-        <div className="profile">
-          <img src={user.img} alt="headshot"/>
-          <div className="info">
-            {edit ?
-              <Stack spacing={5}>
-                <Input 
-                  type="text"
-                  name="name"
-                  value={name}
-                  placeholder="New Name"
-                  onChange={handleChange}
-                />
-                <Input 
-                  type="text"
-                  name="email"
-                  value={email}
-                  placeholder="New Email Address"
-                  onChange={handleChange}
-                />
-                <Button onClick={handleSubmit} colorScheme="teal" variant="outline">
-                  Finish Edit
-                </Button>
-              </Stack>
-              :
-              <Stack spacing={5}>
-                <h5>{user.name}</h5>
-                <h5>{user.email}</h5>
-                <Button onClick={() => setEdit(true)} colorScheme="teal" variant="outline">
-                  Edit Profile
-                </Button>
-              </Stack>
-            }
-          </div>
+        <div>
+          {loading?
+            <CircularProgress isIndeterminate color="blue.300" />
+            :
+            <div className="profile">
+              <img src={user.img} alt="headshot"/>
+              <div className="info">
+                {edit ?
+                  <Stack spacing={5}>
+                    <Input 
+                      type="text"
+                      name="name"
+                      value={name}
+                      placeholder={user.name}
+                      onChange={handleChange}
+                    />
+                    <Input 
+                      type="text"
+                      name="email"
+                      value={email}
+                      placeholder={user.email}
+                      onChange={handleChange}
+                    />
+                    <Button onClick={handleSubmit} colorScheme="teal" variant="outline">
+                      Finish Edit
+                    </Button>
+                  </Stack>
+                  :
+                  <Stack spacing={5}>
+                    <h5>{user.name}</h5>
+                    <h5>{user.email}</h5>
+                    <Button onClick={() => setEdit(true)} colorScheme="teal" variant="outline">
+                      Edit Profile
+                    </Button>
+                  </Stack>
+                }
+              </div>
+            </div>
+          }
         </div>
+        
       }
     </div>
   ); 
