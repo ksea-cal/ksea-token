@@ -7,10 +7,6 @@ We use Python `>3.5`, Flask `1.1.x`, React.js as well as Solidity `>0.5.0`
 ### Prerequisites for Developers
 Please install `Moesif CORS` to interact with the database and backend from the web browser. 
 
-### DB Link
-
-https://dobchain-testing.herokuapp.com/
-
 ## Running the Application
 ### Backend
 Please run the following to start the server: 

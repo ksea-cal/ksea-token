@@ -1,9 +1,7 @@
 from flask import *
-import datetime
 from flask_sqlalchemy import SQLAlchemy
-import ast
-import os
 from flask_cors import CORS
+import datetime
 
 app = Flask(__name__)
 
@@ -166,10 +164,10 @@ def member():
     address = request.args.get("address")
     curr_member = User.query.filter(User.address == address).first()
     member_checkins = Checkin.filter(Checkin.user == address)
+    
     # Delete checkins
     for checkin in member_checkins:
       db.session.delete(checkin)
-      db.session.commit()
     db.session.delete(curr_member)
     db.session.commit()
     return jsonify({"status": '%s deleted' % curr_member.name})
@@ -178,7 +176,7 @@ def member():
 
 @app.route("/checkedinMembers", methods=["GET"])
 def checkedin_members():
-  eventId = request.args.get("eventId")
+  eventId = int(request.args.get("eventId"))
   all_checkedin_members = Checkin.query.filter(Checkin.event == eventId)
   member_addr_lists = [c.user for c in all_checkedin_members]
   name_lists = []
@@ -196,38 +194,36 @@ def checkedin_members():
 def checkin():
   if request.method == "POST":
     eventId = request.values['eventId']
-    curr_checkin = Event.query.filter(Event.eid == eventId).first()
+    curr_event = Event.query.filter(Event.eid == eventId).first()
     input_password = request.values['password']
-    if input_password == curr_checkin.password:
+    if input_password == curr_event.password:
       address = request.values['address'].lower()
       awardee = User.query.filter(User.address == address).first()
       
+      # return error code when the member is not found
       if awardee is None:
         return jsonify({"status": "Selected awardee is a nonetype"})
       
-      awardee.point_amount
-      curr_checkin = Checkin(event=curr_checkin.eid, user=awardee.address)
-      db.session.add(curr_checkin)
+      # award points to member
+      awardee.num_points += curr_event.point_amount
+      # add new checkin to db
+      new_checkin = Checkin(event=curr_event.eid, user=awardee.address)
+      db.session.add(new_checkin)
       db.session.commit()
       return jsonify(
-        {"status": '%s checked in for %s' % (awardee.name, curr_checkin.event_name)}
+          {"status": '%s checked in for %s' %
+           (awardee.name, curr_event.event_name)}
       )
+
     else:
-      curr_status = "wrong_password"
       return jsonify({
-          "curr_status": curr_status,
+          "curr_status": "wrong_password",
           "password": input_password,
-          "correctpw": curr_checkin.password
+          "correctpw": curr_event.password
       })
 
   else:
     address = request.args.get("address").lower()
-    # if len(Checkin.query.all()) < 1:
-    #   return jsonify({
-    #     'completed':  [],
-    #     'missed':  [],
-    #     'upcoming':  []
-    #   })
 
     all_checkins = Checkin.query.filter(Checkin.user == address)
     completedIds = list(map(lambda c: c.event, all_checkins))
@@ -328,25 +324,22 @@ def event():
   else:
     # When deleting an event, 
     # it should also delete checkins with that event id
-    checkin = Checkin.query.get
-    db.session.delete(checkin)
+    eventId = int(request.args.get("eventId"))
+    event_checkins = Checkin.query.filter(Checkin.event == eventId)
+    
+    # Delete all checkins with the event id
+    for checkin in event_checkins:
+      db.session.delete(checkin)
+
+    # Delete event itself
+    event = Event.query.get(eventId)
+    db.session.delete(event)
     db.session.commit()
-    return jsonify({"status": '%s deleted' % check.name})
+    return jsonify(
+      {"status": '%s deleted and its checkins' % event.event_name}
+    )
 
 
-  # if request.method == "POST":
-  #   event_name = request.form['eventName']
-  #   name = request.form['members']
-  #   points = int(request.form['points'])
-  #   awardee = User.query.filter(User.name == name).first()
-  #   awardee.num_points += points
-  #   db.session.commit()
-  #   return index()
-  # else:
-  #   awardee = User.query.filter(User.name == name).first()
-  #   awardee.num_points += points
-  #   db.session.commit()
-  #   return index()
 
 @app.route("/events", methods=["GET", "DELETE"])
 def view_events():

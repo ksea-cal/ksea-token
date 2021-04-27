@@ -52,8 +52,12 @@ export default function ManageCheckin() {
 
   function handleDeleteEvent(event) {
     event.preventDefault();
-    /* TODO: DELTE EVENT WITH ID */
-    toastIdRef.current = toast({ description: `not implemented yet` })
+    axios.delete(`https://dobchain-testing.herokuapp.com/event?eventId=${deleteEventId}`)
+      .then(res => {
+        console.log(res.data)
+        toastIdRef.current = toast({ description: res.data.status })
+        setDeleteEventId('');
+      })
   }
 
   function handleChange(event) {

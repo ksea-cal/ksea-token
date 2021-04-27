@@ -48,9 +48,9 @@ export default function CheckIn({address, onboardState}) {
     console.log(eventId, inputKey, address)
     axios.post(`https://dobchain-testing.herokuapp.com/checkin`, formData)
       .then(res => { 
-        console.log(res.data.curr_status)
-        setStatus(res.data.curr_status)
-        toastIdRef.current = toast({ description: res.data.curr_status })
+        console.log(res.data)
+        setStatus(res.data.status)
+        toastIdRef.current = toast({ description: res.data.status })
       })
   };
 
