@@ -189,7 +189,6 @@ export default function AuctionItem({address, item}) {
                     Bid
                   </Button>
                 }
-                
             </Stack>
           </ModalBody>
 
